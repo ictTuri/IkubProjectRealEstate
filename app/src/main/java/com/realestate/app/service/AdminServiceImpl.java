@@ -59,8 +59,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void addOwner(User user) {
-		user.setRoleId(new Role(3));
-		user.setActive(true);
 		if(adminRepository.existUsername(user.getUsername()) || adminRepository.existEmail(user.getEmail())) {
 			throw new MyExcMessages("Username or email already exist");
 		}

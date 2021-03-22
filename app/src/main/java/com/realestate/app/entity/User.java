@@ -6,9 +6,7 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
 
-	public User() {
-		super();
-	}
+	public User() {	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +22,7 @@ public class User {
 	private String username;
 	@Column(name = "pass")
 	private String password;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
 	private Role roleId;
 	@Column(name = "is_active")
@@ -93,5 +91,15 @@ public class User {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+
+	public User(String firstName, String lastName, String email, String username, String password) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+	
 
 }

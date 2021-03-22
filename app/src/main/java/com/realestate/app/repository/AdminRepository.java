@@ -31,7 +31,7 @@ public class AdminRepository {
 	private static final String GET_USER_BY_EMAIL = "SELECT u.email FROM User u WHERE u.email = :email";
 	private static final String GET_ALL_OWNERS = "SELECT user FROM User user WHERE user.roleId = 3";
 	private static final String GET_ALL_CLIENTS = "SELECT user FROM User user WHERE user.roleId = 1";
-
+	private static final String USER_BY_USERNAME = "SELECT u FROM User u where u.username =?1 and u.isActive = true";
 	//RETRIEVE OPERATIONS DOWN HERE
 	
 	public List<Property> getAllProperties() {
@@ -103,11 +103,12 @@ public class AdminRepository {
 	}
 	
 	public User getUserByUsername(String username) {
-		if(isActiveUser(username)) {
-			TypedQuery<User> query = em.createQuery("FROM User u WHERE u.username = :username", User.class).setParameter("username", username);
+		TypedQuery<User> query = em.createQuery(USER_BY_USERNAME, User.class).setParameter(1,username);
+		try {
 			return query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		}
-		return null;
 	}
 	
 	public boolean existEmail(String email) {

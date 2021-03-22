@@ -15,6 +15,7 @@ import com.realestate.app.entity.Location;
 import com.realestate.app.entity.Property;
 import com.realestate.app.entity.PropertyInfo;
 import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.Role;
 import com.realestate.app.entity.User;
 import com.realestate.app.service.AdminService;
 
@@ -70,6 +71,8 @@ public class AdminController {
 	// -----------------------------
 	@PostMapping("/addowner")
 	public void addOwner(@RequestBody User user) {
+		user.setRoleId(new Role(3));
+		user.setActive(true);
 		adminService.addOwner(user);
 	}
 

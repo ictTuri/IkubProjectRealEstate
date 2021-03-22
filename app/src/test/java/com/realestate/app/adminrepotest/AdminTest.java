@@ -69,4 +69,5 @@ class AdminTest {
 		
 		Assertions.assertNull(adminRepository.getUserByUsername("admin123"));
 	}
+	
 }
