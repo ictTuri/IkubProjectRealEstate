@@ -10,10 +10,13 @@ import lombok.Data;
 @Data
 public class Bought {
 
+	public Bought() {
+		super();
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bought_id")
-	private int boughtId;
+	private Integer boughtId;
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User userId;

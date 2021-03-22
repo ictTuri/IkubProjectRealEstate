@@ -10,10 +10,13 @@ import lombok.Data;
 @Data
 public class Rented {
 
+	public Rented() {
+		super();
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "rent_id")
-	private int rentId;
+	private Integer rentId;
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User userId;

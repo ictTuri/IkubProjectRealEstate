@@ -4,37 +4,45 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.realestate.app.model.BoughtModel;
-import com.realestate.app.model.IssuesModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
+import com.realestate.app.entity.Bought;
+import com.realestate.app.entity.Issues;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.Rented;
+
 
 @Service
 public class UserServiceImpl implements UserService{
 
 	@Override
-	public PropertyModel getProperty(int id) {
+	public Property getProperty(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<RentedModel> showRented() {
+	public List<Rented> showRented() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<BoughtModel> showBought() {
+	public List<Bought> showBought() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void createIssue(IssuesModel issue) {
+	public void createIssue(Issues issue) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteIssue(int id) {
+		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.model.BoughtModel;
-import com.realestate.app.model.IssuesModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Bought;
+import com.realestate.app.entity.Issues;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 import com.realestate.app.service.AdminService;
 import com.realestate.app.service.OwnerService;
 import com.realestate.app.service.UserService;
@@ -38,23 +38,23 @@ public class UserController {
 	// CLIENT GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/property/{id}")
-	public PropertyModel showProperty(@PathVariable("id") int id) {
+	public Property showProperty(@PathVariable("id") int id) {
 		return userService.getProperty(id);
 	}
 	@GetMapping("/properties")
-	public List<PropertyModel> showAllProperty() {
+	public List<Property> showAllProperty() {
 		return ownerService.allProperties();
 	}
 	@GetMapping("/rented")
-	public List<RentedModel> showRented() {
+	public List<Rented> showRented() {
 		return userService.showRented();
 	}
 	@GetMapping("/bought")
-	public List<BoughtModel> showBought() {
+	public List<Bought> showBought() {
 		return userService.showBought();
 	}
 	@GetMapping("/profile")
-	public UserModel showUser() {
+	public User showUser() {
 		return ownerService.showProfile();
 	}
 	// -----------------------------
@@ -64,11 +64,11 @@ public class UserController {
 	// CLIENT POST ROUTES STARTS HERE
 	// -----------------------------
 	@PostMapping("/register")
-	public void registerClient(@RequestBody UserModel user) {
+	public void registerClient(@RequestBody User user) {
 		adminService.addClient(user);
 	}
 	@PostMapping("/issue")
-	public void createIssue(@RequestBody IssuesModel issue) {
+	public void createIssue(@RequestBody Issues issue) {
 		userService.createIssue(issue);
 	}
 	// -----------------------------
@@ -78,7 +78,7 @@ public class UserController {
 	// CLIENT PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PutMapping("/updateprofile")
-	public UserModel updateProfile() {
+	public User updateProfile() {
 		return ownerService.updateProfile();
 	}
 	// -----------------------------

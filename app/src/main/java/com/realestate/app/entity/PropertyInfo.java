@@ -9,10 +9,13 @@ import lombok.Data;
 @Data
 public class PropertyInfo {
 	
+	public PropertyInfo() {
+		super();
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "property_info_id")
-	private int propertyInfoId;
+	private Integer propertyInfoId;
 	@Column(name = "has_garage")
 	private boolean hasGarage;
 	@Column(name = "has_elevator")
@@ -20,11 +23,11 @@ public class PropertyInfo {
 	@Column(name = "has_pool")
 	private boolean hasPool;
 	@Column(name = "floor_number")
-	private int floorNumber;
+	private Integer floorNumber;
 	@Column(name = "nr_bathrooms")
-	private int nrBathrooms;
+	private Integer nrBathrooms;
 	@Column(name = "nr_bedrooms")
-	private int nrBedrooms;
+	private Integer nrBedrooms;
 	@Column(name = "area")
-	private int area;
+	private Integer area;
 }

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.model.LocationModel;
-import com.realestate.app.model.PropertyInfoModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Location;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.PropertyInfo;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 import com.realestate.app.service.AdminService;
 
 @RestController
@@ -33,25 +33,31 @@ public class AdminController {
 	// ADMIN GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/properties")
-	public List<PropertyModel> showProperties() {
+	public List<Property> showProperties() {
 		// show all properties on database
 		return adminService.allProperties();
 	}
 
 	@GetMapping("/users")
-	public List<UserModel> showAllUsers() {
+	public List<User> showAllUsers() {
 		// show all users on database
 		return adminService.allUsers();
 	}
+	
+	@GetMapping("/users/{id}")
+	public User showUserById(@PathVariable("id") Integer id) {
+		// show all users on database
+		return adminService.showUserById(id);
+	}
 
 	@GetMapping("/owners")
-	public List<UserModel> showAllOwners() {
+	public List<User> showAllOwners() {
 		// show all users that are owners
 		return adminService.allOwners();
 	}
 
 	@GetMapping("/clients")
-	public List<UserModel> showAllClients() {
+	public List<User> showAllClients() {
 		// show all users that are clients
 		return adminService.allClients();
 	}
@@ -63,22 +69,22 @@ public class AdminController {
 	// ADMIN POST ROUTES STARTS HERE
 	// -----------------------------
 	@PostMapping("/addowner")
-	public void addOwner(@RequestBody UserModel user) {
+	public void addOwner(@RequestBody User user) {
 		adminService.addOwner(user);
 	}
 
 	@PostMapping("/addproperty")
-	public void addProperty(@RequestBody PropertyModel property) {
+	public void addProperty(@RequestBody Property property) {
 		adminService.addProperty(property);
 	}
 
 	@PostMapping("/addclient")
-	public void addClient(@RequestBody UserModel user) {
+	public void addClient(@RequestBody User user) {
 		adminService.addClient(user);
 	}
 
 	@PostMapping("/addlocations")
-	public void addLocation(@RequestBody LocationModel location) {
+	public void addLocation(@RequestBody Location location) {
 		adminService.addLocation(location);
 	}
 
@@ -88,28 +94,28 @@ public class AdminController {
 	// -----------------------------
 	// ADMIN PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/updateuser/{username}")
-	public UserModel updateUser(@PathVariable("username") String username) {
-		return adminService.updateUser(username);
+	@PutMapping("/updateuser")
+	public User updateUser(@RequestBody User user) {
+		return adminService.updateUser(user);
 	}
 
 	@PutMapping("/updateproperty/{id}")
-	public PropertyModel updateProperty(@PathVariable("id") int id) {
+	public Property updateProperty(@PathVariable("id") int id) {
 		return adminService.updateProperty(id);
 	}
 
 	@PutMapping("/updaterented/{id}")
-	public RentedModel updateRented(@PathVariable("id") int id) {
+	public Rented updateRented(@PathVariable("id") int id) {
 		return adminService.updateRented(id);
 	}
 
 	@PutMapping("/updatelocations/{id}")
-	public LocationModel updateLocation(@PathVariable("id") int id) {
+	public Location updateLocation(@PathVariable("id") int id) {
 		return adminService.updateLocation(id);
 	}
 
 	@PutMapping("/updatepropertyinfo/{id}")
-	public PropertyInfoModel updatePropertyInfo(@PathVariable("id") int id) {
+	public PropertyInfo updatePropertyInfo(@PathVariable("id") int id) {
 		return adminService.updatePropertyInfo(id);
 	}
 

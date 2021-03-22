@@ -8,10 +8,21 @@ import lombok.Data;
 @Entity
 @Data
 public class Role {
+
+	public Role() {
+		super();
+	}
+
+	public Role(Integer roleId) {
+		super();
+		this.roleId = roleId;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
-	private int roleId;
+	private Integer roleId;
 	@Column(name = "role_name")
-	private int roleName;
+	private String roleName;
+
 }

@@ -10,10 +10,13 @@ import lombok.Data;
 @Data
 public class Issues {
 	
+	public Issues() {
+		super();
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "issue_id")
-	private int issueId;
+	private Integer issueId;
 	@Column(name = "category")
 	private String category;
 	@Column(name = "resolution_status")

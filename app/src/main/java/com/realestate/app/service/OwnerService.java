@@ -2,53 +2,52 @@ package com.realestate.app.service;
 
 import java.util.List;
 
-
-import com.realestate.app.model.BoughtModel;
-import com.realestate.app.model.IssuesModel;
-import com.realestate.app.model.LocationModel;
-import com.realestate.app.model.PropertyInfoModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Bought;
+import com.realestate.app.entity.Issues;
+import com.realestate.app.entity.Location;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.PropertyInfo;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 
 
 public interface OwnerService {
 	//FUNCTIONS TO GET DATA FROM DATABASE
-	List<PropertyModel> allOwnerProperties(String username);
+	List<Property> allOwnerProperties(String username);
 	
-	List<PropertyModel> allProperties();
+	List<Property> allProperties();
 
-	List<UserModel> allOwnerRelatedUsers();
+	List<User> allOwnerRelatedUsers();
 	
-	List<RentedModel> allRented();
+	List<Rented> allRented();
 	
-	List<BoughtModel> allSold();
+	List<Bought> allSold();
 	
-	List<IssuesModel> allIssues();
+	List<Issues> allIssues();
 	
-	IssuesModel issueById(int id);
+	Issues issueById(int id);
 	
-	 UserModel showProfile();
+	 User showProfile();
 	
 	//FUNCTIONS TO INSERT DATA TO DATABASE
-	void addProperty(PropertyModel property);
+	void addProperty(Property property);
 	
-	void addRented(RentedModel rented);
+	void addRented(Rented rented);
 	
-	void addBought(BoughtModel bought);
+	void addBought(Bought bought);
 	
-	 void addLocation(LocationModel location);
+	 void addLocation(Location location);
 	 
 	//FUNCTIONS TO UPDATE DATA ON DATABASE
-	 UserModel updateProfile();
+	 User updateProfile();
 	 
-	 PropertyModel updateProperty(int id);
+	 Property updateProperty(int id);
 	 
-	 RentedModel updateRented(int id);
+	 Rented updateRented(int id);
 	 
-	 PropertyInfoModel updatePropertyInfo(int id);
+	 PropertyInfo updatePropertyInfo(int id);
 	 
-	 IssuesModel updateIssues(int id);
+	 Issues updateIssues(int id);
 	 
 	//FUNCTIONS TO DELETE DATA FROM DATABASE
 	 void deleteUser(String username);

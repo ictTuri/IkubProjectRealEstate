@@ -4,124 +4,149 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.realestate.app.model.BoughtModel;
-import com.realestate.app.model.IssuesModel;
-import com.realestate.app.model.LocationModel;
-import com.realestate.app.model.PropertyInfoModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Bought;
+import com.realestate.app.entity.Issues;
+import com.realestate.app.entity.Location;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.PropertyInfo;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 
 @Service
 public class OwnerServiceImpl implements OwnerService{
 
 	@Override
-	public List<PropertyModel> allOwnerProperties(String username) {
+	public List<Property> allOwnerProperties(String username) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PropertyModel> allProperties() {
+	public List<Property> allProperties() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<UserModel> allOwnerRelatedUsers() {
+	public List<User> allOwnerRelatedUsers() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<RentedModel> allRented() {
+	public List<Rented> allRented() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<BoughtModel> allSold() {
+	public List<Bought> allSold() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<IssuesModel> allIssues() {
+	public List<Issues> allIssues() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IssuesModel issueById(int id) {
+	public Issues issueById(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public UserModel showProfile() {
+	public User showProfile() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addProperty(PropertyModel property) {
+	public void addProperty(Property property) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void addRented(RentedModel rented) {
-	}
-
-	@Override
-	public void addBought(BoughtModel bought) {
+	public void addRented(Rented rented) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void addLocation(LocationModel location) {
+	public void addBought(Bought bought) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public UserModel updateProfile() {
+	public void addLocation(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public User updateProfile() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public PropertyModel updateProperty(int id) {
+	public Property updateProperty(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RentedModel updateRented(int id) {
+	public Rented updateRented(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public PropertyInfoModel updatePropertyInfo(int id) {
+	public PropertyInfo updatePropertyInfo(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IssuesModel updateIssues(int id) {
+	public Issues updateIssues(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void deleteUser(String username) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteProperty(int id) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteRented(int id) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteLocation(int id) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteBought(int id) {
+		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

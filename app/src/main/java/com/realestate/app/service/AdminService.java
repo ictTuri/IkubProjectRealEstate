@@ -2,47 +2,48 @@ package com.realestate.app.service;
 
 import java.util.List;
 
-
-import com.realestate.app.model.LocationModel;
-import com.realestate.app.model.PropertyInfoModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Location;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.PropertyInfo;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 
 
 public interface AdminService {
 
 	//FUNCTIONS TO GET DATA FROM DATABASE 
-	List<PropertyModel> allProperties();
+	List<Property> allProperties();
 
-	List<UserModel> allUsers();
+	List<User> allUsers();
 
-	List<UserModel> allOwners();
+	User showUserById(Integer id);
+	
+	List<User> allOwners();
 
-	List<UserModel> allClients();
+	List<User> allClients();
 	
 	//FUNCTIONS TO STORE DATA TO DATABASE 
-	void addOwner(UserModel user);
+	void addOwner(User user);
 	
-	void addProperty(PropertyModel property);
+	void addProperty(Property property);
 	
-	void addClient(UserModel user);
+	void addClient(User user);
 	
-	void addLocation(LocationModel location);
+	void addLocation(Location location);
 	
 	//FUNCTIONS TO UPDATE DATA ON DATABASE 
-	UserModel updateUser(String username);
+	User updateUser(User user);
 	
-	PropertyModel updateProperty(int id);
+	Property updateProperty(int id);
 	
-	RentedModel updateRented(int id);
+	Rented updateRented(int id);
 	
-	LocationModel updateLocation(int id);
+	Location updateLocation(int id);
 	
-	PropertyInfoModel updatePropertyInfo(int id);
+	PropertyInfo updatePropertyInfo(int id);
 	
 	//FUNCTIONS TO DELETE DATA FROM DATABASE 
-	void deleteUser(String username);
+	User deleteUser(String username);
 	
 	void deleteProperty(int id);
 	

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.model.BoughtModel;
-import com.realestate.app.model.IssuesModel;
-import com.realestate.app.model.LocationModel;
-import com.realestate.app.model.PropertyInfoModel;
-import com.realestate.app.model.PropertyModel;
-import com.realestate.app.model.RentedModel;
-import com.realestate.app.model.UserModel;
+import com.realestate.app.entity.Bought;
+import com.realestate.app.entity.Issues;
+import com.realestate.app.entity.Location;
+import com.realestate.app.entity.Property;
+import com.realestate.app.entity.PropertyInfo;
+import com.realestate.app.entity.Rented;
+import com.realestate.app.entity.User;
 import com.realestate.app.service.OwnerService;
 
 @RestController
@@ -35,48 +35,48 @@ public class OwnerController {
 	// OWNER GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/properties/{username}")
-	public List<PropertyModel> showProperties(@PathVariable("username") String username) {
+	public List<Property> showProperties(@PathVariable("username") String username) {
 		return ownerService.allOwnerProperties(username);
 	}
 
 	@GetMapping("/allproperties")
-	public List<PropertyModel> showProperties() {
+	public List<Property> showProperties() {
 		//Get all properties from DB
 		return ownerService.allProperties();
 	}
 
 	@GetMapping("/users")
-	public List<UserModel> showAllUsers() {
+	public List<User> showAllUsers() {
 		//get users that have rent properties of the owner
 		return ownerService.allOwnerRelatedUsers();
 	}
 
 	@GetMapping("/rented")
-	public List<RentedModel> showAllRented() {
+	public List<Rented> showAllRented() {
 		// show rented of owner properties
 		return ownerService.allRented();
 	}
 
 	@GetMapping("/sold")
-	public List<BoughtModel>  showAllBought() {
+	public List<Bought>  showAllBought() {
 		// show sold of owner properties
 		return ownerService.allSold();
 	}
 
 	@GetMapping("/issues")
-	public List<IssuesModel> showAllIssues() {
+	public List<Issues> showAllIssues() {
 		// show issues of owner properties
 		return ownerService.allIssues();
 	}
 
 	@GetMapping("/issues/{id}")
-	public IssuesModel showIssueFromId(@PathVariable("id") int id) {
+	public Issues showIssueFromId(@PathVariable("id") int id) {
 		// show issue with passed id
 		return ownerService.issueById(id);
 	}
 	//new route profiles added after flowchart
 	@GetMapping("/profile")
-	public UserModel showProfile() {
+	public User showProfile() {
 		// show owner profile
 		return ownerService.showProfile();
 	}
@@ -88,22 +88,22 @@ public class OwnerController {
 	// OWNER POST ROUTES STARTS HERE
 	// -----------------------------
 	@PostMapping("/addproperty")
-	public void addProperty(@RequestBody PropertyModel property) {
+	public void addProperty(@RequestBody Property property) {
 		ownerService.addProperty(property);
 	}
 
 	@PostMapping("/addrented")
-	public void addRented(@RequestBody RentedModel rented) {
+	public void addRented(@RequestBody Rented rented) {
 		ownerService.addRented(rented);
 	}
 
 	@PostMapping("/addbought")
-	public void addBought(@RequestBody BoughtModel bought) {
+	public void addBought(@RequestBody Bought bought) {
 		ownerService.addBought(bought);
 	}
 
 	@PostMapping("/addlocations")
-	public void addLocation(@RequestBody LocationModel location) {
+	public void addLocation(@RequestBody Location location) {
 		ownerService.addLocation(location);
 	}
 
@@ -114,27 +114,27 @@ public class OwnerController {
 	// OWNER PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PutMapping("/updateprofile")
-	public UserModel updateProfile() {
+	public User updateProfile() {
 		return ownerService.updateProfile();
 	}
 
 	@PutMapping("/updateproperty/{id}")
-	public PropertyModel updateProperty(@PathVariable("id") int id) {
+	public Property updateProperty(@PathVariable("id") int id) {
 		return ownerService.updateProperty(id);
 	}
 
 	@PutMapping("/updaterented/{id}")
-	public RentedModel updateRented(@PathVariable("id") int id) {
+	public Rented updateRented(@PathVariable("id") int id) {
 		return ownerService.updateRented(id);
 	}
 
 	@PutMapping("/updatepropertyinfo/{id}")
-	public PropertyInfoModel updatePropertyInfo(@PathVariable("id") int id) {
+	public PropertyInfo updatePropertyInfo(@PathVariable("id") int id) {
 		return ownerService.updatePropertyInfo(id);
 	}
 
 	@PutMapping("/updateissues/{id}")
-	public IssuesModel updateIssues(@PathVariable("id") int id) {
+	public Issues updateIssues(@PathVariable("id") int id) {
 		return ownerService.updateIssues(id);
 	}
 
