@@ -7,54 +7,54 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.realestate.app.entity.User;
-import com.realestate.app.repository.AdminRepository;
+import com.realestate.app.entity.UserEntity;
+import com.realestate.app.repository.UserRepository;
 
 @SpringBootTest
 @Transactional
 class AdminTest {
 	
 	@Autowired
-	AdminRepository adminRepository;
+	UserRepository userRepository;
 	
 	@Test
 	 void givenUsername_whenRetrieved_thenGetUserData() {
-		User user = UserUtil.createUser();
-		adminRepository.insertUser(user);
+		UserEntity user = UserUtil.createUser();
+		userRepository.insertUser(user);
 		String username = "test123";
 		
-		User userRetrieved = adminRepository.getUserByUsername(username);
+		UserEntity userRetrieved = userRepository.getUserByUsername(username);
 		
 		Assertions.assertEquals(username, userRetrieved.getUsername());
 	}
 	
 	@Test
 	 void givenUser_whenUpdate_thenGetUpdatedUser() {
-		User user = UserUtil.createUser();
-		adminRepository.insertUser(user);
+		UserEntity user = UserUtil.createUser();
+		userRepository.insertUser(user);
 		user.setFirstName("testUpdate");
 		
-		adminRepository.updateUser(user);
+		userRepository.updateUser(user);
 		
-		Assertions.assertEquals("testUpdate", adminRepository.getUserByUsername("test123").getFirstName());
+		Assertions.assertEquals("testUpdate", userRepository.getUserByUsername("test123").getFirstName());
 	}
 	
 	@Test
 	 void givenUser_whenSave_thenGetCreatedUser() {
-		Integer userSize = adminRepository.getAllUsers().size();
-		User user = UserUtil.createUserAdmin();
+		Integer userSize = userRepository.getAllUsers().size();
+		UserEntity user = UserUtil.createUserAdmin();
 
-		adminRepository.insertUser(user);
+		userRepository.insertUser(user);
 		
-		Assertions.assertEquals(userSize+1, adminRepository.getAllUsers().size());
-		Assertions.assertNotNull(adminRepository.getUserByUsername("admin123"));
+		Assertions.assertEquals(userSize+1, userRepository.getAllUsers().size());
+		Assertions.assertNotNull(userRepository.getUserByUsername("admin123"));
 	}
 	
 	@Test
 	 void givenWrongUsername_whenRetrieved_thenGetNoResult() {
 		String username = "test";
 		
-		User user = adminRepository.getUserByUsername(username);
+		UserEntity user = userRepository.getUserByUsername(username);
 		
 		Assertions.assertNull(user);
 	}
@@ -62,12 +62,12 @@ class AdminTest {
 	
 	@Test
 	 void givenUser_whenSoftDelete_thenGetNoResult() {
-		User user = UserUtil.createUserAdmin();
-		adminRepository.insertUser(user);
+		UserEntity user = UserUtil.createUserAdmin();
+		userRepository.insertUser(user);
 
-		adminRepository.deleteUser(user);
+		userRepository.deleteUser(user);
 		
-		Assertions.assertNull(adminRepository.getUserByUsername("admin123"));
+		Assertions.assertNull(userRepository.getUserByUsername("admin123"));
 	}
 	
 }

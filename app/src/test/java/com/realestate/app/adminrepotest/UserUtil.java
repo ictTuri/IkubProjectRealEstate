@@ -1,10 +1,10 @@
 package com.realestate.app.adminrepotest;
 
-import com.realestate.app.entity.User;
+import com.realestate.app.entity.UserEntity;
 
 public class UserUtil {
-	public static User createUser() {
-		User user = new User();
+	public static UserEntity createUser() {
+		UserEntity user = new UserEntity();
 		user.setFirstName("test");
 		user.setLastName("test");
 		user.setEmail("test@gmail.com");
@@ -14,8 +14,8 @@ public class UserUtil {
 		return user;
 	}
 	
-	public static User createUserAdmin() {
-		User user = new User();
+	public static UserEntity createUserAdmin() {
+		UserEntity user = new UserEntity();
 		user.setFirstName("admin");
 		user.setLastName("admin");
 		user.setEmail("admin@gmail.com");

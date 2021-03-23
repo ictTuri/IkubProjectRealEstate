@@ -1,30 +1,44 @@
 package com.realestate.app.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
-@Entity
-@Table(name = "users")
-public class User {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	public User() {	}
+@Entity
+@Table(name = "USERS")
+@Data
+@NoArgsConstructor
+public class UserEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Integer userId;
+
 	@Column(name = "first_name")
 	private String firstName;
+
 	@Column(name = "last_name")
 	private String lastName;
+
 	@Column(name = "email")
 	private String email;
+
 	@Column(name = "username")
 	private String username;
+
 	@Column(name = "pass")
 	private String password;
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
-	private Role roleId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "role", referencedColumnName = "role_id")
+	private RoleEntity role;
+
 	@Column(name = "is_active")
 	private boolean isActive;
 
@@ -76,30 +90,20 @@ public class User {
 		this.password = password;
 	}
 
-	public Role getRoleId() {
-		return roleId;
+	public RoleEntity getRole() {
+		return role;
 	}
 
-	public void setRoleId(Role roleId) {
-		this.roleId = roleId;
+	public void setRole(RoleEntity role) {
+		this.role = role;
 	}
 
-	public boolean getActive() {
+	public boolean isActive() {
 		return isActive;
 	}
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-
-	public User(String firstName, String lastName, String email, String username, String password) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-	}
-	
 
 }

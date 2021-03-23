@@ -4,45 +4,32 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.realestate.app.entity.Bought;
-import com.realestate.app.entity.Issues;
-import com.realestate.app.entity.Property;
-import com.realestate.app.entity.Rented;
-
+import com.realestate.app.entity.UserEntity;
+import com.realestate.app.repository.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
+	UserRepository adminRepository;
 
 	@Override
-	public Property getProperty(int id) {
-		// TODO Auto-generated method stub
+	public List<UserEntity> allUsers() {
 		return null;
 	}
 
 	@Override
-	public List<Rented> showRented() {
-		// TODO Auto-generated method stub
+	public void addOwner(UserEntity user) {
+
+	}
+
+	@Override
+	public UserEntity updateUser(UserEntity user) {
 		return null;
 	}
 
 	@Override
-	public List<Bought> showBought() {
-		// TODO Auto-generated method stub
+	public UserEntity deleteUser(String username) {
 		return null;
 	}
-
-	@Override
-	public void createIssue(Issues issue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteIssue(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 }
