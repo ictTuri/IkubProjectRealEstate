@@ -1,4 +1,4 @@
-package com.realestate.app.adminrepotest;
+package com.realestate.app.utils;
 
 import com.realestate.app.entity.UserEntity;
 

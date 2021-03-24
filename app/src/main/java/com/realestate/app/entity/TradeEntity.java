@@ -40,4 +40,62 @@ public class TradeEntity implements Serializable{
 	
 	@Column(name = "payment_type")
 	private String paymentType;
+
+	public Integer getTradeId() {
+		return tradeId;
+	}
+
+	public void setTradeId(Integer tradeId) {
+		this.tradeId = tradeId;
+	}
+
+	public UserEntity getClient() {
+		return client;
+	}
+
+	public void setClient(UserEntity client) {
+		this.client = client;
+	}
+
+	public PropertyEntity getProperties() {
+		return properties;
+	}
+
+	public void setProperties(PropertyEntity properties) {
+		this.properties = properties;
+	}
+
+	public LocalDateTime getTradeDate() {
+		return tradeDate;
+	}
+
+	public void setTradeDate(LocalDateTime tradeDate) {
+		this.tradeDate = tradeDate;
+	}
+
+	public LocalDateTime getEndTradeDate() {
+		return endTradeDate;
+	}
+
+	public void setEndTradeDate(LocalDateTime endTradeDate) {
+		this.endTradeDate = endTradeDate;
+	}
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+	
+	
 }

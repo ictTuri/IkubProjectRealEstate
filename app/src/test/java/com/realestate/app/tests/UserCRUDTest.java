@@ -1,4 +1,4 @@
-package com.realestate.app.adminrepotest;
+package com.realestate.app.tests;
 
 import javax.transaction.Transactional;
 
@@ -9,10 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.repository.UserRepository;
+import com.realestate.app.utils.UserUtil;
 
 @SpringBootTest
 @Transactional
-class AdminTest {
+class UserCRUDTest {
 	
 	@Autowired
 	UserRepository userRepository;
