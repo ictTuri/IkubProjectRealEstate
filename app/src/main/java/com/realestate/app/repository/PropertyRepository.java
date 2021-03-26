@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,6 @@ import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 
 @Repository
-@Transactional
 public class PropertyRepository {
 	EntityManager em;
 
@@ -30,6 +28,7 @@ public class PropertyRepository {
 	private static final String GET_PROPERTY_BY_ID = "FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id";
 	private static final String GET_PROPERTY_TYPE_BY_ID = "FROM PropertyTypeEntity pte WHERE pte.propertyTypeId = :id";
+	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	// PROPERTIES
@@ -67,7 +66,7 @@ public class PropertyRepository {
 		return em.createQuery(GET_ALL_PROPERTY_TYPES, PropertyTypeEntity.class).getResultList();
 	}
 
-	public PropertyTypeEntity getPropertyTyoeById(Integer id) {
+	public PropertyTypeEntity getPropertyTypeById(Integer id) {
 		TypedQuery<PropertyTypeEntity> query = em.createQuery(GET_PROPERTY_TYPE_BY_ID, PropertyTypeEntity.class)
 				.setParameter("id", id);
 		try {
@@ -114,5 +113,36 @@ public class PropertyRepository {
 	
 	public void deletePropertyType(PropertyTypeEntity propertyType) {
 		em.remove(propertyType);
+	}
+	
+	//HELPING METHODS DOWN HERE
+	public boolean existPropertyType(int id) {
+		TypedQuery<PropertyTypeEntity> query = em.createQuery(GET_PROPERTY_TYPE_BY_ID, PropertyTypeEntity.class).setParameter("id", id);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+	}
+	
+	public boolean existPropertyInfoAnotherProperty(int id, int info) {
+		TypedQuery<PropertyTypeEntity> query = em.createQuery(CHECK_PROPERTY_INFO_TAKEN, PropertyTypeEntity.class).setParameter("id", id).setParameter("info", info);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+	}
+	
+	public boolean existPropertyInfo(int id) {
+		TypedQuery<PropertyInfoEntity> query = em.createQuery(GET_PROPERTY_INFO_BY_ID, PropertyInfoEntity.class).setParameter("id", id);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
 	}
 }

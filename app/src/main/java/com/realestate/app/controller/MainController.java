@@ -2,6 +2,7 @@ package com.realestate.app.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,61 +12,104 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.entity.UserEntity;
+import com.realestate.app.converter.LocationConverter;
+import com.realestate.app.converter.PropertyConverter;
+import com.realestate.app.converter.UserConverter;
+import com.realestate.app.dto.LocationDto;
+import com.realestate.app.dto.PropertyDto;
+import com.realestate.app.dto.PropertyDtoForCreate;
+import com.realestate.app.dto.UserDto;
+import com.realestate.app.dto.UserDtoForCreate;
+import com.realestate.app.service.PropertyService;
 import com.realestate.app.service.UserService;
 
 @RestController
 @RequestMapping
 public class MainController {
 
-	UserService adminService;
+	UserService userService;
+	PropertyService propertyService;
 
-	public MainController(UserService adminServ) {
+	@Autowired
+	public MainController(UserService userService ,PropertyService propertyService) {
 		super();
-		this.adminService = adminServ;
+		this.userService = userService;
+		this.propertyService = propertyService;
 	}
 
 	// -----------------------------
-	// ADMIN GET ROUTES STARTS HERE
+	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/users")
-	public List<UserEntity> showAllUsers() {
+	public List<UserDto> showAllUsers() {
 		// show all users on database
-		return adminService.allUsers();
+		return UserConverter.toDto(userService.allUsers());
+	}
+	
+	@GetMapping("/properties")
+	public List<PropertyDto> showAllProperties(){
+		// show all properties on database
+		return PropertyConverter.toDto(propertyService.allProperties());
+	}
+	
+	@GetMapping("/locations")
+	public List<LocationDto> showAllLocations(){
+		// show all locations on database
+		return LocationConverter.toDto(propertyService.allLocations());
+	}
+	
+	// -----------------------------
+	// GET ROUTES ENDS HERE
+	// -----------------------------
+	// -----------------------------
+	// POST ROUTES STARTS HERE
+	// -----------------------------
+	@PostMapping("/adduser")
+	public UserDto addUser(@RequestBody UserDtoForCreate user) {
+		//return the added user formated by converter
+		return UserConverter.toDto(userService.addUser(user));
+	}
+	@PostMapping("/addproperty")
+	public PropertyDto addProperty(@RequestBody PropertyDtoForCreate property) {
+		//return the added property formated by converter
+		return PropertyConverter.toDto(propertyService.addProperty(property));
+	}
+	@PostMapping("/addlocation")
+	public LocationDto addLocation(@RequestBody LocationDto location) {
+		//return the added location formated by converter
+		return LocationConverter.toDto(propertyService.addLocation(location));
 	}
 	// -----------------------------
-	// ADMIN GET ROUTES ENDS HERE
+	// POST ROUTES ENDS HERE
 	// -----------------------------
 	// -----------------------------
-	// ADMIN POST ROUTES STARTS HERE
+	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/addowner")
-	public void addOwner(@RequestBody UserEntity user) {
-		user.setActive(true);
-		adminService.addOwner(user);
+	@PutMapping("/updateuser/{id}")
+	public UserDto updateUser(@RequestBody UserDtoForCreate user,@PathVariable("id") int id) {
+		return UserConverter.toDto(userService.updateUser(user,id));
+	}
+	@PutMapping("/updatProperty/{id}")
+	public PropertyDto updateProperty(@RequestBody PropertyDtoForCreate property,@PathVariable("id") int id) {
+		return PropertyConverter.toDto(propertyService.updateProperty(property, id));
 	}
 	// -----------------------------
-	// ADMIN POST ROUTES ENDS HERE
+	// PUT ROUTES ENDS HERE
 	// -----------------------------
 	// -----------------------------
-	// ADMIN PUT ROUTES STARTS HERE
+	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/updateuser")
-	public UserEntity updateUser(@RequestBody UserEntity user) {
-		return adminService.updateUser(user);
+	@DeleteMapping("/deleteuser/{id}")
+	public void deleteUser(@PathVariable("id") int id) {
+		userService.deleteUser(id);
 	}
-	// -----------------------------
-	// ADMIN PUT ROUTES ENDS HERE
-	// -----------------------------
-	// -----------------------------
-	// ADMIN DELETE ROUTES STARTS HERE
-	// -----------------------------
-	@DeleteMapping("/deleteuser/{username}")
-	public void deleteUser(@PathVariable("username") String username) {
-		adminService.deleteUser(username);
+	@DeleteMapping("/deleteproperty/{id}")
+	public void deleteProperty(@PathVariable("id") int id) {
+		propertyService.deleteProperty(id);
 	}
+	
 	// -----------------------------
-	// ADMIN DELETE ROUTES ENDS HERE
+	// DELETE ROUTES ENDS HERE
 	// -----------------------------
 	// -----------------------------
 	// EVERY OTHER ROUT REQUEST HANDLED BELOW

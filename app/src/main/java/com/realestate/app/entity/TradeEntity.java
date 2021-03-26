@@ -40,6 +40,10 @@ public class TradeEntity implements Serializable{
 	
 	@Column(name = "payment_type")
 	private String paymentType;
+	
+	@Version
+	@Column(name = "version")
+	private int version;
 
 	public Integer getTradeId() {
 		return tradeId;

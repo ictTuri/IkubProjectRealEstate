@@ -5,16 +5,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.realestate.app.entity.PropertyInfoEntity;
-import com.realestate.app.entity.PropertyTypeEntity;
+import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 
 @Repository
-@Transactional
 public class UserRepository {
 
 	EntityManager em;
@@ -26,67 +23,39 @@ public class UserRepository {
 
 	private static final String GET_ALL_USERS = "FROM UserEntity";
 	
-	
-	private static final String GET_ALL_PROPERTY_INFOS = "FROM PropertyInfoEntity";
-	private static final String GET_ALL_PROPERTY_TYPES = "FROM PropertyTypeEntity";
-
 	private static final String GET_USER_BY_ID = "FROM UserEntity u WHERE u.userId = :id";
+	private static final String GET_ROLE_BY_ID = "FROM RoleEntity r WHERE r.roleId = :id";
+	private static final String GET_OWNER_BY_ID = "SELECT u FROM UserEntity u WHERE u.userId = :id and u.role = :role";
 	
-	
-	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pi WHERE pi.propertyInfoId = :id";
-	private static final String GET_PROPERTY_TYPE_BY_ID = "FROM PropertyTypeEntity pt WHERE pt.propertyTypeId = :id";
-
-	private static final String GET_USER_BY_USERNAME = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
-	private static final String GET_USER_BY_EMAIL = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
+	private static final String CHECK_USERNAME_EXIST = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
+	private static final String CHECK_EMAIL_EXIST = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
 	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u where u.username =?1 and u.isActive = true";
+	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u where u.username = :username";
+	
 
 	// RETRIEVE OPERATIONS DOWN HERE
-	// USERS
 	public List<UserEntity> getAllUsers() {
 		return em.createQuery(GET_ALL_USERS, UserEntity.class).getResultList();
 	}
 
-	public UserEntity getUserById(Integer id) {
+	public UserEntity getUserById(int id) {
 		TypedQuery<UserEntity> query = em.createQuery(GET_USER_BY_ID, UserEntity.class).setParameter("id", id);
+		try{
+			return query.getResultList().get(0);
+		}catch(IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+	//ROLE
+	public RoleEntity getRoleById(int id) {
+		TypedQuery<RoleEntity> query = em.createQuery(GET_ROLE_BY_ID, RoleEntity.class).setParameter("id", id);
 		try {
 			return query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-
-	// PROPERTY INFO
-	public List<PropertyInfoEntity> getAllPropertyInfos() {
-		return em.createQuery(GET_ALL_PROPERTY_INFOS, PropertyInfoEntity.class).getResultList();
-	}
-
-	public PropertyInfoEntity getPropertyInfoById(Integer id) {
-		TypedQuery<PropertyInfoEntity> query = em.createQuery(GET_PROPERTY_INFO_BY_ID, PropertyInfoEntity.class)
-				.setParameter("id", id);
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
-	// PROPERTY TYPE
-	public List<PropertyTypeEntity> getAllPropertyTypes() {
-		return em.createQuery(GET_ALL_PROPERTY_TYPES, PropertyTypeEntity.class).getResultList();
-	}
-
-	public PropertyTypeEntity getPropertyTypeById(Integer id) {
-		TypedQuery<PropertyTypeEntity> query = em.createQuery(GET_PROPERTY_TYPE_BY_ID, PropertyTypeEntity.class)
-				.setParameter("id", id);
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
-	// PROPERTIES
-
+	
 	// INSERT OPERATIONS DOWN HERE
 	public void insertUser(UserEntity user) {
 		em.persist(user);
@@ -110,10 +79,32 @@ public class UserRepository {
 
 	// HELPING METHODS BELOW HERE
 	public boolean existUsername(String username) {
-		TypedQuery<String> query = em.createQuery(GET_USER_BY_USERNAME, String.class).setParameter("username",
-				username);
-		return query.getSingleResult() != null;
+		TypedQuery<String> query = em.createQuery(CHECK_USERNAME_EXIST, String.class).setParameter("username",username);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
 
+	public boolean existEmail(String email) {
+		TypedQuery<String> query = em.createQuery(CHECK_EMAIL_EXIST, String.class).setParameter("email", email);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+	}
+	
+	public boolean existUserById(int id, RoleEntity role) {
+		TypedQuery<UserEntity> query = em.createQuery(GET_OWNER_BY_ID, UserEntity.class).setParameter("id", id).setParameter("role", role);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
 	}
 
 	public UserEntity getUserByUsername(String username) {
@@ -125,16 +116,13 @@ public class UserRepository {
 		}
 	}
 
-	public boolean existEmail(String email) {
-		TypedQuery<String> query = em.createQuery(GET_USER_BY_EMAIL, String.class).setParameter("email", email);
-		return query.getSingleResult() != null;
-	}
-
 	public boolean isActiveUser(String username) {
-		TypedQuery<UserEntity> query = em.createQuery("FROM User u WHERE u.username = :username", UserEntity.class)
-				.setParameter("username", username);
-		UserEntity u = query.getSingleResult();
-		return u.isActive() == Boolean.TRUE;
-
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter("username", username);
+		try {
+			UserEntity u = query.getSingleResult();
+			return u.isActive() == Boolean.TRUE;
+		}catch(NoResultException e) {
+			return false;
+		}
 	}
 }

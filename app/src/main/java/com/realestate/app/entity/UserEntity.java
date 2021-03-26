@@ -41,6 +41,18 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "is_active")
 	private boolean isActive;
+	
+	@Version
+	@Column(name = "version")
+	private int version;
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
 	public Integer getUserId() {
 		return userId;

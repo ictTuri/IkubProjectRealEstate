@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.realestate.app.entity.LocationEntity;
 
 @Repository
-@Transactional
 public class LocationRepository {
 	EntityManager em;
 
@@ -54,4 +53,14 @@ public class LocationRepository {
 		 em.remove(location);
 	}
 
+	//HELPING METHODS DOWN HERE
+	public boolean existLocation(int id) {
+		TypedQuery<LocationEntity> query = em.createQuery(GET_LOCATION_BY_ID, LocationEntity.class).setParameter("id", id);
+		try {
+			return query.getResultList().get(0) != null;
+		}catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+	}
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UserDto{
 	
-	private Integer userId;
+	private int userId;
 		
 	private String firstName;
 
@@ -17,13 +17,17 @@ public class UserDto{
 
 	private String password;
 
-	private Integer role;
+	private RoleDto role;
+	
+	private boolean isActive;
+	
+	private int version;
 
-	public Integer getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
@@ -67,12 +71,28 @@ public class UserDto{
 		this.password = password;
 	}
 
-	public Integer getRole() {
+	public RoleDto getRole() {
 		return role;
 	}
 
-	public void setRole(Integer role) {
+	public void setRole(RoleDto role) {
 		this.role = role;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	
 	

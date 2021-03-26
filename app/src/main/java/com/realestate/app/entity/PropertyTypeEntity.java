@@ -31,4 +31,28 @@ public class PropertyTypeEntity implements Serializable{
 	@Column(name = "property_type_desc")
 	private String propertyTypeDesc;
 
+	public Integer getPropertyTypeId() {
+		return propertyTypeId;
+	}
+
+	public void setPropertyTypeId(Integer propertyTypeId) {
+		this.propertyTypeId = propertyTypeId;
+	}
+
+	public String getPropertyTypeName() {
+		return propertyTypeName;
+	}
+
+	public void setPropertyTypeName(String propertyTypeName) {
+		this.propertyTypeName = propertyTypeName;
+	}
+
+	public String getPropertyTypeDesc() {
+		return propertyTypeDesc;
+	}
+
+	public void setPropertyTypeDesc(String propertyTypeDesc) {
+		this.propertyTypeDesc = propertyTypeDesc;
+	}
+
 }

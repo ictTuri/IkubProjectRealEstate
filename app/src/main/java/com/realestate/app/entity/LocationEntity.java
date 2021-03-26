@@ -31,6 +31,18 @@ public class LocationEntity implements Serializable {
 
 	@Column(name = "description")
 	private String description;
+	
+	@Version
+	@Column(name = "version")
+	private int version;
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
 	public Integer getLocationId() {
 		return locationId;

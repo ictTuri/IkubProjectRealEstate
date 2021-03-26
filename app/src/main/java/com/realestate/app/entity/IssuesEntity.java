@@ -40,4 +40,8 @@ public class IssuesEntity implements Serializable{
 	@JoinColumn(name = "property", referencedColumnName = "properties_id")
 	private PropertyEntity property;
 	
+	@Version
+	@Column(name = "version")
+	private int version;
+	
 }
