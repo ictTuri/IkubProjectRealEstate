@@ -24,11 +24,24 @@ public class UserServiceImpl implements UserService {
 		this.userRepository = userRepository;
 	}
 
+	//ALL USERS DISPLAYED
 	@Override
 	public List<UserEntity> allUsers() {
 		return userRepository.getAllUsers();
 	}
-
+	
+	//USER DISPLAY
+	@Override
+	public UserEntity userById(int id) {
+		UserEntity user = userRepository.getUserById(id);
+		if(user!=null) {
+			return user;
+		}else {
+			throw new MyExcMessages("No such User with given Id !");
+		}
+	}
+	
+	//USER INSERT
 	@Override
 	public UserEntity addUser(UserDtoForCreate user) {
 		if (user != null) {
@@ -37,7 +50,8 @@ public class UserServiceImpl implements UserService {
 			throw new MyExcMessages("please fill the user data to proceed !");
 		}	
 	}
-	//Validations for the user extracted
+	
+	//Validations for the new user extracted
 	private UserEntity userValidations(UserDtoForCreate user) {
 		if (user.getFirstName() != null || user.getLastName() != null) {
 			if(!userRepository.existUsername(user.getUsername())) {
@@ -60,7 +74,8 @@ public class UserServiceImpl implements UserService {
 			throw new MyExcMessages("Please fill your first name and last name !");
 		}
 	}
-
+	
+	//USER UPDATE
 	@Override
 	public UserEntity updateUser(UserDtoForCreate user, int id) {
 		UserEntity userToUpdate = userRepository.getUserById(id);
@@ -70,7 +85,8 @@ public class UserServiceImpl implements UserService {
 			throw new MyExcMessages("No User with such Id / Please check again");
 		}
 	}
-
+	
+	//Validations for the User Update Extracted
 	private UserEntity userUpdateValidation(UserDtoForCreate user, UserEntity userToUpdate) {
 		if (!userToUpdate.getUsername().equals(user.getUsername()) && userRepository.existUsername(null)) {
 			throw new MyExcMessages("Can not use this username !");
@@ -95,11 +111,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	//USER DELETION
 	@Override
 	public UserEntity deleteUser(int id) {
 		UserEntity userToDelete = userRepository.getUserById(id);
 		if (userToDelete != null) {
-			if (userToDelete.isActive()) {
+			if (userToDelete.getActive()) {
 				userToDelete.setActive(false);
 				return userRepository.updateUser(userToDelete);
 			} else {

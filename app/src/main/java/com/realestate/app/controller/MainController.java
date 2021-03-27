@@ -45,19 +45,31 @@ public class MainController {
 		// show all users on database
 		return UserConverter.toDto(userService.allUsers());
 	}
-	
+	@GetMapping("/user/{id}")
+	public UserDto showUserById(@PathVariable("id") int id) {
+		// show user by id
+		return UserConverter.toDto(userService.userById(id));
+	}
 	@GetMapping("/properties")
 	public List<PropertyDto> showAllProperties(){
 		// show all properties on database
 		return PropertyConverter.toDto(propertyService.allProperties());
 	}
-	
+	@GetMapping("/property/{id}")
+	public PropertyDto showPropertyById(@PathVariable("id") int id){
+		// show property by id
+		return PropertyConverter.toDto(propertyService.propertyById(id));
+	}
 	@GetMapping("/locations")
 	public List<LocationDto> showAllLocations(){
 		// show all locations on database
 		return LocationConverter.toDto(propertyService.allLocations());
 	}
-	
+	@GetMapping("/location/{id}")
+	public LocationDto showLocationById(@PathVariable("id") int id){
+		// show property by id
+		return LocationConverter.toDto(propertyService.locationById(id));
+	}
 	// -----------------------------
 	// GET ROUTES ENDS HERE
 	// -----------------------------
@@ -89,9 +101,13 @@ public class MainController {
 	public UserDto updateUser(@RequestBody UserDtoForCreate user,@PathVariable("id") int id) {
 		return UserConverter.toDto(userService.updateUser(user,id));
 	}
-	@PutMapping("/updatProperty/{id}")
+	@PutMapping("/updateproperty/{id}")
 	public PropertyDto updateProperty(@RequestBody PropertyDtoForCreate property,@PathVariable("id") int id) {
 		return PropertyConverter.toDto(propertyService.updateProperty(property, id));
+	}
+	@PutMapping("/updatelocation/{id}")
+	public LocationDto updateLocation(@RequestBody LocationDto location,@PathVariable("id") int id) {
+		return LocationConverter.toDto(propertyService.updateLocation(location, id));
 	}
 	// -----------------------------
 	// PUT ROUTES ENDS HERE
@@ -107,7 +123,10 @@ public class MainController {
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
 	}
-	
+	@DeleteMapping("/deletelocation/{id}")
+	public void deleteLocation(@PathVariable("id") int id) {
+		propertyService.deleteLocation(id);
+	}
 	// -----------------------------
 	// DELETE ROUTES ENDS HERE
 	// -----------------------------

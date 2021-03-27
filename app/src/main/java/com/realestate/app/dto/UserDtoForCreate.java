@@ -14,7 +14,7 @@ public class UserDtoForCreate {
 
 	private int role;
 
-	private boolean isActive;
+	private boolean active;
 	
 	private int version;
 	
@@ -66,12 +66,12 @@ public class UserDtoForCreate {
 		this.role = role;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public boolean getActive() {
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public int getVersion() {

@@ -10,6 +10,7 @@ public interface UserService {
 
 	//FUNCTIONS TO GET DATA FROM DATABASE 
 	List<UserEntity> allUsers();
+	UserEntity userById(int id);
 	
 	//FUNCTIONS TO STORE DATA TO DATABASE 
 	UserEntity addUser(UserDtoForCreate user);

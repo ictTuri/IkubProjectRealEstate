@@ -4,12 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "USERS")
-@Data
 @NoArgsConstructor
 public class UserEntity implements Serializable {
 
@@ -40,7 +38,7 @@ public class UserEntity implements Serializable {
 	private RoleEntity role;
 
 	@Column(name = "is_active")
-	private boolean isActive;
+	private boolean active;
 	
 	@Version
 	@Column(name = "version")
@@ -110,12 +108,12 @@ public class UserEntity implements Serializable {
 		this.role = role;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public boolean getActive() {
+		return active;
 	}
 
 	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+		this.active = isActive;
 	}
 
 }

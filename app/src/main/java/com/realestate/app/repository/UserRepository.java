@@ -120,7 +120,7 @@ public class UserRepository {
 		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter("username", username);
 		try {
 			UserEntity u = query.getSingleResult();
-			return u.isActive() == Boolean.TRUE;
+			return u.getActive() == Boolean.TRUE;
 		}catch(NoResultException e) {
 			return false;
 		}

@@ -19,7 +19,7 @@ public class UserDto{
 
 	private RoleDto role;
 	
-	private boolean isActive;
+	private boolean active;
 	
 	private int version;
 
@@ -79,12 +79,12 @@ public class UserDto{
 		this.role = role;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public boolean getActive() {
+		return active;
 	}
 
 	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+		this.active = isActive;
 	}
 
 	public int getVersion() {

@@ -4,12 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Table(name = "roles")
 @Entity
-@Data
 @NoArgsConstructor
 public class RoleEntity implements Serializable{
 	

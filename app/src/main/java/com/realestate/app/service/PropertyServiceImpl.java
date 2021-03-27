@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.LocationConverter;
 import com.realestate.app.converter.PropertyConverter;
+import com.realestate.app.converter.PropertyInfoConverter;
+import com.realestate.app.converter.PropertyTypeConverter;
 import com.realestate.app.dto.LocationDto;
 import com.realestate.app.dto.PropertyDtoForCreate;
+import com.realestate.app.dto.PropertyInfoDto;
+import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
@@ -31,6 +35,7 @@ public class PropertyServiceImpl implements PropertyService {
 	UserRepository userRepo;
 	LocationRepository locationRepo;
 	TradeRepository tradeRepo;
+	
 	@Autowired
 	public PropertyServiceImpl(PropertyRepository propertyRepo, UserRepository userRepo,
 			LocationRepository locationRepo, TradeRepository tradeRepo) {
@@ -42,18 +47,76 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 
-	
+	//DISPLAY ALL PROPERTIES
 	@Override
 	public List<PropertyEntity> allProperties() {
 		return propertyRepo.getAllProperties();
 	}
+	
+	
+	//DISPLAY PROPERTY BY ID
+	@Override
+	public PropertyEntity propertyById(int id) {
+		PropertyEntity property =  propertyRepo.getPropertiesById(id);
+		if(property!=null) {
+			return property;
+		}else {
+			throw new MyExcMessages("No such property with given Id !");
+		}
+	}
 
+	//DISPLAY ALL LOCATIONS
 	@Override
 	public List<LocationEntity> allLocations() {
 		return locationRepo.getAllLocations();
 	}
+	
+	//DISPLAY LOCATION BY ID
+	@Override
+	public LocationEntity locationById(int id) {
+		LocationEntity location = locationRepo.getLocationById(id);
+		if(location != null) {
+			return location;
+		}else {
+			throw new MyExcMessages("No such location with given Id !");
+		}
+	}
+	
+	//DISPLAY ALL PROPERTY TYPES
+	@Override
+	public List<PropertyTypeEntity> allPropertyTypes() {
+		return propertyRepo.getAllPropertyTypes();
+	}
 
+	//DISPLAY PROPERTY TYPE BY ID
+	@Override
+	public PropertyTypeEntity propertyTypeById(int id) {
+		PropertyTypeEntity propertyType = propertyRepo.getPropertyTypeById(id);
+		if(propertyType != null) {
+			return propertyType;
+		}else {
+			throw new MyExcMessages("No such property type with given Id !");
+		}
+	}
+	
+	//DISPLAY ALL PROPERTY INFOS
+	@Override
+	public List<PropertyInfoEntity> allPropertyInfos() {
+		return propertyRepo.getAllPropertyInfos();
+	}
 
+	//DISPLAY PROPERTY INFO BY ID
+	@Override
+	public PropertyInfoEntity propertyInfoById(int id) {
+		PropertyInfoEntity propertyInfo = propertyRepo.getPropertyInfoById(id);
+		if(propertyInfo!=null) {
+			return propertyInfo;
+		}else {
+			throw new MyExcMessages("No such property info with given Id !");
+		}
+	}
+	
+	//PROPERTY INSERT
 	@Override
 	public PropertyEntity addProperty(PropertyDtoForCreate property) {
 		if(property != null) {
@@ -95,7 +158,7 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 	}
 
-
+	//LOCATION INSERT
 	@Override
 	public LocationEntity addLocation(LocationDto location) {
 		if(location != null) {
@@ -110,7 +173,40 @@ public class PropertyServiceImpl implements PropertyService {
 			throw new MyExcMessages("Please fill the location data to proceed !");
 		}
 	}
+	
+	//PROPERTY TYPE INSERT
+	@Override
+	public PropertyTypeEntity addPropertyType(PropertyTypeDto propertyType) {
+		if(propertyType!=null) {
+			if(propertyType.getPropertyTypeName()!=null&&propertyType.getPropertyTypeDesc()!=null) {
+				PropertyTypeEntity propertyTypeToAdd = PropertyTypeConverter.toEntity(propertyType);
+				propertyRepo.insertPropertyType(propertyTypeToAdd);
+				return propertyTypeToAdd;
+			}else {
+				throw new MyExcMessages("Please fill the property type name and description !");
+			}
+		}else {
+			throw new MyExcMessages("Please fill the property type data to proceed !");
+		}
+	}
 
+	//PROPERTY INFO INSERT
+	@Override
+	public PropertyInfoEntity addPropertyInfo(PropertyInfoDto propertyInfo) {
+		if(propertyInfo != null) {
+			if(propertyInfo.getFloorNumber()>-1 && propertyInfo.getNrBathrooms()>-1 && propertyInfo.getNrBedrooms()>-1) {
+				PropertyInfoEntity propertyInfoToAdd = PropertyInfoConverter.toEntity(propertyInfo);
+				propertyRepo.deletePropertyInfo(propertyInfoToAdd);
+				return propertyInfoToAdd;
+			}else {
+				throw new MyExcMessages("Please fill floor number, bathroom and bedroom numbers data !");
+			}
+		}else {
+			throw new MyExcMessages("Please fill the property info data to proceed !");
+		}
+	}
+	
+	//PROPERTY UPDATE
 	@Override
 	public PropertyEntity updateProperty(PropertyDtoForCreate property, int id) {
 		PropertyEntity propertyToUpdate = propertyRepo.getPropertiesById(id);
@@ -128,7 +224,6 @@ public class PropertyServiceImpl implements PropertyService {
 		}else
 			throw new MyExcMessages("No Property with such Id / Please check again");
 	}
-
 
 	//Validations for the updated property extracted
 	private PropertyEntity propertyUpdateValidation(PropertyDtoForCreate property, int id,
@@ -161,6 +256,74 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 	}
 
+	//LOCATION UPDATE
+	@Override
+	public LocationEntity updateLocation(LocationDto location, int id) {
+		LocationEntity locationToUpdate = locationRepo.getLocationById(id);
+		if(locationToUpdate != null) {
+			return locationUpdateValidations(location, locationToUpdate);
+		}else {
+			throw new MyExcMessages("No Location with such Id / Please check again");
+		}
+	}
+
+	//Validations for the updated location extracted
+	private LocationEntity locationUpdateValidations(LocationDto location, LocationEntity locationToUpdate) {
+		if(location.getCityName() != null && location.getStreetName() != null && location.getDescription() != null) {
+			if(location.getZipCode()>999 && location.getZipCode()<10000) {
+				locationToUpdate.setCityName(location.getCityName());
+				locationToUpdate.setStreetName(location.getStreetName());
+				locationToUpdate.setDescription(location.getDescription());
+				locationToUpdate.setZipCode(location.getZipCode());
+				locationRepo.updateLocation(locationToUpdate);
+				return locationToUpdate;
+			}else {
+				throw new MyExcMessages("Zip Code not valid for Albania");
+			}
+		}else {
+			throw new MyExcMessages("Please fill city name, street name and description");
+		}
+	}
+	
+	//PROPERTY TYPE UPDATE
+	@Override
+	public PropertyTypeEntity updatePropertyType(PropertyTypeDto propertyType, int id) {
+		PropertyTypeEntity propertyToUpdate = propertyRepo.getPropertyTypeById(id);
+		if(propertyToUpdate!=null) {
+			if(propertyRepo.existPropertyType(propertyType.getPropertyTypeName(), propertyType.getPropertyTypeDesc())) {
+				throw new MyExcMessages("Property type already exist with name and desciption given");
+			}else {
+				propertyToUpdate.setPropertyTypeName(propertyType.getPropertyTypeName());
+				propertyToUpdate.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
+				propertyRepo.updatePropertyType(propertyToUpdate);
+				return propertyToUpdate;
+			}
+		}else {
+			throw new MyExcMessages("No Property type with such Id / Please check again");
+		}
+	}
+
+	//PROPERTY INFO UPDATE
+	@Override
+	public PropertyInfoEntity updatePropertyInfo(PropertyInfoDto propertyInfo, int id) {
+		PropertyInfoEntity propertyInfoToUpdate = propertyRepo.getPropertyInfoById(id);
+		if(propertyInfoToUpdate!=null) {
+			propertyInfoToUpdate.setHasGarage(propertyInfo.isHasGarage());
+			propertyInfoToUpdate.setHasElevator(propertyInfo.isHasElevator());
+			propertyInfoToUpdate.setHasPool(propertyInfo.isHasPool());
+			propertyInfoToUpdate.setArea(propertyInfo.getArea());
+			propertyInfoToUpdate.setFloorNumber(propertyInfo.getFloorNumber());
+			propertyInfoToUpdate.setNrBathrooms(propertyInfo.getNrBathrooms());
+			propertyInfoToUpdate.setNrBedrooms(propertyInfo.getNrBedrooms());
+			propertyRepo.updatePropertyInfo(propertyInfoToUpdate);
+			return propertyInfoToUpdate;
+		}else {
+			throw new MyExcMessages("No Property info with such Id / Please check again");
+		}
+	}
+	
+	//PROPERTY DELETION
+	//PROPERTY DELETION
 	@Override
 	public PropertyEntity deleteProperty(int id) {
 		PropertyEntity propertyToDelete = propertyRepo.getPropertiesById(id);
@@ -175,5 +338,75 @@ public class PropertyServiceImpl implements PropertyService {
 			throw new MyExcMessages("Can not delete Property / Or property does not exist with given Id");
 		}
 	}
+
+
+	
+	//LOCATION DELETION
+	//LOCATION DELETION
+	@Override
+	public void deleteLocation(int id) {
+		LocationEntity locationToDelete = locationRepo.getLocationById(id);
+		if(locationToDelete != null) {
+			if(propertyRepo.existLocationInProperty(locationToDelete)) {
+				throw new MyExcMessages("Location attached to a property, can not delete");
+			}else {
+				locationRepo.deleteLocation(locationToDelete);
+			}
+		}else {
+			throw new MyExcMessages("No locatin on given id or already deleted");
+		}
+	}
+
+
+
+
+
+	//PROPERTY TYPE DELETION
+
+
+
+
+	//PROPERTY TYPE DELETE
+	@Override
+	public void deletePropertyType(int id) {
+		PropertyTypeEntity propertyTypeToDelete = propertyRepo.getPropertyTypeById(id);
+		if(propertyTypeToDelete != null) {
+			if(propertyRepo.existPropertyTypeInProperties(propertyTypeToDelete)) {
+				throw new MyExcMessages("Property type assigned to a property / consider update / can not delete");
+			}else {
+				propertyRepo.deletePropertyType(propertyTypeToDelete);
+			}
+		}else {
+			throw new MyExcMessages("Can not delete Property Type/ Or property type does not exist with given Id");
+		}
+	}
+
+
+	
+	//PROPERTY INFO DELETION
+
+
+	@Override
+	public void deletePropertyInfo(int id) {
+		PropertyInfoEntity propertyInfoToDelete = propertyRepo.getPropertyInfoById(id);
+		if(propertyInfoToDelete != null) {
+			if(propertyRepo.existRropertyWithInfo(propertyInfoToDelete)) {
+				throw new MyExcMessages("Property info exist with a property, can not delete");
+			}else {
+				propertyRepo.deletePropertyInfo(propertyInfoToDelete);
+			}
+		}else {
+			throw new MyExcMessages("Can not delete Property Info/ Or property info does not exist with given Id");
+		}
+	}
+
+
+
+
+
+
+
+
+
 
 }
