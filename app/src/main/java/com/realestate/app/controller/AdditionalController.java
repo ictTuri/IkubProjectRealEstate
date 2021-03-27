@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.realestate.app.converter.IssuesConverter;
 import com.realestate.app.converter.PropertyInfoConverter;
 import com.realestate.app.converter.PropertyTypeConverter;
+import com.realestate.app.converter.TradeConverter;
 import com.realestate.app.dto.IssueDtoForUpdate;
 import com.realestate.app.dto.IssuesDto;
 import com.realestate.app.dto.IssuesDtoForCreate;
 import com.realestate.app.dto.PropertyInfoDto;
 import com.realestate.app.dto.PropertyTypeDto;
+import com.realestate.app.dto.TradeDto;
+import com.realestate.app.dto.TradeDtoForCreate;
+import com.realestate.app.dto.TradeDtoForUpdate;
 import com.realestate.app.service.IssuesAndTradeService;
 import com.realestate.app.service.PropertyService;
 
@@ -75,6 +79,17 @@ public class AdditionalController {
 		// show issue by id
 		return IssuesConverter.toDto(iATService.issuesById(id));
 	}
+	@GetMapping("/trades")
+	public List<TradeDto> showAllTrades() {
+		// show all trades on database
+		return TradeConverter.toDto(iATService.allTrades());
+	}
+
+	@GetMapping("/trade/{id}")
+	public TradeDto showTradeById(@PathVariable("id") int id) {
+		// show trades by id
+		return TradeConverter.toDto(iATService.tradesById(id));
+	}
 	// -----------------------------
 	// GET ROUTES ENDS HERE
 	// -----------------------------
@@ -96,6 +111,11 @@ public class AdditionalController {
 	public IssuesDto addPropertyInfo(@RequestBody IssuesDtoForCreate issue) {
 		// return the added issue formated by converter
 		return IssuesConverter.toDto(iATService.addIssues(issue));
+	}
+	@PostMapping("/addtrade")
+	public TradeDto addTrade(@RequestBody TradeDtoForCreate trade) {
+		// return the added trade formated by converter
+		return TradeConverter.toDto(iATService.addTrade(trade));
 	}
 	// -----------------------------
 	// POST ROUTES ENDS HERE
@@ -120,6 +140,12 @@ public class AdditionalController {
 		// return the updated issue if process complete
 		return IssuesConverter.toDto(iATService.updateIssues(issue, id));
 	}
+	
+	@PutMapping("/updatetrade/{id}")
+	public TradeDto updateTrade(@RequestBody TradeDtoForUpdate trade, @PathVariable("id") int id) {
+		// return the updated trade if process complete
+		return TradeConverter.toDto(iATService.updateTrade(trade, id));
+	}
 	// -----------------------------
 	// PUT ROUTES ENDS HERE
 	// -----------------------------
@@ -142,6 +168,12 @@ public class AdditionalController {
 	public void deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		iATService.deleteIssue(id);
+	}
+	
+	@DeleteMapping("/deletetrade/{id}")
+	public void deleteTrade(@PathVariable("id") int id) {
+		// delete trade if needed to
+		iATService.deleteTrade(id);
 	}
 	// -----------------------------
 	// DELETE ROUTES ENDS HERE

@@ -1,5 +1,6 @@
 package com.realestate.app.converter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class TradeConverter {
 		toReturn.setTradeId(null);
 		toReturn.setClient(client);
 		toReturn.setProperties(property);
-		toReturn.setTradeDate(dto.getTradeDate());
-		toReturn.setEndTradeDate(dto.getEndTradeDate());
+		toReturn.setTradeDate(LocalDateTime.now());
+		toReturn.setEndTradeDate(null);
 		toReturn.setPaymentType(dto.getPaymentType());
 		toReturn.setTradeType(dto.getTradeType());
 		return toReturn;

@@ -1,5 +1,6 @@
 package com.realestate.app.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.IssuesConverter;
+import com.realestate.app.converter.TradeConverter;
 import com.realestate.app.dto.IssueDtoForUpdate;
 import com.realestate.app.dto.IssuesDtoForCreate;
+import com.realestate.app.dto.TradeDtoForCreate;
+import com.realestate.app.dto.TradeDtoForUpdate;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.RoleEntity;
+import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.IssuesRepository;
@@ -29,6 +34,7 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 	TradeRepository tradeRepo;
 	PropertyRepository propertyRepo;
 	
+	//CONSTRUCTOR
 	@Autowired
 	public IssuesAndTradeServiceImpl(IssuesRepository issuesRepo, TradeRepository tradeRepo
 			,UserRepository userRepo, PropertyRepository propertyRepo) {
@@ -56,6 +62,22 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 		}
 	}
 
+	//DISPLAY ALL TRADES
+	@Override
+	public List<TradeEntity> allTrades() {
+		return tradeRepo.getAllTrades();
+	}
+	
+	//DISPLAY TRADES BY ID
+	@Override
+	public TradeEntity tradesById(int id) {
+		TradeEntity trade = tradeRepo.getTradeById(id);
+		if(trade!=null) {
+			return trade;
+		}else {
+			throw new MyExcMessages("No such trade with given Id !");
+		}
+	}
 	
 	//ISSUE INSERT
 	@Override
@@ -89,8 +111,34 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 			throw new MyExcMessages("please add a category and description");
 		}
 	}
-
 	
+	//TRADE INSERT
+	@Override
+	public TradeEntity addTrade(TradeDtoForCreate trade) {
+		if(trade!=null) {
+			RoleEntity role = userRepo.getRoleById(3);
+			if(userRepo.isClient(trade.getClient(), role)) {
+				if(trade.getPaymentType()!=null&&trade.getTradeType()!=null) {
+					PropertyEntity property = propertyRepo.getPropertiesById(trade.getProperties());
+					if(tradeRepo.isInRentedStatus(property)) {
+						UserEntity client = userRepo.getUserById(trade.getClient());
+						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, property);
+						tradeRepo.insertTrade(tradeToAdd);
+						return tradeToAdd;
+					}else {
+						throw new MyExcMessages("Property is bought or Rented !");
+					}
+				}else {
+					throw new MyExcMessages("Please fill trade type and payment type");
+				}
+			}else {
+				throw new MyExcMessages("Only client can be part of a trade !");
+			}
+		}else {
+			throw new MyExcMessages("Please fill the trade data to proceed !");
+		}
+	}
+
 	//ISSUE UPDATE
 	@Override
 	public IssuesEntity updateIssues(IssueDtoForUpdate issue, int id) {
@@ -110,6 +158,24 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 		}
 	}
 
+	//TRADE UPDATE
+	@Override
+	public TradeEntity updateTrade(TradeDtoForUpdate trade, int id) {
+		if(trade!=null) {
+			TradeEntity tradeToUpdate = tradeRepo.getTradeById(id);
+			if(tradeToUpdate != null) {
+				tradeToUpdate.setTradeType(trade.getTradeType());
+				tradeToUpdate.setPaymentType(trade.getPaymentType());
+				trade.setEndTradeDate(LocalDateTime.now());
+				tradeRepo.updateTrade(tradeToUpdate);
+				return tradeToUpdate;
+			}else {
+				throw new MyExcMessages("No trade exist with given id !");
+			}
+		}else {
+			throw new MyExcMessages("Please fill the data for the update !");
+		}
+	}
 	
 	//ISSUE DELETION
 	@Override
@@ -121,5 +187,16 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 			throw new MyExcMessages("Issue with given id does not exist !");
 		}
 	}
-	
+
+
+	//TRADE DELETION
+	@Override
+	public void deleteTrade(int id) {
+		TradeEntity tradeToDelete = tradeRepo.getTradeById(id);
+		if(tradeToDelete!=null) {
+			tradeRepo.deleteTrade(tradeToDelete);
+		}else {
+			throw new MyExcMessages("Trade with given id does not exist !");
+		}
+	}
 }

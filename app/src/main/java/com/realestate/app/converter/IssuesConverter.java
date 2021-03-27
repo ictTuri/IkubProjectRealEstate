@@ -52,7 +52,6 @@ public class IssuesConverter {
 		toReturn.setCreatedDate(LocalDateTime.now());
 		toReturn.setDescription(dto.getDescription());
 		toReturn.setProperty(property);
-		toReturn.setResoulutionStatus(dto.getResoulutionStatus());
 		toReturn.setIssueId(null);
 		return toReturn;
 	}

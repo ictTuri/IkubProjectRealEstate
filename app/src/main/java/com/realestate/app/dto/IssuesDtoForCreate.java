@@ -5,8 +5,6 @@ public class IssuesDtoForCreate {
 
 	private String category;
 
-	private String resoulutionStatus;
-
 	private String description;
 	
 	private int client;
@@ -20,14 +18,6 @@ public class IssuesDtoForCreate {
 
 	public void setCategory(String category) {
 		this.category = category;
-	}
-
-	public String getResoulutionStatus() {
-		return resoulutionStatus;
-	}
-
-	public void setResoulutionStatus(String resoulutionStatus) {
-		this.resoulutionStatus = resoulutionStatus;
 	}
 
 	public String getDescription() {

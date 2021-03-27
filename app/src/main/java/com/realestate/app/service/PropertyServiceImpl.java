@@ -196,7 +196,7 @@ public class PropertyServiceImpl implements PropertyService {
 		if(propertyInfo != null) {
 			if(propertyInfo.getFloorNumber()>-1 && propertyInfo.getNrBathrooms()>-1 && propertyInfo.getNrBedrooms()>-1) {
 				PropertyInfoEntity propertyInfoToAdd = PropertyInfoConverter.toEntity(propertyInfo);
-				propertyRepo.deletePropertyInfo(propertyInfoToAdd);
+				propertyRepo.insertPropertyInfo(propertyInfoToAdd);
 				return propertyInfoToAdd;
 			}else {
 				throw new MyExcMessages("Please fill floor number, bathroom and bedroom numbers data !");

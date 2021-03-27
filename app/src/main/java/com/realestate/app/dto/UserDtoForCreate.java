@@ -16,8 +16,6 @@ public class UserDtoForCreate {
 
 	private boolean active;
 	
-	private int version;
-	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -72,14 +70,6 @@ public class UserDtoForCreate {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 	
 }

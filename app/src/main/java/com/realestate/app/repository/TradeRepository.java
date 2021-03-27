@@ -27,7 +27,9 @@ public class TradeRepository {
 	private static final String GET_TRADE_BY_ID = "FROM TradeEntity t WHERE t.tradeId = :id";
 	
 	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.properties = :properties";
-
+	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity t t.properties = :id and tradeType = rent OR"
+			+ "t.tradeType = bought and endTradeDate == null";
+	
 	// RETRIEVE OPERATIONS DOWN HERE
 	// TRADES
 	public List<TradeEntity> getAllTrades() {
@@ -63,6 +65,16 @@ public class TradeRepository {
 		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_CLIENTPROPERTY,TradeEntity.class)
 				.setParameter("client", client)
 				.setParameter("properties", property);
+		try {
+			return query.getSingleResult()!=null;
+		}catch(NoResultException e) {
+			return false;
+		}
+	}
+
+	public boolean isInRentedStatus(PropertyEntity property) {
+		TypedQuery<TradeEntity> query = em.createQuery(PROPERTY_RENTED_OR_BOUGHT, TradeEntity.class)
+				.setParameter("id", property);
 		try {
 			return query.getSingleResult()!=null;
 		}catch(NoResultException e) {
