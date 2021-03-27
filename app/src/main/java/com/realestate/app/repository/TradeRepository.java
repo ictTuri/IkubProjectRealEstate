@@ -9,8 +9,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.TradeEntity;
-
+import com.realestate.app.entity.UserEntity;
 
 @Repository
 @Transactional
@@ -25,6 +26,8 @@ public class TradeRepository {
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
 	private static final String GET_TRADE_BY_ID = "FROM TradeEntity t WHERE t.tradeId = :id";
 	
+	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.properties = :properties";
+
 	// RETRIEVE OPERATIONS DOWN HERE
 	// TRADES
 	public List<TradeEntity> getAllTrades() {
@@ -39,7 +42,6 @@ public class TradeRepository {
 			return null;
 		}
 	}
-	
 
 	// INSERT OPERATIONS DOWN HERE
 	public void insertTrade(TradeEntity trade) {
@@ -50,10 +52,21 @@ public class TradeRepository {
 	public TradeEntity updateTrade(TradeEntity trade) {
 		return em.merge(trade);
 	}
-	
+
 	// DELETE OPERATIONS DOWN HERE
-		public void deleteTrade(TradeEntity trade) {
-			 em.remove(trade);
+	public void deleteTrade(TradeEntity trade) {
+		em.remove(trade);
+	}
+
+	//HELPING METHODS DOWN HERE
+	public boolean existTrade(UserEntity client, PropertyEntity property) {
+		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_CLIENTPROPERTY,TradeEntity.class)
+				.setParameter("client", client)
+				.setParameter("properties", property);
+		try {
+			return query.getSingleResult()!=null;
+		}catch(NoResultException e) {
+			return false;
 		}
-	
+	}
 }

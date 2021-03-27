@@ -12,18 +12,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realestate.app.converter.IssuesConverter;
 import com.realestate.app.converter.PropertyInfoConverter;
 import com.realestate.app.converter.PropertyTypeConverter;
+import com.realestate.app.dto.IssueDtoForUpdate;
+import com.realestate.app.dto.IssuesDto;
+import com.realestate.app.dto.IssuesDtoForCreate;
 import com.realestate.app.dto.PropertyInfoDto;
 import com.realestate.app.dto.PropertyTypeDto;
+import com.realestate.app.service.IssuesAndTradeService;
 import com.realestate.app.service.PropertyService;
 
 @RestController
 @RequestMapping("/additional")
 public class AdditionalController {
 
-	@Autowired
 	PropertyService propertyService;
+	IssuesAndTradeService iATService;
+
+	@Autowired
+	public AdditionalController(PropertyService propertyService, IssuesAndTradeService iATService) {
+		super();
+		this.propertyService = propertyService;
+		this.iATService = iATService;
+	}
 
 	// -----------------------------
 	// GET ROUTES STARTS HERE
@@ -39,6 +51,7 @@ public class AdditionalController {
 		// show property type by id
 		return PropertyTypeConverter.toDto(propertyService.propertyTypeById(id));
 	}
+
 	@GetMapping("/propertyinfos")
 	public List<PropertyInfoDto> showAllPropertyInfos() {
 		// show all property Info on database
@@ -47,10 +60,21 @@ public class AdditionalController {
 
 	@GetMapping("/propertyinfo/{id}")
 	public PropertyInfoDto showPropertInfoById(@PathVariable("id") int id) {
-		// show property type by id
+		// show property info by id
 		return PropertyInfoConverter.toDto(propertyService.propertyInfoById(id));
 	}
 
+	@GetMapping("/issues")
+	public List<IssuesDto> showAllIssues() {
+		// show all issues on database
+		return IssuesConverter.toDto(iATService.allIssues());
+	}
+
+	@GetMapping("/issue/{id}")
+	public IssuesDto showIssueById(@PathVariable("id") int id) {
+		// show issue by id
+		return IssuesConverter.toDto(iATService.issuesById(id));
+	}
 	// -----------------------------
 	// GET ROUTES ENDS HERE
 	// -----------------------------
@@ -62,10 +86,16 @@ public class AdditionalController {
 		// return the added property type formated by converter
 		return PropertyTypeConverter.toDto(propertyService.addPropertyType(propertyType));
 	}
+
 	@PostMapping("/addpropertyinfo")
 	public PropertyInfoDto addPropertyInfo(@RequestBody PropertyInfoDto propertyInfo) {
 		// return the added property info formated by converter
 		return PropertyInfoConverter.toDto(propertyService.addPropertyInfo(propertyInfo));
+	}
+	@PostMapping("/addissue")
+	public IssuesDto addPropertyInfo(@RequestBody IssuesDtoForCreate issue) {
+		// return the added issue formated by converter
+		return IssuesConverter.toDto(iATService.addIssues(issue));
 	}
 	// -----------------------------
 	// POST ROUTES ENDS HERE
@@ -84,6 +114,12 @@ public class AdditionalController {
 		// return the updated property info if process complete
 		return PropertyInfoConverter.toDto(propertyService.updatePropertyInfo(propertyInfo, id));
 	}
+	
+	@PutMapping("/updateissues/{id}")
+	public IssuesDto updateIssue(@RequestBody IssueDtoForUpdate issue, @PathVariable("id") int id) {
+		// return the updated issue if process complete
+		return IssuesConverter.toDto(iATService.updateIssues(issue, id));
+	}
 	// -----------------------------
 	// PUT ROUTES ENDS HERE
 	// -----------------------------
@@ -92,14 +128,20 @@ public class AdditionalController {
 	// -----------------------------
 	@DeleteMapping("/deletepropertytype/{id}")
 	public void deletePropertyType(@PathVariable("id") int id) {
-		//delete property type if not used
+		// delete property type if not used
 		propertyService.deletePropertyType(id);
 	}
 
 	@DeleteMapping("/deletepropertyinfo/{id}")
 	public void deletePropertyInfo(@PathVariable("id") int id) {
-		//delete property info if no property assigned it
+		// delete property info if no property assigned it
 		propertyService.deletePropertyInfo(id);
+	}
+	
+	@DeleteMapping("/deleteissue/{id}")
+	public void deleteIssue(@PathVariable("id") int id) {
+		// delete issue if needed to
+		iATService.deleteIssue(id);
 	}
 	// -----------------------------
 	// DELETE ROUTES ENDS HERE

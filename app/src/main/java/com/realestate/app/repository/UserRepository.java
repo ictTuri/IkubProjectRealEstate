@@ -29,9 +29,9 @@ public class UserRepository {
 	
 	private static final String CHECK_USERNAME_EXIST = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
 	private static final String CHECK_EMAIL_EXIST = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
-	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u where u.username =?1 and u.isActive = true";
-	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u where u.username = :username";
-	
+	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username =?1 and u.isActive = true";
+	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username";
+	private static final String CHECK_IF_CLIENT = "FROM UserEntity u WHERE u.userId = :id and u.role = :role";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	public List<UserEntity> getAllUsers() {
@@ -121,6 +121,17 @@ public class UserRepository {
 		try {
 			UserEntity u = query.getSingleResult();
 			return u.getActive() == Boolean.TRUE;
+		}catch(NoResultException e) {
+			return false;
+		}
+	}
+
+	public boolean isClient(int id,RoleEntity role) {
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_IF_CLIENT, UserEntity.class)
+				.setParameter("id", id)
+				.setParameter("role", role);
+		try {
+			return query.getSingleResult() != null;
 		}catch(NoResultException e) {
 			return false;
 		}

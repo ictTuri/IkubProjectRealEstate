@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.getAllUsers();
 	}
 	
-	//USER DISPLAY
+	//USER DISPLAY BY ID
 	@Override
 	public UserEntity userById(int id) {
 		UserEntity user = userRepository.getUserById(id);

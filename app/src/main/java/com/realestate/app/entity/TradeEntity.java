@@ -45,6 +45,14 @@ public class TradeEntity implements Serializable{
 	@Column(name = "version")
 	private int version;
 
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public Integer getTradeId() {
 		return tradeId;
 	}
