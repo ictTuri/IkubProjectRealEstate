@@ -3,6 +3,7 @@ package com.realestate.app.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.realestate.app.converter.LocationConverter;
@@ -67,7 +69,7 @@ public class MainController {
 	}
 	@GetMapping("/location/{id}")
 	public LocationDto showLocationById(@PathVariable("id") int id){
-		// show property by id
+		// show location by id
 		return LocationConverter.toDto(propertyService.locationById(id));
 	}
 	// -----------------------------
@@ -77,16 +79,19 @@ public class MainController {
 	// POST ROUTES STARTS HERE
 	// -----------------------------
 	@PostMapping("/adduser")
+	@ResponseStatus(HttpStatus.CREATED)
 	public UserDto addUser(@RequestBody UserDtoForCreate user) {
 		//return the added user formated by converter
 		return UserConverter.toDto(userService.addUser(user));
 	}
 	@PostMapping("/addproperty")
+	@ResponseStatus(HttpStatus.CREATED)
 	public PropertyDto addProperty(@RequestBody PropertyDtoForCreate property) {
 		//return the added property formated by converter
 		return PropertyConverter.toDto(propertyService.addProperty(property));
 	}
 	@PostMapping("/addlocation")
+	@ResponseStatus(HttpStatus.CREATED)
 	public LocationDto addLocation(@RequestBody LocationDto location) {
 		//return the added location formated by converter
 		return LocationConverter.toDto(propertyService.addLocation(location));
@@ -98,14 +103,17 @@ public class MainController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PutMapping("/updateuser/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public UserDto updateUser(@RequestBody UserDtoForCreate user,@PathVariable("id") int id) {
 		return UserConverter.toDto(userService.updateUser(user,id));
 	}
 	@PutMapping("/updateproperty/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public PropertyDto updateProperty(@RequestBody PropertyDtoForCreate property,@PathVariable("id") int id) {
 		return PropertyConverter.toDto(propertyService.updateProperty(property, id));
 	}
 	@PutMapping("/updatelocation/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public LocationDto updateLocation(@RequestBody LocationDto location,@PathVariable("id") int id) {
 		return LocationConverter.toDto(propertyService.updateLocation(location, id));
 	}
@@ -116,14 +124,17 @@ public class MainController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@DeleteMapping("/deleteuser/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public void deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);
 	}
 	@DeleteMapping("/deleteproperty/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
 	}
 	@DeleteMapping("/deletelocation/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public void deleteLocation(@PathVariable("id") int id) {
 		propertyService.deleteLocation(id);
 	}

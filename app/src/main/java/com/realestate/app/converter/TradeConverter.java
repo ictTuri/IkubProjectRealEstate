@@ -17,7 +17,7 @@ public class TradeConverter {
 	public static TradeDto toDto(TradeEntity trade) {
 		TradeDto toReturn = new TradeDto();
 		toReturn.setClient(UserConverter.toDto(trade.getClient()));
-		toReturn.setProperties(PropertyConverter.toDto(trade.getProperties()));
+		toReturn.setProperties(PropertyConverter.toDto(trade.getProperty()));
 		toReturn.setTradeDate(trade.getTradeDate());
 		toReturn.setEndTradeDate(trade.getEndTradeDate());
 		toReturn.setPaymentType(trade.getPaymentType());
@@ -38,7 +38,7 @@ public class TradeConverter {
 	public static TradeEntity toEntity(TradeDto dto) {
 		TradeEntity toReturn=new TradeEntity();
 		toReturn.setClient(UserConverter.toEntity(dto.getClient()));
-		toReturn.setProperties(PropertyConverter.toEntity(dto.getProperties()));
+		toReturn.setProperty(PropertyConverter.toEntity(dto.getProperties()));
 		toReturn.setTradeDate(dto.getTradeDate());
 		toReturn.setPaymentType(dto.getPaymentType());
 		toReturn.setTradeType(dto.getTradeType());
@@ -48,7 +48,7 @@ public class TradeConverter {
 		TradeEntity toReturn=new TradeEntity();
 		toReturn.setTradeId(null);
 		toReturn.setClient(client);
-		toReturn.setProperties(property);
+		toReturn.setProperty(property);
 		toReturn.setTradeDate(LocalDateTime.now());
 		toReturn.setEndTradeDate(null);
 		toReturn.setPaymentType(dto.getPaymentType());

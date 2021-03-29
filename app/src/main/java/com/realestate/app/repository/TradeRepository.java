@@ -26,9 +26,8 @@ public class TradeRepository {
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
 	private static final String GET_TRADE_BY_ID = "FROM TradeEntity t WHERE t.tradeId = :id";
 	
-	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.properties = :properties";
-	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity t t.properties = :id and tradeType = rent OR"
-			+ "t.tradeType = bought and endTradeDate == null";
+	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.property = :properties";
+	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity te WHERE te.property = :id and te.endTradeDate = null";
 	
 	// RETRIEVE OPERATIONS DOWN HERE
 	// TRADES

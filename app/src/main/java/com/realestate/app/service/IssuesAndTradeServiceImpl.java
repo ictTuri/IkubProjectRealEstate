@@ -120,7 +120,7 @@ public class IssuesAndTradeServiceImpl implements IssuesAndTradeService {
 			if(userRepo.isClient(trade.getClient(), role)) {
 				if(trade.getPaymentType()!=null&&trade.getTradeType()!=null) {
 					PropertyEntity property = propertyRepo.getPropertiesById(trade.getProperties());
-					if(tradeRepo.isInRentedStatus(property)) {
+					if(!tradeRepo.isInRentedStatus(property)) {
 						UserEntity client = userRepo.getUserById(trade.getClient());
 						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, property);
 						tradeRepo.insertTrade(tradeToAdd);

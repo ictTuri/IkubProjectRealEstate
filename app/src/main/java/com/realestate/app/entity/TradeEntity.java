@@ -26,8 +26,8 @@ public class TradeEntity implements Serializable{
 	private UserEntity client;
 	
 	@ManyToOne
-	@JoinColumn(name = "properties", referencedColumnName = "properties_id")
-	private PropertyEntity properties;
+	@JoinColumn(name = "property", referencedColumnName = "properties_id")
+	private PropertyEntity property;
 	
 	@Column(name = "trade_date")
 	private LocalDateTime tradeDate;
@@ -52,6 +52,15 @@ public class TradeEntity implements Serializable{
 	public void setVersion(int version) {
 		this.version = version;
 	}
+	
+
+	public PropertyEntity getProperty() {
+		return property;
+	}
+
+	public void setProperty(PropertyEntity property) {
+		this.property = property;
+	}
 
 	public Integer getTradeId() {
 		return tradeId;
@@ -67,14 +76,6 @@ public class TradeEntity implements Serializable{
 
 	public void setClient(UserEntity client) {
 		this.client = client;
-	}
-
-	public PropertyEntity getProperties() {
-		return properties;
-	}
-
-	public void setProperties(PropertyEntity properties) {
-		this.properties = properties;
 	}
 
 	public LocalDateTime getTradeDate() {

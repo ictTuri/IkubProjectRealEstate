@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 	
 	//Validations for the User Update Extracted
 	private UserEntity userUpdateValidation(UserDtoForCreate user, UserEntity userToUpdate) {
-		if (!userToUpdate.getUsername().equals(user.getUsername()) && userRepository.existUsername(null)) {
+		if (!userToUpdate.getUsername().equals(user.getUsername()) && userRepository.existUsername(user.getUsername())) {
 			throw new MyExcMessages("Can not use this username !");
 		} else {
 			if (!user.getEmail().equals(userToUpdate.getEmail()) && userRepository.existEmail(user.getEmail())) {
