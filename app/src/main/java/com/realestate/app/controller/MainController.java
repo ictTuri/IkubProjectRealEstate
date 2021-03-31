@@ -2,8 +2,11 @@ package com.realestate.app.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +29,7 @@ import com.realestate.app.service.PropertyService;
 import com.realestate.app.service.UserService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/realestate/api/v1")
 public class MainController {
 
 	UserService userService;
@@ -43,34 +46,34 @@ public class MainController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/users")
-	public List<UserDto> showAllUsers() {
+	public ResponseEntity<List<UserDto>> showAllUsers() {
 		// show all users on database
-		return UserConverter.toDto(userService.allUsers());
+		return new ResponseEntity<>(UserConverter.toDto(userService.allUsers()), HttpStatus.OK); 
 	}
-	@GetMapping("/user/{id}")
-	public UserDto showUserById(@PathVariable("id") int id) {
+	@GetMapping("/users/{id}")
+	public ResponseEntity<UserDto> showUserById(@PathVariable("id") int id) {
 		// show user by id
-		return UserConverter.toDto(userService.userById(id));
+		return new ResponseEntity<>(UserConverter.toDto(userService.userById(id)),HttpStatus.FOUND);
 	}
 	@GetMapping("/properties")
-	public List<PropertyDto> showAllProperties(){
+	public ResponseEntity<List<PropertyDto>> showAllProperties(){
 		// show all properties on database
-		return PropertyConverter.toDto(propertyService.allProperties());
+		return new ResponseEntity<> (PropertyConverter.toDto(propertyService.allProperties()),HttpStatus.OK);
 	}
-	@GetMapping("/property/{id}")
-	public PropertyDto showPropertyById(@PathVariable("id") int id){
+	@GetMapping("/properties/{id}")
+	public ResponseEntity<PropertyDto> showPropertyById(@PathVariable("id") int id){
 		// show property by id
-		return PropertyConverter.toDto(propertyService.propertyById(id));
+		return new ResponseEntity<> (PropertyConverter.toDto(propertyService.propertyById(id)),HttpStatus.FOUND);
 	}
 	@GetMapping("/locations")
-	public List<LocationDto> showAllLocations(){
+	public ResponseEntity<List<LocationDto>> showAllLocations(){
 		// show all locations on database
-		return LocationConverter.toDto(propertyService.allLocations());
+		return new ResponseEntity<> (LocationConverter.toDto(propertyService.allLocations()),HttpStatus.OK);
 	}
-	@GetMapping("/location/{id}")
-	public LocationDto showLocationById(@PathVariable("id") int id){
+	@GetMapping("/locations/{id}")
+	public ResponseEntity<LocationDto> showLocationById(@PathVariable("id") int id){
 		// show location by id
-		return LocationConverter.toDto(propertyService.locationById(id));
+		return new ResponseEntity<> (LocationConverter.toDto(propertyService.locationById(id)), HttpStatus.FOUND);
 	}
 	// -----------------------------
 	// GET ROUTES ENDS HERE
@@ -78,23 +81,20 @@ public class MainController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/adduser")
-	@ResponseStatus(HttpStatus.CREATED)
-	public UserDto addUser(@RequestBody UserDtoForCreate user) {
+	@PostMapping("/users")
+	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDtoForCreate user) {
 		//return the added user formated by converter
-		return UserConverter.toDto(userService.addUser(user));
+		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)),HttpStatus.CREATED);
 	}
-	@PostMapping("/addproperty")
-	@ResponseStatus(HttpStatus.CREATED)
-	public PropertyDto addProperty(@RequestBody PropertyDtoForCreate property) {
+	@PostMapping("/properties")
+	public ResponseEntity<PropertyDto> addProperty(@RequestBody PropertyDtoForCreate property) {
 		//return the added property formated by converter
-		return PropertyConverter.toDto(propertyService.addProperty(property));
+		return new ResponseEntity<> (PropertyConverter.toDto(propertyService.addProperty(property)),HttpStatus.CREATED);
 	}
-	@PostMapping("/addlocation")
-	@ResponseStatus(HttpStatus.CREATED)
-	public LocationDto addLocation(@RequestBody LocationDto location) {
+	@PostMapping("/locations")
+	public ResponseEntity<LocationDto> addLocation(@RequestBody LocationDto location) {
 		//return the added location formated by converter
-		return LocationConverter.toDto(propertyService.addLocation(location));
+		return new ResponseEntity<> (LocationConverter.toDto(propertyService.addLocation(location)),HttpStatus.CREATED);
 	}
 	// -----------------------------
 	// POST ROUTES ENDS HERE
@@ -102,20 +102,17 @@ public class MainController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/updateuser/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public UserDto updateUser(@RequestBody UserDtoForCreate user,@PathVariable("id") int id) {
-		return UserConverter.toDto(userService.updateUser(user,id));
+	@PutMapping("/users/{id}")
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDtoForCreate user,@PathVariable("id") int id) {
+		return new ResponseEntity<> (UserConverter.toDto(userService.updateUser(user,id)),HttpStatus.CREATED);
 	}
-	@PutMapping("/updateproperty/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public PropertyDto updateProperty(@RequestBody PropertyDtoForCreate property,@PathVariable("id") int id) {
-		return PropertyConverter.toDto(propertyService.updateProperty(property, id));
+	@PutMapping("/properties/{id}")
+	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody PropertyDtoForCreate property,@PathVariable("id") int id) {
+		return new ResponseEntity<> (PropertyConverter.toDto(propertyService.updateProperty(property, id)), HttpStatus.CREATED);
 	}
-	@PutMapping("/updatelocation/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public LocationDto updateLocation(@RequestBody LocationDto location,@PathVariable("id") int id) {
-		return LocationConverter.toDto(propertyService.updateLocation(location, id));
+	@PutMapping("/locations/{id}")
+	public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody LocationDto location,@PathVariable("id") int id) {
+		return new ResponseEntity<> (LocationConverter.toDto(propertyService.updateLocation(location, id)), HttpStatus.CREATED);
 	}
 	// -----------------------------
 	// PUT ROUTES ENDS HERE
@@ -123,17 +120,17 @@ public class MainController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/deleteuser/{id}")
+	@DeleteMapping("/users/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);
 	}
-	@DeleteMapping("/deleteproperty/{id}")
+	@DeleteMapping("/properties/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
 	}
-	@DeleteMapping("/deletelocation/{id}")
+	@DeleteMapping("/locations/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteLocation(@PathVariable("id") int id) {
 		propertyService.deleteLocation(id);
@@ -146,6 +143,7 @@ public class MainController {
 	// -----------------------------
 
 	@RequestMapping("/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String getBack() {
 		return "nothing here";
 	}

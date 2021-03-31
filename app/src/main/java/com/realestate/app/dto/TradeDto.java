@@ -3,8 +3,6 @@ package com.realestate.app.dto;
 import java.time.LocalDateTime;
 
 public class TradeDto {
-
-	private Integer tradeId;
 	
 	private UserDto client;
 	
@@ -19,14 +17,6 @@ public class TradeDto {
 	private String paymentType;
 	
 	private int version;
-
-	public Integer getTradeId() {
-		return tradeId;
-	}
-
-	public void setTradeId(Integer tradeId) {
-		this.tradeId = tradeId;
-	}
 
 	public UserDto getClient() {
 		return client;

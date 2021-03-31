@@ -2,8 +2,11 @@ package com.realestate.app.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +33,9 @@ import com.realestate.app.service.IssuesAndTradeService;
 import com.realestate.app.service.PropertyService;
 
 @RestController
-@RequestMapping("/additional")
+@RequestMapping("/realestate/api/v1")
 public class AdditionalController {
-
+ 
 	PropertyService propertyService;
 	IssuesAndTradeService iATService;
 
@@ -42,55 +45,48 @@ public class AdditionalController {
 		this.propertyService = propertyService;
 		this.iATService = iATService;
 	}
-
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/propertytypes")
-	public List<PropertyTypeDto> showAllPropertyTypes() {
+	public ResponseEntity<List<PropertyTypeDto>> propertyTypes() {
 		// show all property types on database
-		return PropertyTypeConverter.toDto(propertyService.allPropertyTypes());
+		return new ResponseEntity<>(PropertyTypeConverter.toDto(propertyService.allPropertyTypes()), HttpStatus.OK);
 	}
-
-	@GetMapping("/propertytype/{id}")
-	public PropertyTypeDto showPropertTypeById(@PathVariable("id") int id) {
+	@GetMapping("/propertytypes/{id}")
+	public ResponseEntity<PropertyTypeDto> showPropertTypeById(@PathVariable("id") int id) {
 		// show property type by id
-		return PropertyTypeConverter.toDto(propertyService.propertyTypeById(id));
+		return new ResponseEntity<> (PropertyTypeConverter.toDto(propertyService.propertyTypeById(id)), HttpStatus.FOUND);
 	}
-
 	@GetMapping("/propertyinfos")
-	public List<PropertyInfoDto> showAllPropertyInfos() {
+	public ResponseEntity<List<PropertyInfoDto>> showAllPropertyInfos() {
 		// show all property Info on database
-		return PropertyInfoConverter.toDto(propertyService.allPropertyInfos());
+		return new ResponseEntity<> (PropertyInfoConverter.toDto(propertyService.allPropertyInfos()),HttpStatus.OK);
 	}
-
-	@GetMapping("/propertyinfo/{id}")
-	public PropertyInfoDto showPropertInfoById(@PathVariable("id") int id) {
+	@GetMapping("/propertyinfos/{id}")
+	public ResponseEntity<PropertyInfoDto> showPropertInfoById(@PathVariable("id") int id) {
 		// show property info by id
-		return PropertyInfoConverter.toDto(propertyService.propertyInfoById(id));
+		return new ResponseEntity<> (PropertyInfoConverter.toDto(propertyService.propertyInfoById(id)),HttpStatus.FOUND);
 	}
-
 	@GetMapping("/issues")
-	public List<IssuesDto> showAllIssues() {
+	public ResponseEntity<List<IssuesDto>> showAllIssues() {
 		// show all issues on database
-		return IssuesConverter.toDto(iATService.allIssues());
+		return new ResponseEntity<> (IssuesConverter.toDto(iATService.allIssues()),HttpStatus.OK);
 	}
-
-	@GetMapping("/issue/{id}")
-	public IssuesDto showIssueById(@PathVariable("id") int id) {
+	@GetMapping("/issues/{id}")
+	public ResponseEntity<IssuesDto> showIssueById(@PathVariable("id") int id) {
 		// show issue by id
-		return IssuesConverter.toDto(iATService.issuesById(id));
+		return new ResponseEntity<> (IssuesConverter.toDto(iATService.issuesById(id)),HttpStatus.FOUND);
 	}
 	@GetMapping("/trades")
-	public List<TradeDto> showAllTrades() {
+	public ResponseEntity<List<TradeDto>> showAllTrades() {
 		// show all trades on database
-		return TradeConverter.toDto(iATService.allTrades());
+		return new ResponseEntity<> (TradeConverter.toDto(iATService.allTrades()),HttpStatus.OK);
 	}
-
-	@GetMapping("/trade/{id}")
-	public TradeDto showTradeById(@PathVariable("id") int id) {
+	@GetMapping("/trades/{id}")
+	public ResponseEntity<TradeDto> showTradeById(@PathVariable("id") int id) {
 		// show trades by id
-		return TradeConverter.toDto(iATService.tradesById(id));
+		return new ResponseEntity<> (TradeConverter.toDto(iATService.tradesById(id)),HttpStatus.FOUND);
 	}
 	// -----------------------------
 	// GET ROUTES ENDS HERE
@@ -98,30 +94,25 @@ public class AdditionalController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/addpropertytype")
-	@ResponseStatus(HttpStatus.CREATED)
-	public PropertyTypeDto addPropertyType(@RequestBody PropertyTypeDto propertyType) {
+	@PostMapping("/propertytypes")
+	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
-		return PropertyTypeConverter.toDto(propertyService.addPropertyType(propertyType));
+		return new ResponseEntity<> (PropertyTypeConverter.toDto(propertyService.addPropertyType(propertyType)),HttpStatus.CREATED);
 	}
-
-	@PostMapping("/addpropertyinfo")
-	@ResponseStatus(HttpStatus.CREATED)
-	public PropertyInfoDto addPropertyInfo(@RequestBody PropertyInfoDto propertyInfo) {
+	@PostMapping("/propertyinfos")
+	public ResponseEntity<PropertyInfoDto> addPropertyInfo(@Valid @RequestBody PropertyInfoDto propertyInfo) {
 		// return the added property info formated by converter
-		return PropertyInfoConverter.toDto(propertyService.addPropertyInfo(propertyInfo));
+		return new ResponseEntity<> (PropertyInfoConverter.toDto(propertyService.addPropertyInfo(propertyInfo)),HttpStatus.CREATED);
 	}
-	@PostMapping("/addissue")
-	@ResponseStatus(HttpStatus.CREATED)
-	public IssuesDto addPropertyInfo(@RequestBody IssuesDtoForCreate issue) {
+	@PostMapping("/issues")
+	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesDtoForCreate issue) {
 		// return the added issue formated by converter
-		return IssuesConverter.toDto(iATService.addIssues(issue));
+		return new ResponseEntity<> (IssuesConverter.toDto(iATService.addIssues(issue)),HttpStatus.CREATED);
 	}
-	@PostMapping("/addtrade")
-	@ResponseStatus(HttpStatus.CREATED)
-	public TradeDto addTrade(@RequestBody TradeDtoForCreate trade) {
+	@PostMapping("/trades")
+	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeDtoForCreate trade) {
 		// return the added trade formated by converter
-		return TradeConverter.toDto(iATService.addTrade(trade));
+		return new ResponseEntity<> (TradeConverter.toDto(iATService.addTrade(trade)),HttpStatus.CREATED);
 	}
 	// -----------------------------
 	// POST ROUTES ENDS HERE
@@ -129,32 +120,25 @@ public class AdditionalController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/updatepropertytype/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public PropertyTypeDto updatePropertyType(@RequestBody PropertyTypeDto propertyType, @PathVariable("id") int id) {
+	@PutMapping("/propertytypes/{id}")
+	public ResponseEntity<PropertyTypeDto> updatePropertyType(@Valid @RequestBody PropertyTypeDto propertyType, @PathVariable("id") int id) {
 		// return the updated property type if process complete
-		return PropertyTypeConverter.toDto(propertyService.updatePropertyType(propertyType, id));
+		return new ResponseEntity<> (PropertyTypeConverter.toDto(propertyService.updatePropertyType(propertyType, id)),HttpStatus.OK);
 	}
-
-	@PutMapping("/updatepropertyinfo/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public PropertyInfoDto updatePropertyInfo(@RequestBody PropertyInfoDto propertyInfo, @PathVariable("id") int id) {
+	@PutMapping("/propertyinfos/{id}")
+	public ResponseEntity<PropertyInfoDto> updatePropertyInfo(@Valid @RequestBody PropertyInfoDto propertyInfo, @PathVariable("id") int id) {
 		// return the updated property info if process complete
-		return PropertyInfoConverter.toDto(propertyService.updatePropertyInfo(propertyInfo, id));
+		return new ResponseEntity<> (PropertyInfoConverter.toDto(propertyService.updatePropertyInfo(propertyInfo, id)),HttpStatus.OK);
 	}
-	
-	@PutMapping("/updateissues/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public IssuesDto updateIssue(@RequestBody IssueDtoForUpdate issue, @PathVariable("id") int id) {
+	@PutMapping("/issues/{id}")
+	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueDtoForUpdate issue, @PathVariable("id") int id) {
 		// return the updated issue if process complete
-		return IssuesConverter.toDto(iATService.updateIssues(issue, id));
+		return new ResponseEntity<> (IssuesConverter.toDto(iATService.updateIssues(issue, id)),HttpStatus.OK);
 	}
-	
-	@PutMapping("/updatetrade/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public TradeDto updateTrade(@RequestBody TradeDtoForUpdate trade, @PathVariable("id") int id) {
+	@PutMapping("/trades/{id}")
+	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeDtoForUpdate trade, @PathVariable("id") int id) {
 		// return the updated trade if process complete
-		return TradeConverter.toDto(iATService.updateTrade(trade, id));
+		return new ResponseEntity<> (TradeConverter.toDto(iATService.updateTrade(trade, id)),HttpStatus.OK);
 	}
 	// -----------------------------
 	// PUT ROUTES ENDS HERE
@@ -162,28 +146,25 @@ public class AdditionalController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/deletepropertytype/{id}")
+	@DeleteMapping("/propertytypes/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		propertyService.deletePropertyType(id);
 	}
-
-	@DeleteMapping("/deletepropertyinfo/{id}")
+	@DeleteMapping("/propertyinfos/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deletePropertyInfo(@PathVariable("id") int id) {
 		// delete property info if no property assigned it
 		propertyService.deletePropertyInfo(id);
 	}
-	
-	@DeleteMapping("/deleteissue/{id}")
+	@DeleteMapping("/issues/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		iATService.deleteIssue(id);
 	}
-	
-	@DeleteMapping("/deletetrade/{id}")
+	@DeleteMapping("/trades/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
@@ -192,12 +173,4 @@ public class AdditionalController {
 	// -----------------------------
 	// DELETE ROUTES ENDS HERE
 	// -----------------------------
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-
-	@RequestMapping("/*")
-	public String getBack() {
-		return "nothing here";
-	}
 }

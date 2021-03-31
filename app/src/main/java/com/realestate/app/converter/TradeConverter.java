@@ -23,7 +23,6 @@ public class TradeConverter {
 		toReturn.setPaymentType(trade.getPaymentType());
 		toReturn.setTradeType(trade.getTradeType());
 		toReturn.setVersion(trade.getVersion());
-		toReturn.setTradeId(trade.getTradeId());
 		return toReturn;
 	}
 	

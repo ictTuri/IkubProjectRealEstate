@@ -1,20 +1,14 @@
 package com.realestate.app.dto;
 
+import javax.validation.constraints.NotBlank;
 
 public class PropertyTypeDto {
-	private int propertyTypeId;
-	
+
+	@NotBlank(message = "Property Type Name is mandatory")
 	private String propertyTypeName;
 	
+	@NotBlank(message = "Property Type Description is mandatory")
 	private String propertyTypeDesc;
-
-	public int getPropertyTypeId() {
-		return propertyTypeId;
-	}
-
-	public void setPropertyTypeId(int propertyTypeId) {
-		this.propertyTypeId = propertyTypeId;
-	}
 
 	public String getPropertyTypeName() {
 		return propertyTypeName;
@@ -31,5 +25,5 @@ public class PropertyTypeDto {
 	public void setPropertyTypeDesc(String propertyTypeDesc) {
 		this.propertyTypeDesc = propertyTypeDesc;
 	}
-	
+
 }

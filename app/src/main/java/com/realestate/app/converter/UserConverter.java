@@ -19,7 +19,6 @@ public class UserConverter {
 		toReturn.setEmail(entity.getEmail());
 		toReturn.setRole(RoleConverter.toDto(entity.getRole()));
 		toReturn.setActive(entity.getActive());
-		toReturn.setVersion(entity.getVersion());
 		return toReturn;
 	}
 	
@@ -33,12 +32,9 @@ public class UserConverter {
 
 	public static UserEntity toEntity(UserDto dto) {
 		UserEntity toReturn=new UserEntity();
-		toReturn.setUserId(dto.getUserId());
 		toReturn.setFirstName(dto.getFirstName());
 		toReturn.setLastName(dto.getLastName());
 		toReturn.setEmail(dto.getEmail());
-		toReturn.setUsername(dto.getUsername());
-		toReturn.setPassword(dto.getPassword());
 		toReturn.setRole(RoleConverter.toEntity(dto.getRole()));
 		toReturn.setActive(dto.getActive());
 		return toReturn;

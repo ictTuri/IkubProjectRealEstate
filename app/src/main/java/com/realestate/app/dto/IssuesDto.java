@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 public class IssuesDto {
 
-	private Integer issueId;
-
 	private String category;
 
 	private String resoulutionStatus;
@@ -14,19 +12,7 @@ public class IssuesDto {
 
 	private LocalDateTime createdDate;
 	
-	private UserDto client;
-
-	private PropertyDto property;
-	
 	private int version;
-
-	public Integer getIssueId() {
-		return issueId;
-	}
-
-	public void setIssueId(Integer issueId) {
-		this.issueId = issueId;
-	}
 
 	public String getCategory() {
 		return category;
@@ -58,22 +44,6 @@ public class IssuesDto {
 
 	public void setCreatedDate(LocalDateTime createdDate) {
 		this.createdDate = createdDate;
-	}
-
-	public UserDto getClient() {
-		return client;
-	}
-
-	public void setClient(UserDto client) {
-		this.client = client;
-	}
-
-	public PropertyDto getProperty() {
-		return property;
-	}
-
-	public void setProperty(PropertyDto property) {
-		this.property = property;
 	}
 
 	public int getVersion() {

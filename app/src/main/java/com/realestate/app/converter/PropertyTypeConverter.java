@@ -13,7 +13,6 @@ public class PropertyTypeConverter {
 
 	public static PropertyTypeDto toDto(PropertyTypeEntity propertyType) {
 		PropertyTypeDto propertyTypeToReturn = new PropertyTypeDto();
-		propertyTypeToReturn.setPropertyTypeId(propertyType.getPropertyTypeId());
 		propertyTypeToReturn.setPropertyTypeName(propertyType.getPropertyTypeName());
 		propertyTypeToReturn.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 		return propertyTypeToReturn;

@@ -13,7 +13,6 @@ public class LocationConverter {
 
 	public static LocationDto toDto(LocationEntity location) {
 		LocationDto locationToReturn = new LocationDto();
-		locationToReturn.setLocationId(location.getLocationId());
 		locationToReturn.setCityName(location.getCityName());
 		locationToReturn.setStreetName(location.getStreetName());
 		locationToReturn.setZipCode(location.getZipCode());

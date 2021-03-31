@@ -3,8 +3,6 @@ package com.realestate.app.dto;
 
 public class PropertyDto {
 
-	private int propertiesId;
-	
 	private UserDto owner;
 	
 	private String description;
@@ -17,19 +15,7 @@ public class PropertyDto {
 
 	private PropertyTypeDto propertyType;
 	
-	private LocationDto propertyLocation;
-	
-	private PropertyInfoDto propertyInfo;	
-	
 	private int version;
-
-	public Integer getPropertiesId() {
-		return propertiesId;
-	}
-
-	public void setPropertiesId(Integer propertiesId) {
-		this.propertiesId = propertiesId;
-	}
 
 	public UserDto getOwner() {
 		return owner;
@@ -77,22 +63,6 @@ public class PropertyDto {
 
 	public void setPropertyType(PropertyTypeDto propertyType) {
 		this.propertyType = propertyType;
-	}
-
-	public LocationDto getPropertyLocation() {
-		return propertyLocation;
-	}
-
-	public void setPropertyLocation(LocationDto propertyLocation) {
-		this.propertyLocation = propertyLocation;
-	}
-
-	public PropertyInfoDto getPropertyInfo() {
-		return propertyInfo;
-	}
-
-	public void setPropertyInfo(PropertyInfoDto propertyInfo) {
-		this.propertyInfo = propertyInfo;
 	}
 
 	public int getVersion() {

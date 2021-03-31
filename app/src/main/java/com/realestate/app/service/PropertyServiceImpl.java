@@ -30,12 +30,12 @@ import com.realestate.app.repository.UserRepository;
 @Service
 @Transactional
 public class PropertyServiceImpl implements PropertyService {
-	
+
 	PropertyRepository propertyRepo;
 	UserRepository userRepo;
 	LocationRepository locationRepo;
 	TradeRepository tradeRepo;
-	
+
 	@Autowired
 	public PropertyServiceImpl(PropertyRepository propertyRepo, UserRepository userRepo,
 			LocationRepository locationRepo, TradeRepository tradeRepo) {
@@ -46,268 +46,214 @@ public class PropertyServiceImpl implements PropertyService {
 		this.tradeRepo = tradeRepo;
 	}
 
-
-	//DISPLAY ALL PROPERTIES
+	// DISPLAY ALL PROPERTIES
 	@Override
 	public List<PropertyEntity> allProperties() {
 		return propertyRepo.getAllProperties();
 	}
-	
-	
-	//DISPLAY PROPERTY BY ID
+
+	// DISPLAY PROPERTY BY ID
 	@Override
 	public PropertyEntity propertyById(int id) {
-		PropertyEntity property =  propertyRepo.getPropertiesById(id);
-		if(property!=null) {
+		PropertyEntity property = propertyRepo.getPropertiesById(id);
+		if (property != null) {
 			return property;
-		}else {
+		} else {
 			throw new MyExcMessages("No such property with given Id !");
 		}
 	}
 
-	//DISPLAY ALL LOCATIONS
+	// DISPLAY ALL LOCATIONS
 	@Override
 	public List<LocationEntity> allLocations() {
 		return locationRepo.getAllLocations();
 	}
-	
-	//DISPLAY LOCATION BY ID
+
+	// DISPLAY LOCATION BY ID
 	@Override
 	public LocationEntity locationById(int id) {
 		LocationEntity location = locationRepo.getLocationById(id);
-		if(location != null) {
+		if (location != null) {
 			return location;
-		}else {
+		} else {
 			throw new MyExcMessages("No such location with given Id !");
 		}
 	}
-	
-	//DISPLAY ALL PROPERTY TYPES
+
+	// DISPLAY ALL PROPERTY TYPES
 	@Override
 	public List<PropertyTypeEntity> allPropertyTypes() {
 		return propertyRepo.getAllPropertyTypes();
 	}
 
-	//DISPLAY PROPERTY TYPE BY ID
+	// DISPLAY PROPERTY TYPE BY ID
 	@Override
 	public PropertyTypeEntity propertyTypeById(int id) {
 		PropertyTypeEntity propertyType = propertyRepo.getPropertyTypeById(id);
-		if(propertyType != null) {
+		if (propertyType != null) {
 			return propertyType;
-		}else {
+		} else {
 			throw new MyExcMessages("No such property type with given Id !");
 		}
 	}
-	
-	//DISPLAY ALL PROPERTY INFOS
+
+	// DISPLAY ALL PROPERTY INFOS
 	@Override
 	public List<PropertyInfoEntity> allPropertyInfos() {
 		return propertyRepo.getAllPropertyInfos();
 	}
 
-	//DISPLAY PROPERTY INFO BY ID
+	// DISPLAY PROPERTY INFO BY ID
 	@Override
 	public PropertyInfoEntity propertyInfoById(int id) {
 		PropertyInfoEntity propertyInfo = propertyRepo.getPropertyInfoById(id);
-		if(propertyInfo!=null) {
+		if (propertyInfo != null) {
 			return propertyInfo;
-		}else {
+		} else {
 			throw new MyExcMessages("No such property info with given Id !");
 		}
 	}
-	
-	//PROPERTY INSERT
+
+	// PROPERTY INSERT
 	@Override
 	public PropertyEntity addProperty(PropertyDtoForCreate property) {
-		if(property != null) {
-			if(property.getCategory() == null || property.getDescription() == null) {
-				throw new MyExcMessages("Please fill category and description !");
-			}else {
-				return propertyValidations(property);
-			}
-		}else {
-			throw new MyExcMessages("Please fill the property data to proceed !");
-		}
-	}
-
-	//Validations for the property extracted
-	private PropertyEntity propertyValidations(PropertyDtoForCreate property) {
 		RoleEntity role = userRepo.getRoleById(2);
-		if(userRepo.existUserById(property.getOwner(),role)) {
-			if(locationRepo.existLocation(property.getPropertyLocation())) {
-				if(propertyRepo.existPropertyInfo(property.getPropertyInfo())) {
-					if(propertyRepo.existPropertyType(property.getPropertyType())) {
+		if (userRepo.existUserById(property.getOwner(), role)) {
+			if (locationRepo.existLocation(property.getPropertyLocation())) {
+				if (propertyRepo.existPropertyInfo(property.getPropertyInfo())) {
+					if (propertyRepo.existPropertyType(property.getPropertyType())) {
 						UserEntity owner = userRepo.getUserById(property.getOwner());
 						LocationEntity location = locationRepo.getLocationById(property.getPropertyLocation());
 						PropertyInfoEntity propertyInfo = propertyRepo.getPropertyInfoById(property.getPropertyInfo());
 						PropertyTypeEntity propertyType = propertyRepo.getPropertyTypeById(property.getPropertyType());
-						PropertyEntity propertyToAdd = PropertyConverter.toEntityForCreate(property, owner, propertyType, location, propertyInfo);
+						PropertyEntity propertyToAdd = PropertyConverter.toEntityForCreate(property, owner,
+								propertyType, location, propertyInfo);
 						propertyRepo.insertProperties(propertyToAdd);
 						return propertyToAdd;
-					}else {
+					} else {
 						throw new MyExcMessages("No property type with given Id !");
 					}
-				}else {
+				} else {
 					throw new MyExcMessages("No property info with given Id !");
 				}
-			}else {
+			} else {
 				throw new MyExcMessages("No location with given Id !");
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("No owner with given Id !");
 		}
 	}
 
-	//LOCATION INSERT
+	// LOCATION INSERT
 	@Override
 	public LocationEntity addLocation(LocationDto location) {
-		if(location != null) {
-			if(location.getCityName() !=null && location.getStreetName() != null && location.getZipCode() > 999) {
-				LocationEntity locationToAdd = LocationConverter.toEntity(location);
-				locationRepo.insertLocation(locationToAdd);
-				return locationToAdd;
-			}else {
-				throw new MyExcMessages("Please fill City, Street and zip data to proceed !");
-			}
-		}else {
-			throw new MyExcMessages("Please fill the location data to proceed !");
-		}
-	}
-	
-	//PROPERTY TYPE INSERT
-	@Override
-	public PropertyTypeEntity addPropertyType(PropertyTypeDto propertyType) {
-		if(propertyType!=null) {
-			if(propertyType.getPropertyTypeName()!=null&&propertyType.getPropertyTypeDesc()!=null) {
-				PropertyTypeEntity propertyTypeToAdd = PropertyTypeConverter.toEntity(propertyType);
-				propertyRepo.insertPropertyType(propertyTypeToAdd);
-				return propertyTypeToAdd;
-			}else {
-				throw new MyExcMessages("Please fill the property type name and description !");
-			}
-		}else {
-			throw new MyExcMessages("Please fill the property type data to proceed !");
-		}
+		LocationEntity locationToAdd = LocationConverter.toEntity(location);
+		locationRepo.insertLocation(locationToAdd);
+		return locationToAdd;
 	}
 
-	//PROPERTY INFO INSERT
+	// PROPERTY TYPE INSERT
+	@Override
+	public PropertyTypeEntity addPropertyType(PropertyTypeDto propertyType) {
+		PropertyTypeEntity propertyTypeToAdd = PropertyTypeConverter.toEntity(propertyType);
+		propertyRepo.insertPropertyType(propertyTypeToAdd);
+		return propertyTypeToAdd;
+	}
+
+	// PROPERTY INFO INSERT
 	@Override
 	public PropertyInfoEntity addPropertyInfo(PropertyInfoDto propertyInfo) {
-		if(propertyInfo != null) {
-			if(propertyInfo.getFloorNumber()>-1 && propertyInfo.getNrBathrooms()>-1 && propertyInfo.getNrBedrooms()>-1) {
-				PropertyInfoEntity propertyInfoToAdd = PropertyInfoConverter.toEntity(propertyInfo);
-				propertyRepo.insertPropertyInfo(propertyInfoToAdd);
-				return propertyInfoToAdd;
-			}else {
-				throw new MyExcMessages("Please fill floor number, bathroom and bedroom numbers data !");
-			}
-		}else {
-			throw new MyExcMessages("Please fill the property info data to proceed !");
-		}
+		PropertyInfoEntity propertyInfoToAdd = PropertyInfoConverter.toEntity(propertyInfo);
+		propertyRepo.insertPropertyInfo(propertyInfoToAdd);
+		return propertyInfoToAdd;
 	}
-	
-	//PROPERTY UPDATE
+
+	// PROPERTY UPDATE
 	@Override
 	public PropertyEntity updateProperty(PropertyDtoForCreate property, int id) {
 		PropertyEntity propertyToUpdate = propertyRepo.getPropertiesById(id);
-		if(propertyToUpdate != null) {
+		if (propertyToUpdate != null) {
 			RoleEntity role = userRepo.getRoleById(2);
-			if(userRepo.existUserById(property.getOwner(),role)) {
-				if(locationRepo.existLocation(property.getPropertyLocation())) {
+			if (userRepo.existUserById(property.getOwner(), role)) {
+				if (locationRepo.existLocation(property.getPropertyLocation())) {
 					return propertyUpdateValidation(property, id, propertyToUpdate);
-				}else {
+				} else {
 					throw new MyExcMessages("Updated Location does not exist !");
 				}
-			}else {
+			} else {
 				throw new MyExcMessages("Updated Owner does not exist !");
 			}
-		}else
+		} else
 			throw new MyExcMessages("No Property with such Id / Please check again");
 	}
 
-	//Validations for the updated property extracted
+	// Validations for the updated property extracted
 	private PropertyEntity propertyUpdateValidation(PropertyDtoForCreate property, int id,
 			PropertyEntity propertyToUpdate) {
-		if(propertyRepo.existPropertyInfo(property.getPropertyInfo())) {
-			if(propertyRepo.existPropertyInfoAnotherProperty(id, property.getPropertyInfo())) {
-				if(property.getCategory()!=null&&property.getDescription()!=null&&(property.getRentingPrice()>0 || property.getSellingPrice()>0)) {
-					propertyToUpdate.setCategory(property.getCategory());
-					propertyToUpdate.setDescription(property.getDescription());
-					UserEntity owner = userRepo.getUserById(property.getOwner());
-					LocationEntity location = locationRepo.getLocationById(property.getPropertyLocation());
-					PropertyInfoEntity propertyInfo = propertyRepo.getPropertyInfoById(property.getPropertyInfo());
-					PropertyTypeEntity propertyType = propertyRepo.getPropertyTypeById(property.getPropertyType());
-					propertyToUpdate.setOwner(owner);
-					propertyToUpdate.setPropertyInfo(propertyInfo);
-					propertyToUpdate.setPropertyLocation(location);
-					propertyToUpdate.setPropertyType(propertyType);
-					propertyToUpdate.setRentingPrice(property.getRentingPrice());
-					propertyToUpdate.setSellingPrice(property.getSellingPrice());
-					propertyRepo.updateProperty(propertyToUpdate);
-					return propertyToUpdate;
-				}else {
-					throw new MyExcMessages("Please fill all data fpr property !");
-				}
-			}else {
+		if (propertyRepo.existPropertyInfo(property.getPropertyInfo())) {
+			if (propertyRepo.existPropertyInfoAnotherProperty(id, property.getPropertyInfo())) {
+				propertyToUpdate.setCategory(property.getCategory());
+				propertyToUpdate.setDescription(property.getDescription());
+				UserEntity owner = userRepo.getUserById(property.getOwner());
+				LocationEntity location = locationRepo.getLocationById(property.getPropertyLocation());
+				PropertyInfoEntity propertyInfo = propertyRepo.getPropertyInfoById(property.getPropertyInfo());
+				PropertyTypeEntity propertyType = propertyRepo.getPropertyTypeById(property.getPropertyType());
+				propertyToUpdate.setOwner(owner);
+				propertyToUpdate.setPropertyInfo(propertyInfo);
+				propertyToUpdate.setPropertyLocation(location);
+				propertyToUpdate.setPropertyType(propertyType);
+				propertyToUpdate.setRentingPrice(property.getRentingPrice());
+				propertyToUpdate.setSellingPrice(property.getSellingPrice());
+				propertyRepo.updateProperty(propertyToUpdate);
+				return propertyToUpdate;
+			} else {
 				throw new MyExcMessages("Info Id belong to another property !");
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("Updated Property Info does not exist !");
 		}
 	}
 
-	//LOCATION UPDATE
+	// LOCATION UPDATE
 	@Override
 	public LocationEntity updateLocation(LocationDto location, int id) {
 		LocationEntity locationToUpdate = locationRepo.getLocationById(id);
-		if(locationToUpdate != null) {
-			return locationUpdateValidations(location, locationToUpdate);
-		}else {
+		if (locationToUpdate != null) {
+			locationToUpdate.setCityName(location.getCityName());
+			locationToUpdate.setStreetName(location.getStreetName());
+			locationToUpdate.setDescription(location.getDescription());
+			locationToUpdate.setZipCode(location.getZipCode());
+			locationRepo.updateLocation(locationToUpdate);
+			return locationToUpdate;
+		} else {
 			throw new MyExcMessages("No Location with such Id / Please check again");
 		}
 	}
 
-	//Validations for the updated location extracted
-	private LocationEntity locationUpdateValidations(LocationDto location, LocationEntity locationToUpdate) {
-		if(location.getCityName() != null && location.getStreetName() != null && location.getDescription() != null) {
-			if(location.getZipCode()>999 && location.getZipCode()<10000) {
-				locationToUpdate.setCityName(location.getCityName());
-				locationToUpdate.setStreetName(location.getStreetName());
-				locationToUpdate.setDescription(location.getDescription());
-				locationToUpdate.setZipCode(location.getZipCode());
-				locationRepo.updateLocation(locationToUpdate);
-				return locationToUpdate;
-			}else {
-				throw new MyExcMessages("Zip Code not valid for Albania");
-			}
-		}else {
-			throw new MyExcMessages("Please fill city name, street name and description");
-		}
-	}
-	
-	//PROPERTY TYPE UPDATE
+	// PROPERTY TYPE UPDATE
 	@Override
 	public PropertyTypeEntity updatePropertyType(PropertyTypeDto propertyType, int id) {
 		PropertyTypeEntity propertyToUpdate = propertyRepo.getPropertyTypeById(id);
-		if(propertyToUpdate!=null) {
-			if(propertyRepo.existPropertyType(propertyType.getPropertyTypeName(), propertyType.getPropertyTypeDesc())) {
+		if (propertyToUpdate != null) {
+			if (propertyRepo.existPropertyType(propertyType.getPropertyTypeName(),
+					propertyType.getPropertyTypeDesc())) {
 				throw new MyExcMessages("Property type already exist with name and desciption given");
-			}else {
+			} else {
 				propertyToUpdate.setPropertyTypeName(propertyType.getPropertyTypeName());
 				propertyToUpdate.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 				propertyRepo.updatePropertyType(propertyToUpdate);
 				return propertyToUpdate;
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("No Property type with such Id / Please check again");
 		}
 	}
 
-	//PROPERTY INFO UPDATE
+	// PROPERTY INFO UPDATE
 	@Override
 	public PropertyInfoEntity updatePropertyInfo(PropertyInfoDto propertyInfo, int id) {
 		PropertyInfoEntity propertyInfoToUpdate = propertyRepo.getPropertyInfoById(id);
-		if(propertyInfoToUpdate!=null) {
+		if (propertyInfoToUpdate != null) {
 			propertyInfoToUpdate.setHasGarage(propertyInfo.isHasGarage());
 			propertyInfoToUpdate.setHasElevator(propertyInfo.isHasElevator());
 			propertyInfoToUpdate.setHasPool(propertyInfo.isHasPool());
@@ -317,96 +263,70 @@ public class PropertyServiceImpl implements PropertyService {
 			propertyInfoToUpdate.setNrBedrooms(propertyInfo.getNrBedrooms());
 			propertyRepo.updatePropertyInfo(propertyInfoToUpdate);
 			return propertyInfoToUpdate;
-		}else {
+		} else {
 			throw new MyExcMessages("No Property info with such Id / Please check again");
 		}
 	}
-	
-	//PROPERTY DELETION
-	//PROPERTY DELETION
+
+	// PROPERTY DELETION
 	@Override
 	public PropertyEntity deleteProperty(int id) {
 		PropertyEntity propertyToDelete = propertyRepo.getPropertiesById(id);
-		if(propertyToDelete!=null) {
-			if(tradeRepo.getTradeById(id)!=null) {
+		if (propertyToDelete != null) {
+			if (tradeRepo.getTradeById(id) != null) {
 				propertyRepo.deleteProperty(propertyToDelete);
 				return propertyToDelete;
-			}else {
+			} else {
 				throw new MyExcMessages("Property is Rented or Bought. Can not delete");
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("Can not delete Property / Or property does not exist with given Id");
 		}
 	}
 
-
-	
-	//LOCATION DELETION
-	//LOCATION DELETION
+	// LOCATION DELETION
 	@Override
 	public void deleteLocation(int id) {
 		LocationEntity locationToDelete = locationRepo.getLocationById(id);
-		if(locationToDelete != null) {
-			if(propertyRepo.existLocationInProperty(locationToDelete)) {
+		if (locationToDelete != null) {
+			if (propertyRepo.existLocationInProperty(locationToDelete)) {
 				throw new MyExcMessages("Location attached to a property, can not delete");
-			}else {
+			} else {
 				locationRepo.deleteLocation(locationToDelete);
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("No locatin on given id or already deleted");
 		}
 	}
 
-
-
-
-
-	//PROPERTY TYPE DELETION
-
-
-
-
-	//PROPERTY TYPE DELETE
+	// PROPERTY TYPE DELETION
 	@Override
 	public void deletePropertyType(int id) {
 		PropertyTypeEntity propertyTypeToDelete = propertyRepo.getPropertyTypeById(id);
-		if(propertyTypeToDelete != null) {
-			if(propertyRepo.existPropertyTypeInProperties(propertyTypeToDelete)) {
+		if (propertyTypeToDelete != null) {
+			if (propertyRepo.existPropertyTypeInProperties(propertyTypeToDelete)) {
 				throw new MyExcMessages("Property type assigned to a property / consider update / can not delete");
-			}else {
+			} else {
 				propertyRepo.deletePropertyType(propertyTypeToDelete);
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("Can not delete Property Type/ Or property type does not exist with given Id");
 		}
 	}
 
-
-	
-	//PROPERTY INFO DELETION
-
-
+	// PROPERTY INFO DELETION
 	@Override
 	public void deletePropertyInfo(int id) {
 		PropertyInfoEntity propertyInfoToDelete = propertyRepo.getPropertyInfoById(id);
-		if(propertyInfoToDelete != null) {
-			if(propertyRepo.existRropertyWithInfo(propertyInfoToDelete)) {
+		if (propertyInfoToDelete != null) {
+			if (propertyRepo.existRropertyWithInfo(propertyInfoToDelete)) {
 				throw new MyExcMessages("Property info exist with a property, can not delete");
-			}else {
+			} else {
 				propertyRepo.deletePropertyInfo(propertyInfoToDelete);
 			}
-		}else {
+		} else {
 			throw new MyExcMessages("Can not delete Property Info/ Or property info does not exist with given Id");
 		}
 	}
-
-
-
-
-
-
-
-
-
 
 }

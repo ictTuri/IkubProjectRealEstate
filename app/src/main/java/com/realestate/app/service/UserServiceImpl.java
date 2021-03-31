@@ -24,58 +24,46 @@ public class UserServiceImpl implements UserService {
 		this.userRepository = userRepository;
 	}
 
-	//ALL USERS DISPLAYED
+	// ALL USERS DISPLAYED
 	@Override
 	public List<UserEntity> allUsers() {
 		return userRepository.getAllUsers();
 	}
-	
-	//USER DISPLAY BY ID
+
+	// USER DISPLAY BY ID
 	@Override
 	public UserEntity userById(int id) {
 		UserEntity user = userRepository.getUserById(id);
-		if(user!=null) {
+		if (user != null) {
 			return user;
-		}else {
+		} else {
 			throw new MyExcMessages("No such User with given Id !");
 		}
 	}
-	
-	//USER INSERT
+
+	// USER INSERT
 	@Override
 	public UserEntity addUser(UserDtoForCreate user) {
-		if (user != null) {
-			return userValidations(user);
-		} else {
-			throw new MyExcMessages("please fill the user data to proceed !");
-		}	
-	}
-	
-	//Validations for the new user extracted
-	private UserEntity userValidations(UserDtoForCreate user) {
-		if (user.getFirstName() != null || user.getLastName() != null) {
-			if(!userRepository.existUsername(user.getUsername())) {
-				if(!userRepository.existEmail(user.getEmail())) {
-					RoleEntity role = userRepository.getRoleById(user.getRole());
-					if (role != null) {
-						UserEntity userToAdd = UserConverter.toEntityForCreate(user, role);
-						userRepository.insertUser(userToAdd);
-						return userToAdd;
-					} else {
-						throw new MyExcMessages("Role does not exist");
-					}
-				}else {
-					throw new MyExcMessages("Email already registered");
+		if (!userRepository.existUsername(user.getUsername())) {
+			if (!userRepository.existEmail(user.getEmail())) {
+				RoleEntity role = userRepository.getRoleById(user.getRole());
+				if (role != null) {
+					UserEntity userToAdd = UserConverter.toEntityForCreate(user, role);
+					userRepository.insertUser(userToAdd);
+					return userToAdd;
+				} else {
+					throw new MyExcMessages("Role does not exist");
 				}
-			}else {
-				throw new MyExcMessages("Username already exist");
+			} else {
+				throw new MyExcMessages("Email already registered");
 			}
-		}else {
-			throw new MyExcMessages("Please fill your first name and last name !");
+		} else {
+			throw new MyExcMessages("Username already exist");
 		}
 	}
-	
-	//USER UPDATE
+
+
+	// USER UPDATE
 	@Override
 	public UserEntity updateUser(UserDtoForCreate user, int id) {
 		UserEntity userToUpdate = userRepository.getUserById(id);
@@ -85,10 +73,11 @@ public class UserServiceImpl implements UserService {
 			throw new MyExcMessages("No User with such Id / Please check again");
 		}
 	}
-	
-	//Validations for the User Update Extracted
+
+	// Validations for the User Update Extracted
 	private UserEntity userUpdateValidation(UserDtoForCreate user, UserEntity userToUpdate) {
-		if (!userToUpdate.getUsername().equals(user.getUsername()) && userRepository.existUsername(user.getUsername())) {
+		if (!userToUpdate.getUsername().equals(user.getUsername())
+				&& userRepository.existUsername(user.getUsername())) {
 			throw new MyExcMessages("Can not use this username !");
 		} else {
 			if (!user.getEmail().equals(userToUpdate.getEmail()) && userRepository.existEmail(user.getEmail())) {
@@ -111,7 +100,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	//USER DELETION
+	// USER DELETION
 	@Override
 	public UserEntity deleteUser(int id) {
 		UserEntity userToDelete = userRepository.getUserById(id);

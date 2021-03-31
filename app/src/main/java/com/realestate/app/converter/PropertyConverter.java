@@ -18,15 +18,12 @@ public class PropertyConverter {
 
 	public static PropertyDto toDto(PropertyEntity property) {
 		PropertyDto propertyToReturn = new PropertyDto();
-		propertyToReturn.setPropertiesId(property.getPropertiesId());
-		propertyToReturn.setOwner(null);
+		propertyToReturn.setOwner(UserConverter.toDto(property.getOwner()));
 		propertyToReturn.setDescription(property.getDescription());
 		propertyToReturn.setRentingPrice(property.getRentingPrice());
 		propertyToReturn.setSellingPrice(property.getSellingPrice());
 		propertyToReturn.setCategory(property.getCategory());
 		propertyToReturn.setPropertyType(PropertyTypeConverter.toDto(property.getPropertyType()));
-		propertyToReturn.setPropertyLocation(LocationConverter.toDto(property.getPropertyLocation()));
-		propertyToReturn.setPropertyInfo(PropertyInfoConverter.toDto(property.getPropertyInfo()));
 		return propertyToReturn;
 	}
 
@@ -46,8 +43,6 @@ public class PropertyConverter {
 		propertyToReturn.setSellingPrice(property.getSellingPrice());
 		propertyToReturn.setCategory(property.getCategory());
 		propertyToReturn.setPropertyType(PropertyTypeConverter.toEntity(property.getPropertyType()));
-		propertyToReturn.setPropertyLocation(LocationConverter.toEntity(property.getPropertyLocation()));
-		propertyToReturn.setPropertyInfo(PropertyInfoConverter.toEntity(property.getPropertyInfo()));
 		return propertyToReturn;
 	}
 

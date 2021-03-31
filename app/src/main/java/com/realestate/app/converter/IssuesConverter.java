@@ -17,8 +17,6 @@ public class IssuesConverter {
 
 	public static IssuesDto toDto(IssuesEntity issue) {
 		IssuesDto issueToReturn = new IssuesDto();
-		issueToReturn.setClient(UserConverter.toDto(issue.getClient()));
-		issueToReturn.setProperty(PropertyConverter.toDto(issue.getProperty()));
 		issueToReturn.setCategory(issue.getCategory());
 		issueToReturn.setCreatedDate(issue.getCreatedDate());
 		issueToReturn.setResoulutionStatus(issue.getResoulutionStatus());
@@ -36,8 +34,6 @@ public class IssuesConverter {
 	
 	public static IssuesEntity toEntity(IssuesDto issue) {
 		IssuesEntity issueToReturn = new IssuesEntity();
-		issueToReturn.setClient(UserConverter.toEntity(issue.getClient()));
-		issueToReturn.setProperty(PropertyConverter.toEntity(issue.getProperty()));
 		issueToReturn.setCategory(issue.getCategory());
 		issueToReturn.setCreatedDate(LocalDateTime.now());
 		issueToReturn.setResoulutionStatus(issue.getResoulutionStatus());

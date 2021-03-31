@@ -1,14 +1,20 @@
 package com.realestate.app.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class IssuesDtoForCreate {
 
+	@NotBlank(message = "Category type is mandatory")
 	private String category;
-
+	
+	@NotBlank(message = "Description is mandatory")
 	private String description;
 	
+	@NotNull(message = "Client id is mandatory")
 	private int client;
 
+	@NotNull(message = "Property id is mandatory")
 	private int property;
 	
 
