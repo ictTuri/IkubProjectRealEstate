@@ -3,6 +3,7 @@ package com.realestate.app.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+
 public class TradeDtoForCreate {
 	
 	@NotNull(message = "Client Id is mandatory !")

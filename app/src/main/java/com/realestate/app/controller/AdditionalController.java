@@ -147,25 +147,25 @@ public class AdditionalController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@DeleteMapping("/propertytypes/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		propertyService.deletePropertyType(id);
 	}
 	@DeleteMapping("/propertyinfos/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePropertyInfo(@PathVariable("id") int id) {
 		// delete property info if no property assigned it
 		propertyService.deletePropertyInfo(id);
 	}
 	@DeleteMapping("/issues/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		iATService.deleteIssue(id);
 	}
 	@DeleteMapping("/trades/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		iATService.deleteTrade(id);

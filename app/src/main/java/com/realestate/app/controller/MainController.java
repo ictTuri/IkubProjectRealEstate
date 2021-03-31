@@ -121,17 +121,17 @@ public class MainController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@DeleteMapping("/users/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);
 	}
 	@DeleteMapping("/properties/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
 	}
 	@DeleteMapping("/locations/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteLocation(@PathVariable("id") int id) {
 		propertyService.deleteLocation(id);
 	}

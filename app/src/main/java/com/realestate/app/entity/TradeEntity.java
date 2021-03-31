@@ -2,6 +2,7 @@ package com.realestate.app.entity;
 
 import javax.persistence.*;
 
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

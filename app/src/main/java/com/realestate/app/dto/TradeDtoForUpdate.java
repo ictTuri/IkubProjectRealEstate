@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 
+
 public class TradeDtoForUpdate {
 
 	private LocalDateTime endTradeDate;
