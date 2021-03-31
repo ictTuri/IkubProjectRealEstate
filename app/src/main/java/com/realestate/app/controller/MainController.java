@@ -87,12 +87,12 @@ public class MainController {
 		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)),HttpStatus.CREATED);
 	}
 	@PostMapping("/properties")
-	public ResponseEntity<PropertyDto> addProperty(@RequestBody PropertyDtoForCreate property) {
+	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody PropertyDtoForCreate property) {
 		//return the added property formated by converter
 		return new ResponseEntity<> (PropertyConverter.toDto(propertyService.addProperty(property)),HttpStatus.CREATED);
 	}
 	@PostMapping("/locations")
-	public ResponseEntity<LocationDto> addLocation(@RequestBody LocationDto location) {
+	public ResponseEntity<LocationDto> addLocation(@Valid @RequestBody LocationDto location) {
 		//return the added location formated by converter
 		return new ResponseEntity<> (LocationConverter.toDto(propertyService.addLocation(location)),HttpStatus.CREATED);
 	}
