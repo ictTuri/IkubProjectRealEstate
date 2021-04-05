@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "issues")
 @NoArgsConstructor
+@Data
 public class IssuesEntity implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -41,71 +44,4 @@ public class IssuesEntity implements Serializable{
 	@Version
 	@Column(name = "version")
 	private int version;
-
-	public Integer getIssueId() {
-		return issueId;
-	}
-
-	public void setIssueId(Integer issueId) {
-		this.issueId = issueId;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getResoulutionStatus() {
-		return resoulutionStatus;
-	}
-
-	public void setResoulutionStatus(String resoulutionStatus) {
-		this.resoulutionStatus = resoulutionStatus;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public UserEntity getClient() {
-		return client;
-	}
-
-	public void setClient(UserEntity client) {
-		this.client = client;
-	}
-
-	public PropertyEntity getProperty() {
-		return property;
-	}
-
-	public void setProperty(PropertyEntity property) {
-		this.property = property;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	
-	
-	
 }

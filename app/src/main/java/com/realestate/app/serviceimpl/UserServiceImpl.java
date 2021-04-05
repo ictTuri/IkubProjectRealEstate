@@ -1,9 +1,10 @@
-package com.realestate.app.service;
+package com.realestate.app.serviceimpl;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.UserConverter;
@@ -12,22 +13,37 @@ import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.UserRepository;
+import com.realestate.app.service.UserService;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	PasswordEncoder passwordEncoder;
 	UserRepository userRepository;
 
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
-	// ALL USERS DISPLAYED
+	// GET ALL USER OR FILTERED BY NAME
 	@Override
-	public List<UserEntity> allUsers() {
-		return userRepository.getAllUsers();
+	public Iterable<UserEntity> getUsers(String name) {
+		if (name != null && !name.isEmpty()) {
+			List<UserEntity> list = userRepository.getFilterByName(name);
+			if (!list.isEmpty()) {
+				try {
+					return userRepository.getFilterByName(name);
+				} catch (IndexOutOfBoundsException e) {
+					return userRepository.getAllUsers();
+				}
+			}else {
+				throw new MyExcMessages("No User with name: "+name);
+			}
+		} else
+			return userRepository.getAllUsers();
 	}
 
 	// USER DISPLAY BY ID
@@ -48,6 +64,8 @@ public class UserServiceImpl implements UserService {
 			if (!userRepository.existEmail(user.getEmail())) {
 				RoleEntity role = userRepository.getRoleById(user.getRole());
 				if (role != null) {
+					String encodedPass = passwordEncoder.encode(user.getPassword());
+					user.setPassword(encodedPass);
 					UserEntity userToAdd = UserConverter.toEntityForCreate(user, role);
 					userRepository.insertUser(userToAdd);
 					return userToAdd;
@@ -61,7 +79,6 @@ public class UserServiceImpl implements UserService {
 			throw new MyExcMessages("Username already exist");
 		}
 	}
-
 
 	// USER UPDATE
 	@Override
@@ -89,7 +106,7 @@ public class UserServiceImpl implements UserService {
 					userToUpdate.setLastName(user.getLastName());
 					userToUpdate.setEmail(user.getEmail());
 					userToUpdate.setUsername(user.getUsername());
-					userToUpdate.setPassword(user.getPassword());
+					userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
 					userToUpdate.setRole(role);
 					userRepository.updateUser(userToUpdate);
 					return userToUpdate;
@@ -105,7 +122,7 @@ public class UserServiceImpl implements UserService {
 	public UserEntity deleteUser(int id) {
 		UserEntity userToDelete = userRepository.getUserById(id);
 		if (userToDelete != null) {
-			if (userToDelete.getActive()) {
+			if (userToDelete.isActive()) {
 				userToDelete.setActive(false);
 				return userRepository.updateUser(userToDelete);
 			} else {

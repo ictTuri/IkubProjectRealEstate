@@ -10,19 +10,21 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.realestate.app.entity.IssuesEntity;
+import com.realestate.app.entity.PropertyEntity;
 
 @Repository
 @Transactional
-public class IssuesRepository {
+public class IssueRepository {
 	EntityManager em;
 
-	public IssuesRepository(EntityManager em) {
+	public IssueRepository(EntityManager em) {
 		super();
 		this.em = em;
 	}
 
 	private static final String GET_ALL_ISSUES = "FROM IssuesEntity";
 	private static final String GET_ISSUE_BY_ID = "FROM IssuesEntity ie WHERE ie.issueId = :id";
+	private static final String EXIST_ISSUE_FOR_POPERTY = "FROM IssuesEntity ie WHERE ie.property = :property";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	// TRADES
@@ -52,5 +54,15 @@ public class IssuesRepository {
 	// DELETE OPERATIONS DOWN HERE
 	public void deleteIssue(IssuesEntity issue) {
 		em.remove(issue);
+	}
+
+	public IssuesEntity existIssueWithProperty(PropertyEntity property) {
+		TypedQuery<IssuesEntity> query = em.createQuery(EXIST_ISSUE_FOR_POPERTY, IssuesEntity.class)
+				.setParameter("property", property);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 }

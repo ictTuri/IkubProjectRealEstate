@@ -26,6 +26,7 @@ public class TradeRepository {
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
 	private static final String GET_TRADE_BY_ID = "FROM TradeEntity t WHERE t.tradeId = :id";
 	
+	private static final String GET_TRADE_BY_PROPERTY = "FROM TradeEntity t WHERE t.property = :property";
 	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.property = :properties";
 	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity te WHERE te.property = :id and te.endTradeDate = null";
 	
@@ -79,5 +80,14 @@ public class TradeRepository {
 		}catch(NoResultException e) {
 			return false;
 		}
+	}
+
+	public TradeEntity getTradeByProperty(PropertyEntity property) {
+		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_PROPERTY, TradeEntity.class).setParameter("property", property);
+			try{
+				return query.getResultList().get(0);
+			}catch(IndexOutOfBoundsException e) {
+				return null;
+			}
 	}
 }

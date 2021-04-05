@@ -22,14 +22,15 @@ public class UserRepository {
 	}
 
 	private static final String GET_ALL_USERS = "FROM UserEntity";
-	
+	private static final String GET_ALL_USERS_BY_NAME = "FROM UserEntity ue WHERE ue.firstName = :name";
+
 	private static final String GET_USER_BY_ID = "FROM UserEntity u WHERE u.userId = :id";
 	private static final String GET_ROLE_BY_ID = "FROM RoleEntity r WHERE r.roleId = :id";
 	private static final String GET_OWNER_BY_ID = "SELECT u FROM UserEntity u WHERE u.userId = :id and u.role = :role";
-	
+
 	private static final String CHECK_USERNAME_EXIST = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
 	private static final String CHECK_EMAIL_EXIST = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
-	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username =?1 and u.isActive = true";
+	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username =?1 and u.active = true";
 	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username";
 	private static final String CHECK_IF_CLIENT = "FROM UserEntity u WHERE u.userId = :id and u.role = :role";
 
@@ -40,13 +41,14 @@ public class UserRepository {
 
 	public UserEntity getUserById(int id) {
 		TypedQuery<UserEntity> query = em.createQuery(GET_USER_BY_ID, UserEntity.class).setParameter("id", id);
-		try{
+		try {
 			return query.getResultList().get(0);
-		}catch(IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
 	}
-	//ROLE
+
+	// ROLE
 	public RoleEntity getRoleById(int id) {
 		TypedQuery<RoleEntity> query = em.createQuery(GET_ROLE_BY_ID, RoleEntity.class).setParameter("id", id);
 		try {
@@ -55,7 +57,7 @@ public class UserRepository {
 			return null;
 		}
 	}
-	
+
 	// INSERT OPERATIONS DOWN HERE
 	public void insertUser(UserEntity user) {
 		em.persist(user);
@@ -76,13 +78,18 @@ public class UserRepository {
 		return null;
 	}
 
+	// ON CONTROLLER METHODS TO FILTER BY NAME
+	public List<UserEntity> getFilterByName(String name) {
+		return em.createQuery(GET_ALL_USERS_BY_NAME, UserEntity.class).setParameter("name", name).getResultList();
+	}
 
 	// HELPING METHODS BELOW HERE
 	public boolean existUsername(String username) {
-		TypedQuery<String> query = em.createQuery(CHECK_USERNAME_EXIST, String.class).setParameter("username",username);
+		TypedQuery<String> query = em.createQuery(CHECK_USERNAME_EXIST, String.class).setParameter("username",
+				username);
 		try {
 			return query.getResultList().get(0) != null;
-		}catch(IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
 	}
@@ -91,20 +98,21 @@ public class UserRepository {
 		TypedQuery<String> query = em.createQuery(CHECK_EMAIL_EXIST, String.class).setParameter("email", email);
 		try {
 			return query.getResultList().get(0) != null;
-		}catch(IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
-		
+
 	}
-	
+
 	public boolean existUserById(int id, RoleEntity role) {
-		TypedQuery<UserEntity> query = em.createQuery(GET_OWNER_BY_ID, UserEntity.class).setParameter("id", id).setParameter("role", role);
+		TypedQuery<UserEntity> query = em.createQuery(GET_OWNER_BY_ID, UserEntity.class).setParameter("id", id)
+				.setParameter("role", role);
 		try {
 			return query.getResultList().get(0) != null;
-		}catch(IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
-		
+
 	}
 
 	public UserEntity getUserByUsername(String username) {
@@ -117,22 +125,22 @@ public class UserRepository {
 	}
 
 	public boolean isActiveUser(String username) {
-		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter("username", username);
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter("username",
+				username);
 		try {
 			UserEntity u = query.getSingleResult();
-			return u.getActive() == Boolean.TRUE;
-		}catch(NoResultException e) {
+			return u.isActive() == Boolean.TRUE;
+		} catch (NoResultException e) {
 			return false;
 		}
 	}
 
-	public boolean isClient(int id,RoleEntity role) {
-		TypedQuery<UserEntity> query = em.createQuery(CHECK_IF_CLIENT, UserEntity.class)
-				.setParameter("id", id)
+	public boolean isClient(int id, RoleEntity role) {
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_IF_CLIENT, UserEntity.class).setParameter("id", id)
 				.setParameter("role", role);
 		try {
 			return query.getSingleResult() != null;
-		}catch(NoResultException e) {
+		} catch (NoResultException e) {
 			return false;
 		}
 	}

@@ -3,6 +3,7 @@ package com.realestate.app.utils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.client.RestTemplate;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.PathSelectors;
@@ -15,7 +16,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
 public class AppConfiguration {
-
+	
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+	
+	
 	@Bean
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  
