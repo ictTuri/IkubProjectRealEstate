@@ -75,7 +75,7 @@ public class PropertyController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/properties/new")
+	@PostMapping("/properties")
 	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
 		// return the added property formated by converter
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.addProperty(property)), HttpStatus.CREATED);
@@ -84,7 +84,7 @@ public class PropertyController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/properties/edit/{id}")
+	@PutMapping("/properties/{id}")
 	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
 			@PathVariable("id") int id) {
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.updateProperty(property, id)),
@@ -94,10 +94,19 @@ public class PropertyController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/properties/delete/{id}")
+	@DeleteMapping("/properties/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
+	}
+
+	// -----------------------------
+	// EVERY OTHER ROUT REQUEST HANDLED BELOW
+	// -----------------------------
+	@RequestMapping("properties/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String getBack() {
+		return "nothing here";
 	}
 
 }

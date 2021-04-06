@@ -53,7 +53,7 @@ public class IssueController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/issues/new")
+	@PostMapping("/issues")
 	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesDtoForCreate issue) {
 		// return the added issue formated by converter
 		return new ResponseEntity<>(IssuesConverter.toDto(issueService.addIssues(issue)), HttpStatus.CREATED);
@@ -62,7 +62,7 @@ public class IssueController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/issues/edit/{id}")
+	@PutMapping("/issues/{id}")
 	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueDtoForUpdate issue,
 			@PathVariable("id") int id) {
 		// return the updated issue if process complete
@@ -72,11 +72,19 @@ public class IssueController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/issues/delete/{id}")
+	@DeleteMapping("/issues/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		issueService.deleteIssue(id);
 	}
 
+	// -----------------------------
+	// EVERY OTHER ROUT REQUEST HANDLED BELOW
+	// -----------------------------
+	@RequestMapping("issues/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String getBack() {
+		return "nothing here";
+	}
 }

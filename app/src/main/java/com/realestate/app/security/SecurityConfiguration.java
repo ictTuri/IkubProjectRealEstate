@@ -21,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
-import javax.servlet.Filter;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -63,8 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity http) {
-		http.ignoring().antMatchers(HttpMethod.GET, getDisabledUrlPaths());
-		http.ignoring().antMatchers(HttpMethod.POST, getPostDisabledUrlPaths());
+		http.ignoring().antMatchers(getUrlDisabledPaths());
 		http.ignoring().antMatchers(HttpMethod.OPTIONS);
 	}
 
@@ -85,23 +83,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 	        http.csrf().disable().authorizeRequests()
-	        		.antMatchers("/api/**").permitAll()
-	        		.and().sessionManagement()
+	        		.antMatchers("/api/**").permitAll().and().sessionManagement()
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-	                .addFilterAfter((Filter) jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+	                .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 
 	        // @formatter:on
 	}
 
-	private String[] getDisabledUrlPaths() {
-		return new String[] {"/open/**", "/api/v1/properties**", "/v2/api-docs/**",
-				"/swagger-resources/**", "/swagger-ui.html", "/swagger/**", "/favicon.ico"};
-	}
-
-	private String[] getPostDisabledUrlPaths() {
-		return new String[] { "/api/login", "/open/**","/api/v1/users/new/owner", "/api/v1/users/new/client", "/v2/api-docs/**"};
+	private String[] getUrlDisabledPaths() {
+        return new String[] {"/api/login","/open/**","/api/register/**","/webjars/**","/v2/api-docs/**","/swagger-resources/**","/swagger-ui.html","/swagger/**", "/favicon.ico", "/api/swagger.json", "/actuator/health" };
 	}
 
 }

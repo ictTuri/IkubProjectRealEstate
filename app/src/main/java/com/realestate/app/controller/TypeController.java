@@ -52,7 +52,7 @@ public class TypeController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/propertytypes/new")
+	@PostMapping("/propertytypes")
 	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
 		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.addPropertyType(propertyType)),
@@ -62,7 +62,7 @@ public class TypeController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/propertytypes/edit/{id}")
+	@PutMapping("/propertytypes/{id}")
 	public ResponseEntity<PropertyTypeDto> updatePropertyType(@Valid @RequestBody PropertyTypeDto propertyType,
 			@PathVariable("id") int id) {
 		// return the updated property type if process complete
@@ -73,10 +73,19 @@ public class TypeController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/propertytypes/delete/{id}")
+	@DeleteMapping("/propertytypes/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		typeService.deletePropertyType(id);
+	}
+	
+	// -----------------------------
+	// EVERY OTHER ROUT REQUEST HANDLED BELOW
+	// -----------------------------
+	@RequestMapping("propertytypes/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String getBack() {
+		return "nothing here";
 	}
 }

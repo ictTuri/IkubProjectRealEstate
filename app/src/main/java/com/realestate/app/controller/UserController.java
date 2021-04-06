@@ -66,28 +66,16 @@ public class UserController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/users/new")
+	@PostMapping("/users")
 	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDtoForCreate user) {
 		// return the added user formated by converter
-		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
-	}
-	@PostMapping("/users/new/client")
-	public ResponseEntity<UserDto> addClient(@Valid @RequestBody UserDtoForCreate user) {
-		// return the added user formated by converter
-		user.setRole(3);
-		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
-	}
-	@PostMapping("/users/new/owner")
-	public ResponseEntity<UserDto> addOwner(@Valid @RequestBody UserDtoForCreate user) {
-		// return the added user formated by converter
-		user.setRole(2);
 		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/users/edit/{id}")
+	@PutMapping("/users/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDtoForCreate user, @PathVariable("id") int id) {
 		return new ResponseEntity<>(UserConverter.toDto(userService.updateUser(user, id)), HttpStatus.CREATED);
 	}
@@ -95,7 +83,7 @@ public class UserController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/users/delete/{id}")
+	@DeleteMapping("/users/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);
@@ -104,7 +92,7 @@ public class UserController {
 	// -----------------------------
 	// EVERY OTHER ROUT REQUEST HANDLED BELOW
 	// -----------------------------
-	@RequestMapping("/*")
+	@RequestMapping("users/*")
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String getBack() {
 		return "nothing here";

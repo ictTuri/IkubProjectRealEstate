@@ -51,7 +51,7 @@ public class LocationController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/locations/new")
+	@PostMapping("/locations")
 	public ResponseEntity<LocationDto> addLocation(@Valid @RequestBody LocationDto location) {
 		// return the added location formated by converter
 		return new ResponseEntity<>(LocationConverter.toDto(propertyService.addLocation(location)), HttpStatus.CREATED);
@@ -60,7 +60,7 @@ public class LocationController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/locations/edit/{id}")
+	@PutMapping("/locations/{id}")
 	public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody LocationDto location,
 			@PathVariable("id") int id) {
 		return new ResponseEntity<>(LocationConverter.toDto(propertyService.updateLocation(location, id)),
@@ -70,9 +70,18 @@ public class LocationController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/locations/delete/{id}")
+	@DeleteMapping("/locations/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteLocation(@PathVariable("id") int id) {
 		propertyService.deleteLocation(id);
+	}
+
+	// -----------------------------
+	// EVERY OTHER ROUT REQUEST HANDLED BELOW
+	// -----------------------------
+	@RequestMapping("locations/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String getBack() {
+		return "nothing here";
 	}
 }

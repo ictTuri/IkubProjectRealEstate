@@ -53,7 +53,7 @@ public class TradeController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PostMapping("/trades/new")
+	@PostMapping("/trades")
 	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeDtoForCreate trade) {
 		// return the added trade formated by converter
 		return new ResponseEntity<>(TradeConverter.toDto(tradeService.addTrade(trade)), HttpStatus.CREATED);
@@ -62,7 +62,7 @@ public class TradeController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PutMapping("/trades/edit/{id}")
+	@PutMapping("/trades/{id}")
 	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeDtoForUpdate trade,
 			@PathVariable("id") int id) {
 		// return the updated trade if process complete
@@ -72,11 +72,20 @@ public class TradeController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@DeleteMapping("/trades/delete/{id}")
+	@DeleteMapping("/trades/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		tradeService.deleteTrade(id);
+	}
+	
+	// -----------------------------
+	// EVERY OTHER ROUT REQUEST HANDLED BELOW
+	// -----------------------------
+	@RequestMapping("trades/*")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String getBack() {
+		return "nothing here";
 	}
 
 }
