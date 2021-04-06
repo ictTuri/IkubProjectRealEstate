@@ -84,7 +84,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-	        http.csrf().disable().authorizeRequests().antMatchers("/api/**").permitAll().and().sessionManagement()
+	        http.csrf().disable().authorizeRequests()
+	        		.antMatchers("/api/**").permitAll()
+	        		.and().sessionManagement()
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 	                .addFilterAfter((Filter) jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -94,14 +96,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	private String[] getDisabledUrlPaths() {
-		return new String[] {"/open/**", "/api/properties", "/v2/api-docs/**",
+		return new String[] {"/open/**", "/api/v1/properties**", "/v2/api-docs/**",
 				"/swagger-resources/**", "/swagger-ui.html", "/swagger/**", "/favicon.ico"};
 	}
 
 	private String[] getPostDisabledUrlPaths() {
-		return new String[] { "/api/login", "/open/**", "/api/v1/users/**", "/v2/api-docs/**"};
+		return new String[] { "/api/login", "/open/**","/api/v1/users/new/owner", "/api/v1/users/new/client", "/v2/api-docs/**"};
 	}
-
-	// return new String[]{"/api/login","/open/**","/api/register","/webjars/**","/v2/api-docs/**","/swagger-resources/**","/swagger-ui.html","/swagger/**","/favicon.ico","/api/swagger.json","/actuator/health"};
 
 }

@@ -42,12 +42,12 @@ class UserCRUDTest {
 	
 	@Test
 	 void givenUser_whenSave_thenGetCreatedUser() {
-		Integer userSize = userRepository.getAllUsers().size();
+		Integer userSize = userRepository.getAllUsers(null).size();
 		UserEntity user = UserUtil.createUserAdmin();
 
 		userRepository.insertUser(user);
 		
-		Assertions.assertEquals(userSize+1, userRepository.getAllUsers().size());
+		Assertions.assertEquals(userSize+1, userRepository.getAllUsers(null).size());
 		Assertions.assertNotNull(userRepository.getUserByUsername("admin123"));
 	}
 	

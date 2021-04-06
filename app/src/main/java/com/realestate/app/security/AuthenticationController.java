@@ -2,6 +2,8 @@ package com.realestate.app.security;
 
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +28,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/api/login")
-	public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest request) {
+	public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginRequest request) {
 		Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(request.getUsername(),
 				request.getPassword());
 		Authentication authenticationResult = authenticationManager.authenticate(authenticationRequest);

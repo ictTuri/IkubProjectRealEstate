@@ -1,9 +1,9 @@
 package com.realestate.app.serviceimpl;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +12,7 @@ import com.realestate.app.dto.UserDtoForCreate;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
+import com.realestate.app.filter.UserFilter;
 import com.realestate.app.repository.UserRepository;
 import com.realestate.app.service.UserService;
 
@@ -19,6 +20,7 @@ import com.realestate.app.service.UserService;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 	PasswordEncoder passwordEncoder;
 	UserRepository userRepository;
 
@@ -30,20 +32,9 @@ public class UserServiceImpl implements UserService {
 
 	// GET ALL USER OR FILTERED BY NAME
 	@Override
-	public Iterable<UserEntity> getUsers(String name) {
-		if (name != null && !name.isEmpty()) {
-			List<UserEntity> list = userRepository.getFilterByName(name);
-			if (!list.isEmpty()) {
-				try {
-					return userRepository.getFilterByName(name);
-				} catch (IndexOutOfBoundsException e) {
-					return userRepository.getAllUsers();
-				}
-			}else {
-				throw new MyExcMessages("No User with name: "+name);
-			}
-		} else
-			return userRepository.getAllUsers();
+	public Iterable<UserEntity> getUsers(UserFilter filter) {
+		logger.info("Filtring users with filter {}", filter);
+		return userRepository.getAllUsers(filter);
 	}
 
 	// USER DISPLAY BY ID

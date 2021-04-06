@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.realestate.app.converter.UserConverter;
 import com.realestate.app.dto.UserDto;
 import com.realestate.app.dto.UserDtoForCreate;
+import com.realestate.app.filter.UserFilter;
 import com.realestate.app.service.UserService;
 
 @RestController
@@ -44,11 +45,15 @@ public class UserController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@GetMapping("/users")
-	public ResponseEntity<List<UserDto>> showAllUsers(@RequestParam(required = false) String name) {
+	public ResponseEntity<List<UserDto>> showAllUsers(@RequestParam(required = false) String name,
+			@RequestParam(required = false) String lastName, @RequestParam(required = false) String username,
+			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
+		
 		// show all users on database
-		logger.warn("attempt to get users");
 		List<UserDto> toReturn = new ArrayList<>();
-		userService.getUsers(name).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
+		UserFilter filter = new UserFilter(name, lastName, username, sortBy, order);
+		userService.getUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
+		logger.info("Getting all users filtering by filter: {}", filter);
 		return new ResponseEntity<>(toReturn, HttpStatus.OK);
 	}
 
@@ -64,6 +69,18 @@ public class UserController {
 	@PostMapping("/users/new")
 	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDtoForCreate user) {
 		// return the added user formated by converter
+		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
+	}
+	@PostMapping("/users/new/client")
+	public ResponseEntity<UserDto> addClient(@Valid @RequestBody UserDtoForCreate user) {
+		// return the added user formated by converter
+		user.setRole(3);
+		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
+	}
+	@PostMapping("/users/new/owner")
+	public ResponseEntity<UserDto> addOwner(@Valid @RequestBody UserDtoForCreate user) {
+		// return the added user formated by converter
+		user.setRole(2);
 		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
 	}
 

@@ -5,8 +5,6 @@ import lombok.Data;
 @Data
 public class PropertyDto {
 
-	private UserDto owner;
-
 	private String description;
 
 	private int rentingPrice;
@@ -15,8 +13,9 @@ public class PropertyDto {
 
 	private String category;
 
-	private PropertyTypeDto propertyType;
-
-	private int version;
-
+	private String propertyType;
+	
+	private String location;
+	
+	private PropertyInfoDto propertyInfo;
 }

@@ -63,14 +63,18 @@ public class TradeServiceImpl implements TradeService {
 		RoleEntity role = userRepo.getRoleById(3);
 		if (userRepo.isClient(trade.getClient(), role)) {
 			PropertyEntity property = propertyRepo.getPropertiesById(trade.getProperties());
-			if (!tradeRepo.isInRentedStatus(property)) {
-				UserEntity client = userRepo.getUserById(trade.getClient());
-				TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, property);
-				tradeRepo.insertTrade(tradeToAdd);
-				return tradeToAdd;
-			} else {
-				throw new MyExcMessages("Property is bought or Rented !");
-			}
+				if(property != null) {
+					if (!tradeRepo.isInRentedStatus(property)) {
+						UserEntity client = userRepo.getUserById(trade.getClient());
+						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, property);
+						tradeRepo.insertTrade(tradeToAdd);
+						return tradeToAdd;
+					} else {
+						throw new MyExcMessages("Property is bought or Rented !");
+					}
+				}else {
+					throw new MyExcMessages("Property id is not listed !");
+				}
 		} else {
 			throw new MyExcMessages("Only client can be part of a trade !");
 		}
