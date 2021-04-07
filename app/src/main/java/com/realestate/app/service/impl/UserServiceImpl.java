@@ -1,4 +1,4 @@
-package com.realestate.app.serviceimpl;
+package com.realestate.app.service.impl;
 
 import javax.transaction.Transactional;
 

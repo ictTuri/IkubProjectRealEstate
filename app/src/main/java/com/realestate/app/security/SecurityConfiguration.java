@@ -83,6 +83,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 	        http.csrf().disable().authorizeRequests()
+	        		.antMatchers("/v1/**").hasAnyRole("ADMIN","OWNER","CLIENT")
+	        		.antMatchers("/trades","/locations","/properties").hasAnyRole("ADMIN","OWNER")
+	        		.antMatchers(HttpMethod.GET,"/properties","/users/**","/issues/**").hasAnyRole("ADMIN","OWNER","CLIENT")
+	        		.antMatchers(HttpMethod.POST,"/issues").hasAnyRole("ADMIN","OWNER","CLIENT")
 	        		.antMatchers("/api/**").permitAll().and().sessionManagement()
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 	                .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

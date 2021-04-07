@@ -50,11 +50,13 @@ public class UserController {
 			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
 		
 		// show all users on database
-		List<UserDto> toReturn = new ArrayList<>();
-		UserFilter filter = new UserFilter(name, lastName, username, sortBy, order);
-		userService.getUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
-		logger.info("Getting all users filtering by filter: {}", filter);
-		return new ResponseEntity<>(toReturn, HttpStatus.OK);
+			List<UserDto> toReturn = new ArrayList<>();
+			UserFilter filter = new UserFilter(name, lastName, username, sortBy, order);
+			userService.getUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
+			
+			logger.info("Getting all users filtering by filter: {}", filter);
+			
+			return new ResponseEntity<>(toReturn, HttpStatus.OK);
 	}
 
 	@GetMapping("/users/{id}")

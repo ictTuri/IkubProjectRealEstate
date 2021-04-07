@@ -23,10 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	    private static final String AUTHORIZATION_SCHEMA = "Bearer";
 
 	    private AuthenticationManager authenticationManager;
-
 	    private AuthenticationEntryPoint authenticationEntryPoint;
-
-
 
 	    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
 	                                   AuthenticationEntryPoint authenticationEntryPoint) {
