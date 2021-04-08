@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,12 +37,14 @@ public class TypeController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/propertytypes")
 	public ResponseEntity<List<PropertyTypeDto>> propertyTypes() {
 		// show all property types on database
 		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.allPropertyTypes()), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/propertytypes/{id}")
 	public ResponseEntity<PropertyTypeDto> showPropertTypeById(@PathVariable("id") int id) {
 		// show property type by id
@@ -52,6 +55,7 @@ public class TypeController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/propertytypes")
 	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
@@ -62,6 +66,7 @@ public class TypeController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/propertytypes/{id}")
 	public ResponseEntity<PropertyTypeDto> updatePropertyType(@Valid @RequestBody PropertyTypeDto propertyType,
 			@PathVariable("id") int id) {
@@ -73,19 +78,11 @@ public class TypeController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/propertytypes/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		typeService.deletePropertyType(id);
-	}
-	
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-	@RequestMapping("propertytypes/*")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String getBack() {
-		return "nothing here";
 	}
 }

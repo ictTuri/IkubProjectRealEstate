@@ -5,10 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.realestate.app.controller.UserController;
 import com.realestate.app.entity.UserEntity;
 
 import lombok.Data;
@@ -16,7 +19,7 @@ import lombok.Data;
 @Data
 public class UserPrincipal implements UserDetails{
 	private static final long serialVersionUID = 1L;
-
+	private static final Logger logger = LogManager.getLogger(UserController.class);
 	private String id;
 
 	private String firstName;
@@ -36,8 +39,10 @@ public class UserPrincipal implements UserDetails{
 		UserPrincipal userPrincipal = new UserPrincipal();
 		List<UserAuthority> grantedAuthorities = new ArrayList<>();
 		grantedAuthorities.add(new UserAuthority(role));
+		logger.info("Role passed method {}",role);
 		userPrincipal.setAuthorities(grantedAuthorities);
 		userPrincipal.setId(user.getUserId().toString());
+		logger.info("built method {}",user.getUserId());
 		userPrincipal.setFirstName(user.getFirstName());
 		userPrincipal.setUsername(user.getUsername());
 		userPrincipal.setLastName(user.getLastName());

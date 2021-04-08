@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,8 @@ public class LocationController {
 	
 	LocationService propertyService;
 
+	private static final Logger logger = LogManager.getLogger(UserController.class);
+	
 	@Autowired
 	public LocationController(LocationService propertyService) {
 		super();
@@ -39,6 +44,7 @@ public class LocationController {
 	@GetMapping("/locations")
 	public ResponseEntity<List<LocationDto>> showAllLocations() {
 		// show all locations on database
+		logger.info("passing here {}",SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		return new ResponseEntity<>(LocationConverter.toDto(propertyService.allLocations()), HttpStatus.OK);
 	}
 

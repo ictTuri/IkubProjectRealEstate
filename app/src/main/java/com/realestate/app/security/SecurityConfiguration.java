@@ -86,19 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        
 	        		.antMatchers("/api/**").permitAll().and().sessionManagement()
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-	                .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-	                .authorizeRequests()
-	                
-	                .antMatchers(HttpMethod.GET,"/properties","/users/**","/issues/**").hasAnyRole("ADMIN","OWNER","CLIENT")
-		        	.antMatchers(HttpMethod.PUT,"/users/**","/issues/**").hasAnyRole("ADMIN","OWNER","CLIENT")
-		        	.antMatchers(HttpMethod.DELETE,"/issues/**").hasAnyRole("ADMIN","OWNER","CLIENT")
-
-		        	.antMatchers(HttpMethod.GET,"/trades").hasAnyRole("ADMIN","OWNER")
-		        	.antMatchers(HttpMethod.PUT,"/issues/**","/trades/**","/properties/**").hasAnyRole("ADMIN","OWNER")
-			        .antMatchers(HttpMethod.POST,"/issues","/trades","/properties").hasAnyRole("ADMIN","OWNER")
-			        .antMatchers(HttpMethod.DELETE,"/properties/**","/trades/**").hasAnyRole("ADMIN","OWNER")
-			        
-			        .antMatchers("api/v1/**").hasRole("ADMIN");
+	                .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 

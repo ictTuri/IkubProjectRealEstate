@@ -24,10 +24,14 @@ public class TradeRepository {
 	}
 
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
-	private static final String GET_TRADE_BY_ID = "FROM TradeEntity t WHERE t.tradeId = :id";
+	private static final String GET_TRADE_BY_ID = "FROM TradeEntity te WHERE te.tradeId = :id";
 	
-	private static final String GET_TRADE_BY_PROPERTY = "FROM TradeEntity t WHERE t.property = :property";
-	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity t WHERE t.client = :client and t.property = :properties";
+	private static final String GET_OWNERS_TRADE = "FROM TradeEntity te INNER JOIN PropertyEntity pe ON te.property = pe.propertyId INNER JOIN UserEntity ue"+
+	" ON ue.userId = pe.owner WHERE ue.client= :user";
+	private static final String GET_CLIENTS_TRADE = "FROM TradeEntity te WHERE te.client= :user";
+	private static final String CHECK_USER_WITH_TRADE = "FROM TradeEntity te WHERE te.client = :client AND te.endTradeDate = null AND te.tradeType = rented";
+	private static final String GET_TRADE_BY_PROPERTY = "FROM TradeEntity te WHERE te.property = :property";
+	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity te WHERE te.client = :client and te.property = :properties";
 	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity te WHERE te.property = :id and te.endTradeDate = null";
 	
 	// RETRIEVE OPERATIONS DOWN HERE
@@ -61,6 +65,7 @@ public class TradeRepository {
 	}
 
 	//HELPING METHODS DOWN HERE
+	
 	public boolean existTrade(UserEntity client, PropertyEntity property) {
 		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_CLIENTPROPERTY,TradeEntity.class)
 				.setParameter("client", client)
@@ -81,6 +86,16 @@ public class TradeRepository {
 			return false;
 		}
 	}
+	
+	public boolean checkClientInTrade(UserEntity user) {
+		TypedQuery<TradeEntity> query = em.createQuery(CHECK_USER_WITH_TRADE, TradeEntity.class)
+				.setParameter("client", user);
+		try {
+			return query.getSingleResult()!=null;
+		}catch(NoResultException e) {
+			return false;
+		}
+	}
 
 	public TradeEntity getTradeByProperty(PropertyEntity property) {
 		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_PROPERTY, TradeEntity.class).setParameter("property", property);
@@ -89,5 +104,13 @@ public class TradeRepository {
 			}catch(IndexOutOfBoundsException e) {
 				return null;
 			}
+	}
+
+	public List<TradeEntity> tradesOfOwnersByOwner(UserEntity user) {
+		return em.createQuery(GET_OWNERS_TRADE, TradeEntity.class).setParameter("user", user).getResultList();
+	}
+
+	public List<TradeEntity> tradesOfClientByClient(UserEntity user) {
+		return em.createQuery(GET_CLIENTS_TRADE, TradeEntity.class).setParameter("user", user).getResultList();
 	}
 }
