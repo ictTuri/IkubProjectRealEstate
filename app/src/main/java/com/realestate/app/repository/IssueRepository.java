@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
+import com.realestate.app.entity.UserEntity;
 
 @Repository
 @Transactional
@@ -25,7 +26,10 @@ public class IssueRepository {
 	private static final String GET_ALL_ISSUES = "FROM IssuesEntity";
 	private static final String GET_ISSUE_BY_ID = "FROM IssuesEntity ie WHERE ie.issueId = :id";
 	private static final String EXIST_ISSUE_FOR_POPERTY = "FROM IssuesEntity ie WHERE ie.property = :property";
-
+	private static final String GET_OWNER_RELATED_ISSUES = "FROM IssuesEntity ie INNER JOIN PropertyEntity pe ON ie.property=pe.propertiesId"+
+	" INNER JOIN UserEntity ue ON pe.owner=ue.userId WHERE pe.owner = :owner";
+	private static final String GET_CLIENT_RELATED_ISSUES = "FROM IssuesEntity ie WHERE ie.client = :client";
+	
 	// RETRIEVE OPERATIONS DOWN HERE
 	// TRADES
 	public List<IssuesEntity> getAllIssues() {
@@ -64,5 +68,12 @@ public class IssueRepository {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	public List<IssuesEntity> issuesOfOwnersByOwner(UserEntity user) {
+		return em.createQuery(GET_OWNER_RELATED_ISSUES, IssuesEntity.class).setParameter("owner", user).getResultList(); 
+	}
+	public List<IssuesEntity> issuesOfClientByClient(UserEntity user) {
+		return em.createQuery(GET_CLIENT_RELATED_ISSUES, IssuesEntity.class).setParameter("client", user).getResultList(); 
 	}
 }

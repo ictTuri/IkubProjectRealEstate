@@ -3,6 +3,7 @@ package com.realestate.app.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserTradeService;
 
 @Service
+@Transactional
 public class UserTradeServiceImpl implements UserTradeService {
 	TradeRepository tradeRepo;
 	UserRepository userRepo;

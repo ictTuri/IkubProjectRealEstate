@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,12 +39,14 @@ public class IssueController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/issues")
 	public ResponseEntity<List<IssuesDto>> showAllIssues() {
 		// show all issues on database
 		return new ResponseEntity<>(IssuesConverter.toDto(issueService.allIssues()), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/issues/{id}")
 	public ResponseEntity<IssuesDto> showIssueById(@PathVariable("id") int id) {
 		// show issue by id
@@ -53,6 +56,7 @@ public class IssueController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
 	@PostMapping("/issues")
 	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesDtoForCreate issue) {
 		// return the added issue formated by converter
@@ -62,6 +66,7 @@ public class IssueController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/issues/{id}")
 	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueDtoForUpdate issue,
 			@PathVariable("id") int id) {
@@ -72,6 +77,7 @@ public class IssueController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/issues/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteIssue(@PathVariable("id") int id) {

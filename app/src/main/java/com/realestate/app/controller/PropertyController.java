@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +67,7 @@ public class PropertyController {
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.propertyById(id)), HttpStatus.FOUND);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/properties/{id}/owner")
 	public ResponseEntity<UserDto> showPropertyOwner(@PathVariable("id") int id) {
 		// show property by id
@@ -75,6 +77,7 @@ public class PropertyController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
 	@PostMapping("/properties")
 	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
 		// return the added property formated by converter
@@ -84,6 +87,7 @@ public class PropertyController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/properties/{id}")
 	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
 			@PathVariable("id") int id) {
@@ -94,6 +98,7 @@ public class PropertyController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/properties/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteProperty(@PathVariable("id") int id) {

@@ -75,7 +75,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 	@Override
 	public UserEntity propertyOwner(int id) {
-		return null;
+		return propertyRepo.getPropertyOwner(id);
 	}
 
 	// CREATE NEW PROPERTY

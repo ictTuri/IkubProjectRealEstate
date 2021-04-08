@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class LocationController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
 	@GetMapping("/locations")
 	public ResponseEntity<List<LocationDto>> showAllLocations() {
 		// show all locations on database
@@ -48,6 +50,7 @@ public class LocationController {
 		return new ResponseEntity<>(LocationConverter.toDto(propertyService.allLocations()), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
 	@GetMapping("/locations/{id}")
 	public ResponseEntity<LocationDto> showLocationById(@PathVariable("id") int id) {
 		// show location by id
@@ -57,6 +60,7 @@ public class LocationController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
 	@PostMapping("/locations")
 	public ResponseEntity<LocationDto> addLocation(@Valid @RequestBody LocationDto location) {
 		// return the added location formated by converter
@@ -66,6 +70,7 @@ public class LocationController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/locations/{id}")
 	public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody LocationDto location,
 			@PathVariable("id") int id) {
@@ -76,6 +81,7 @@ public class LocationController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/locations/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteLocation(@PathVariable("id") int id) {

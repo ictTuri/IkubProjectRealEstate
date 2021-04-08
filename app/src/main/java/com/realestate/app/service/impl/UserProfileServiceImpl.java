@@ -1,5 +1,7 @@
 package com.realestate.app.service.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserProfileService;
 
 @Service
+@Transactional
 public class UserProfileServiceImpl implements UserProfileService {
 
 	TradeRepository tradeRepo;

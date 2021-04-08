@@ -41,7 +41,7 @@ public class UserTradeController {
 		return new ResponseEntity<>(TradeConverter.toDto(userTradeService.allMyTrades()), HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
+	@PreAuthorize("hasAnyRole('OWNER')")
 	@PutMapping("/mytrades/{id}")
 	public ResponseEntity<TradeDto> updateMyTradeById(@Valid @RequestBody TradeDto trade, @PathVariable int id){
 		return new ResponseEntity<>(TradeConverter.toDto(userTradeService.updateMyTrade(trade, id)), HttpStatus.OK);

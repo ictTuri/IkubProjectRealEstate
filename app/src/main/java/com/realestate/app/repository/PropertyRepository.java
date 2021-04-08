@@ -13,6 +13,7 @@ import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
+import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.PropertyFilter;
 
@@ -27,12 +28,14 @@ public class PropertyRepository {
 		this.em = em;
 		this.locRepo = locRepo;
 	}
+	
+	private static final String GET_PROPERTY_OWNER = "SELECT pe.owner FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 
 	private static final String GET_PROPERTY_BY_ID = "FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id";
 	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info";
 	private static final String CHECK_LOCATION_INTO_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyLocation = :id";
-	
+	private static final String GET_PROPERTIES_BY_OWNER = "FROM PropertyEntity pe WHERE pe.owner = :owner";
 	// RETRIEVE OPERATIONS DOWN HERE
 	// PROPERTIES
 	public List<PropertyEntity> getAllProperties(PropertyFilter filter) {
@@ -162,6 +165,18 @@ public class PropertyRepository {
 			return query.getResultList().get(0) != null;
 		} catch (IndexOutOfBoundsException e) {
 			return false;
+		}
+	}
+
+	public Iterable<PropertyEntity> getPropertiesByOwner(UserEntity user) {
+		return em.createQuery(GET_PROPERTIES_BY_OWNER,PropertyEntity.class).setParameter("owner", user).getResultList();
+	}
+
+	public UserEntity getPropertyOwner(int id) {
+		try {
+			return em.createQuery(GET_PROPERTY_OWNER,UserEntity.class).setParameter("id", id).getSingleResult();
+		}catch(NoResultException e) {
+			return null;
 		}
 	}
 
