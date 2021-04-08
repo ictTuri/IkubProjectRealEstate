@@ -38,12 +38,14 @@ public class TradeController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
+//	@Secured({"ADMIN","OWNER"})
 	@GetMapping("/trades")
 	public ResponseEntity<List<TradeDto>> showAllTrades() {
 		// show all trades on database
 		return new ResponseEntity<>(TradeConverter.toDto(tradeService.allTrades()), HttpStatus.OK);
 	}
 
+//	@Secured({"ADMIN","OWNER"})
 	@GetMapping("/trades/{id}")
 	public ResponseEntity<TradeDto> showTradeById(@PathVariable("id") int id) {
 		// show trades by id
@@ -53,6 +55,7 @@ public class TradeController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
+//	@Secured({"ADMIN","OWNER"})
 	@PostMapping("/trades")
 	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeDtoForCreate trade) {
 		// return the added trade formated by converter
@@ -62,6 +65,7 @@ public class TradeController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
+//	@Secured({"ADMIN","OWNER"})
 	@PutMapping("/trades/{id}")
 	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeDtoForUpdate trade,
 			@PathVariable("id") int id) {
@@ -72,6 +76,7 @@ public class TradeController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
+//	@Secured("ADMIN")
 	@DeleteMapping("/trades/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTrade(@PathVariable("id") int id) {
@@ -82,6 +87,7 @@ public class TradeController {
 	// -----------------------------
 	// EVERY OTHER ROUT REQUEST HANDLED BELOW
 	// -----------------------------
+//	@Secured("ADMIN")
 	@RequestMapping("trades/*")
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String getBack() {

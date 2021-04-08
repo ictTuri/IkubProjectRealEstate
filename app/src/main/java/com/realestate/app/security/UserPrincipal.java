@@ -45,7 +45,7 @@ public class UserPrincipal implements UserDetails{
 		userPrincipal.setEnabled(user.isActive());
 		return userPrincipal;
 	}
-
+	
 	public String getId() {
 		return id;
 	}

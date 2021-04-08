@@ -1,5 +1,7 @@
 package com.realestate.app.security;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +17,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
+	private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		UserEntity userEntity = userRepository.getUserByUsername(username);
@@ -22,6 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("User: "+username+" not found");
 		}
 		RoleEntity role = userEntity.getRole();
+		
+		logger.info("getting role name {}",role);
+		
 		return UserPrincipal.build(userEntity, role.getRoleName());
 	}
 }

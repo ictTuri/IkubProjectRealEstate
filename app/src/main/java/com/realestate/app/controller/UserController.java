@@ -32,13 +32,13 @@ import com.realestate.app.service.UserService;
 public class UserController {
 
 	UserService userService;
-	
+
 	@Autowired
 	public UserController(UserService userService) {
 		super();
 		this.userService = userService;
 	}
-	
+
 	private static final Logger logger = LogManager.getLogger(UserController.class);
 
 	// -----------------------------
@@ -48,15 +48,15 @@ public class UserController {
 	public ResponseEntity<List<UserDto>> showAllUsers(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String lastName, @RequestParam(required = false) String username,
 			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
-		
+
 		// show all users on database
-			List<UserDto> toReturn = new ArrayList<>();
-			UserFilter filter = new UserFilter(name, lastName, username, sortBy, order);
-			userService.getUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
-			
-			logger.info("Getting all users filtering by filter: {}", filter);
-			
-			return new ResponseEntity<>(toReturn, HttpStatus.OK);
+		List<UserDto> toReturn = new ArrayList<>();
+		UserFilter filter = new UserFilter(name, lastName, username, sortBy, order);
+		userService.getUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
+
+		logger.info("Getting all users filtering by filter: {}", filter);
+
+		return new ResponseEntity<>(toReturn, HttpStatus.OK);
 	}
 
 	@GetMapping("/users/{id}")
@@ -91,12 +91,4 @@ public class UserController {
 		userService.deleteUser(id);
 	}
 
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-	@RequestMapping("users/*")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String getBack() {
-		return "nothing here";
-	}
 }
