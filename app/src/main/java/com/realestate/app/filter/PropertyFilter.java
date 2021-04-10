@@ -13,8 +13,6 @@ public class PropertyFilter {
 	
 	private Integer maxPrice;
 	
-	private String cityLocated;
-	
 	private String sortBy;
 	
 	private String order;

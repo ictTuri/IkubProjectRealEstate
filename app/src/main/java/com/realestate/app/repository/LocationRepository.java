@@ -63,12 +63,4 @@ public class LocationRepository {
 		
 	}
 
-	public LocationEntity getLocationByCityName(String city) {
-		TypedQuery<LocationEntity> query = em.createQuery("FROM LocationEntity le WHERE le.cityName = :city",LocationEntity.class).setParameter("city", city);
-		try {
-			return query.getSingleResult();
-		}catch(NoResultException  e) {
-			return null;
-		}
-	}
 }

@@ -14,6 +14,7 @@ import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.PropertyCategoryEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.PropertyFilter;
 
@@ -21,14 +22,14 @@ import com.realestate.app.filter.PropertyFilter;
 public class PropertyRepository {
 	EntityManager em;
 	LocationRepository locRepo;
-	
+
 	@Autowired
 	public PropertyRepository(EntityManager em, LocationRepository locRepo) {
 		super();
 		this.em = em;
 		this.locRepo = locRepo;
 	}
-	
+
 	private static final String GET_PROPERTY_OWNER = "SELECT pe.owner FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 
 	private static final String GET_PROPERTY_BY_ID = "FROM PropertyEntity pe WHERE pe.propertiesId = :id";
@@ -36,35 +37,36 @@ public class PropertyRepository {
 	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info";
 	private static final String CHECK_LOCATION_INTO_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyLocation = :id";
 	private static final String GET_PROPERTIES_BY_OWNER = "FROM PropertyEntity pe WHERE pe.owner = :owner";
+
 	// RETRIEVE OPERATIONS DOWN HERE
 	// PROPERTIES
 	public List<PropertyEntity> getAllProperties(PropertyFilter filter) {
 		// Starting query
-				String queryString = "SELECT prop from PropertyEntity prop where 1=1 ";
+		String queryString = "SELECT prop from PropertyEntity prop where 1=1 ";
 
-				// Creating query string for all filtrabl
-				queryString = extractedFilterCheck(filter, queryString);
+		// Creating query string for all filtrabl
+		queryString = extractedFilterCheck(filter, queryString);
 
-				// setting sort field
-				if (filter.getSortBy() != null && !filter.getSortBy().isEmpty()) {
-					if (filter.getSortBy().equals("category") || filter.getSortBy().equals("location")
-							|| filter.getSortBy().equals("sellingPrice")|| filter.getSortBy().equals("rentingPrice")) {
-						queryString = queryString + " order by prop." + filter.getSortBy();
-					} else {
-						throw new MyExcMessages("Sort by must be category, location, sellingPrice or RentingPrice");
-					}
-				}
-				// setting order
-				if (filter.getOrder() != null && !filter.getOrder().isEmpty() && filter.getSortBy() != null
-						&& !filter.getSortBy().isEmpty()) {
-					if (filter.getOrder().equalsIgnoreCase("ASC") || filter.getOrder().equalsIgnoreCase("DESC")) {
-						queryString = queryString + " " + filter.getOrder();
-					} else {
-						throw new MyExcMessages("Order  must be ASC or DESC");
-					}
-				}
+		// setting sort field
+		if (filter.getSortBy() != null && !filter.getSortBy().isEmpty()) {
+			if (filter.getSortBy().equals("category") || filter.getSortBy().equals("location")
+					|| filter.getSortBy().equals("sellingPrice") || filter.getSortBy().equals("rentingPrice")) {
+				queryString = queryString + " order by prop." + filter.getSortBy();
+			} else {
+				throw new MyExcMessages("Sort by must be category, location, sellingPrice or RentingPrice");
+			}
+		}
+		// setting order
+		if (filter.getOrder() != null && !filter.getOrder().isEmpty() && filter.getSortBy() != null
+				&& !filter.getSortBy().isEmpty()) {
+			if (filter.getOrder().equalsIgnoreCase("ASC") || filter.getOrder().equalsIgnoreCase("DESC")) {
+				queryString = queryString + " " + filter.getOrder();
+			} else {
+				throw new MyExcMessages("Order  must be ASC or DESC");
+			}
+		}
 
-				return extractedFinalQuery(filter, queryString);
+		return extractedFinalQuery(filter, queryString);
 	}
 
 	// Extracted
@@ -72,14 +74,15 @@ public class PropertyRepository {
 		if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
 			queryString = queryString + " and prop.category = :category ";
 		}
-		if (filter.getMinPrice()!=null) {
-			queryString = queryString + " and prop.rentingPrice > :min OR prop.sellingPrice > :minPrice";
+		if (filter.getMinPrice() != null) {
+			queryString = queryString + " and ( prop.rentingPrice > :minone OR prop.sellingPrice > :mintwo ) ";
 		}
 		if (filter.getMaxPrice() != null) {
-				queryString = queryString + " and prop.rentingPrice < :maxPrice OR prop.sellingPrice < :maxPrice";
-		}
-		if (filter.getCityLocated() != null && !filter.getCityLocated().isEmpty()) {
-			queryString = queryString + "and prop.location = :location ";
+			if (filter.getMinPrice() != null) {
+				if (filter.getMaxPrice() > filter.getMinPrice()) {
+					queryString = queryString + " and ( prop.rentingPrice < :maxone OR prop.sellingPrice < :maxtwo ) ";
+				}
+			}
 		}
 		return queryString;
 	}
@@ -88,25 +91,21 @@ public class PropertyRepository {
 	private List<PropertyEntity> extractedFinalQuery(PropertyFilter filter, String queryString) {
 		TypedQuery<PropertyEntity> query = em.createQuery(queryString, PropertyEntity.class);
 
-     //Setting parameters
+		// Setting parameters
 		if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
-			query.setParameter("category", filter.getCategory());
+			query.setParameter("category", PropertyCategoryEnum.valueOf(filter.getCategory()));
 		}
-		if (filter.getMinPrice()!=null) {
-			query.setParameter("minPrice", filter.getMinPrice());
+		if (filter.getMinPrice() != null) {
+			query.setParameter("minone", filter.getMinPrice()).setParameter("mintwo", filter.getMinPrice());
 		}
-		if (filter.getMaxPrice()!=null) {
-			if(filter.getMinPrice()!=null) {
-				if(filter.getMaxPrice() > filter.getMinPrice() || filter.getMinPrice()==null ) {
-					query.setParameter("maxPrice", filter.getMaxPrice());	
+		if (filter.getMaxPrice() != null) {
+			if (filter.getMinPrice() != null) {
+				if (filter.getMaxPrice() > filter.getMinPrice()) {
+					query.setParameter("maxone", filter.getMaxPrice()).setParameter("maxtwo", filter.getMaxPrice());
 				}
-			}		
-		}
-		if (filter.getCityLocated() != null && !filter.getCityLocated().isEmpty()) {
-			LocationEntity location = locRepo.getLocationByCityName(filter.getCityLocated());
-			query.setParameter("category", location);
-		}
+			}
 
+		}
 		return query.getResultList();
 	}
 
@@ -169,16 +168,16 @@ public class PropertyRepository {
 	}
 
 	public Iterable<PropertyEntity> getPropertiesByOwner(UserEntity user) {
-		return em.createQuery(GET_PROPERTIES_BY_OWNER,PropertyEntity.class).setParameter("owner", user).getResultList();
+		return em.createQuery(GET_PROPERTIES_BY_OWNER, PropertyEntity.class).setParameter("owner", user)
+				.getResultList();
 	}
 
 	public UserEntity getPropertyOwner(int id) {
 		try {
-			return em.createQuery(GET_PROPERTY_OWNER,UserEntity.class).setParameter("id", id).getSingleResult();
-		}catch(NoResultException e) {
+			return em.createQuery(GET_PROPERTY_OWNER, UserEntity.class).setParameter("id", id).getSingleResult();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}
-
 
 }
