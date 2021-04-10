@@ -3,7 +3,6 @@ package com.realestate.app.repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,6 @@ public class InfoRepository {
 	}
 
 	private static final String GET_ALL_PROPERTY_INFOS = "FROM PropertyInfoEntity";
-	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id";
 	private static final String CHECK_INFO_EXIST_IN_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyInfo = :id";
 
 	// PROPERTY INFO
@@ -29,12 +27,10 @@ public class InfoRepository {
 		return em.createQuery(GET_ALL_PROPERTY_INFOS, PropertyInfoEntity.class).getResultList();
 	}
 
-	public PropertyInfoEntity getPropertyInfoById(Integer id) {
-		TypedQuery<PropertyInfoEntity> query = em.createQuery(GET_PROPERTY_INFO_BY_ID, PropertyInfoEntity.class)
-				.setParameter("id", id);
+	public PropertyInfoEntity getPropertyInfoById(Integer propertyInfoId) {
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(PropertyInfoEntity.class, propertyInfoId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

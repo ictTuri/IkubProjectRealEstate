@@ -32,7 +32,6 @@ public class PropertyRepository {
 
 	private static final String GET_PROPERTY_OWNER = "SELECT pe.owner FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 
-	private static final String GET_PROPERTY_BY_ID = "FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id";
 	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info";
 	private static final String CHECK_LOCATION_INTO_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyLocation = :id";
@@ -110,12 +109,10 @@ public class PropertyRepository {
 	}
 
 	// Get Property by id
-	public PropertyEntity getPropertiesById(Integer id) {
-		TypedQuery<PropertyEntity> query = em.createQuery(GET_PROPERTY_BY_ID, PropertyEntity.class).setParameter("id",
-				id);
+	public PropertyEntity getPropertiesById(Integer propertiesId) {	
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(PropertyEntity.class, propertiesId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

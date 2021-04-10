@@ -25,8 +25,6 @@ public class UserRepository {
 
 	private static final String GET_ALL_USERS_BY_NAME = "FROM UserEntity ue WHERE ue.firstName = :name";
 
-	private static final String GET_USER_BY_ID = "FROM UserEntity u WHERE u.userId = :id";
-	private static final String GET_ROLE_BY_ID = "FROM RoleEntity r WHERE r.roleId = :id";
 	private static final String GET_OWNER_BY_ID = "SELECT u FROM UserEntity u WHERE u.userId = :id and u.role = :role";
 
 	private static final String CHECK_USERNAME_EXIST = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
@@ -96,21 +94,19 @@ public class UserRepository {
 	}
 
 	// Get users by id
-	public UserEntity getUserById(int id) {
-		TypedQuery<UserEntity> query = em.createQuery(GET_USER_BY_ID, UserEntity.class).setParameter("id", id);
+	public UserEntity getUserById(int userId) {
 		try {
-			return query.getResultList().get(0);
-		} catch (IndexOutOfBoundsException e) {
+			return em.find(UserEntity.class, userId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}
 
 	// ROLE
-	public RoleEntity getRoleById(int id) {
-		TypedQuery<RoleEntity> query = em.createQuery(GET_ROLE_BY_ID, RoleEntity.class).setParameter("id", id);
+	public RoleEntity getRoleById(int roleId) {
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(RoleEntity.class, roleId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

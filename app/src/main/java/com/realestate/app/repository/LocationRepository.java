@@ -3,8 +3,6 @@ package com.realestate.app.repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -20,19 +18,16 @@ public class LocationRepository {
 	}
 
 	private static final String GET_ALL_LOCATIONS = "FROM LocationEntity";
-	private static final String GET_LOCATION_BY_ID = "FROM LocationEntity l WHERE l.locationId = :id";
 
 	// LOCATIONS
 	public List<LocationEntity> getAllLocations() {
 		return em.createQuery(GET_ALL_LOCATIONS, LocationEntity.class).getResultList();
 	}
 
-	public LocationEntity getLocationById(Integer id) {
-		TypedQuery<LocationEntity> query = em.createQuery(GET_LOCATION_BY_ID, LocationEntity.class).setParameter("id",
-				id);
+	public LocationEntity getLocationById(Integer locationId) {
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(LocationEntity.class, locationId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}
@@ -53,11 +48,10 @@ public class LocationRepository {
 	}
 
 	//HELPING METHODS DOWN HERE
-	public boolean existLocation(int id) {
-		TypedQuery<LocationEntity> query = em.createQuery(GET_LOCATION_BY_ID, LocationEntity.class).setParameter("id", id);
+	public boolean existLocation(int locationId) {
 		try {
-			return query.getResultList().get(0) != null;
-		}catch(IndexOutOfBoundsException e) {
+			return em.find(LocationEntity.class, locationId)!= null;
+		}catch(IllegalArgumentException e) {
 			return false;
 		}
 		

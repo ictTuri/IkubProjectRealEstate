@@ -24,7 +24,6 @@ public class IssueRepository {
 	}
 
 	private static final String GET_ALL_ISSUES = "FROM IssuesEntity";
-	private static final String GET_ISSUE_BY_ID = "FROM IssuesEntity ie WHERE ie.issueId = :id";
 	private static final String EXIST_ISSUE_FOR_POPERTY = "FROM IssuesEntity ie WHERE ie.property = :property";
 	private static final String GET_OWNER_RELATED_ISSUES = "FROM IssuesEntity ie INNER JOIN PropertyEntity pe ON ie.property=pe.propertiesId"+
 	" INNER JOIN UserEntity ue ON pe.owner=ue.userId WHERE pe.owner = :owner";
@@ -36,11 +35,11 @@ public class IssueRepository {
 		return em.createQuery(GET_ALL_ISSUES, IssuesEntity.class).getResultList();
 	}
 
-	public IssuesEntity getIssueById(Integer id) {
-		TypedQuery<IssuesEntity> query = em.createQuery(GET_ISSUE_BY_ID, IssuesEntity.class).setParameter("id", id);
+	public IssuesEntity getIssueById(Integer issueId) {
+		
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(IssuesEntity.class, issueId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

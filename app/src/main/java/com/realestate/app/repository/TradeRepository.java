@@ -24,7 +24,6 @@ public class TradeRepository {
 	}
 
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
-	private static final String GET_TRADE_BY_ID = "FROM TradeEntity te WHERE te.tradeId = :id";
 	
 	private static final String GET_OWNERS_TRADE = "FROM TradeEntity te INNER JOIN PropertyEntity pe ON te.property = pe.propertiesId INNER JOIN UserEntity ue"+
 	" ON ue.userId = pe.owner WHERE pe.owner= :user";
@@ -40,11 +39,10 @@ public class TradeRepository {
 		return em.createQuery(GET_ALL_TRADES, TradeEntity.class).getResultList();
 	}
 
-	public TradeEntity getTradeById(Integer id) {
-		TypedQuery<TradeEntity> query = em.createQuery(GET_TRADE_BY_ID, TradeEntity.class).setParameter("id", id);
+	public TradeEntity getTradeById(Integer tradeId) {
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(TradeEntity.class, tradeId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

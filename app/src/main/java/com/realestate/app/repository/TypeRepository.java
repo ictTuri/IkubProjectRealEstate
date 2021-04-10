@@ -3,7 +3,6 @@ package com.realestate.app.repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,6 @@ public class TypeRepository {
 	}
 
 	private static final String GET_ALL_PROPERTY_TYPES = "FROM PropertyTypeEntity";
-	private static final String GET_PROPERTY_TYPE_BY_ID = "FROM PropertyTypeEntity pte WHERE pte.propertyTypeId = :id";
 	private static final String CHECK_PROPERTY_TYPE_EXIST = "FROM PropertyTypeEntity pte WHERE pte.propertyTypeName = :name and pte.propertyTypeDesc = :desc";
 	private static final String CHECK_PROPERTY_TYPE_IN_PROPERTIES = "FROM PropertyEntity pe WHERE pe.propertyType = :id";
 
@@ -32,12 +30,10 @@ public class TypeRepository {
 		return em.createQuery(GET_ALL_PROPERTY_TYPES, PropertyTypeEntity.class).getResultList();
 	}
 
-	public PropertyTypeEntity getPropertyTypeById(Integer id) {
-		TypedQuery<PropertyTypeEntity> query = em.createQuery(GET_PROPERTY_TYPE_BY_ID, PropertyTypeEntity.class)
-				.setParameter("id", id);
+	public PropertyTypeEntity getPropertyTypeById(Integer propertyTypeId) {
 		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+			return em.find(PropertyTypeEntity.class, propertyTypeId);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}
@@ -55,12 +51,10 @@ public class TypeRepository {
 	}
 
 	// HELPING METHODS DOWN HERE
-	public boolean existPropertyType(int id) {
-		TypedQuery<PropertyTypeEntity> query = em.createQuery(GET_PROPERTY_TYPE_BY_ID, PropertyTypeEntity.class)
-				.setParameter("id", id);
+	public boolean existPropertyType(int propertyTypeId) {
 		try {
-			return query.getResultList().get(0) != null;
-		} catch (IndexOutOfBoundsException e) {
+			return em.find(PropertyTypeEntity.class, propertyTypeId) != null;
+		} catch (IllegalArgumentException e) {
 			return false;
 		}
 
