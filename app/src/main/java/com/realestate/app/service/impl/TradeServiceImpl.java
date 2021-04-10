@@ -17,6 +17,7 @@ import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.TradeTypeEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.PropertyRepository;
 import com.realestate.app.repository.TradeRepository;
@@ -101,7 +102,7 @@ public class TradeServiceImpl implements TradeService {
 	public TradeEntity updateTrade(TradeDtoForUpdate trade, int id) {
 		TradeEntity tradeToUpdate = tradeRepo.getTradeById(id);
 		if (tradeToUpdate != null) {
-			tradeToUpdate.setTradeType(trade.getTradeType());
+			tradeToUpdate.setTradeType(TradeTypeEnum.valueOf(trade.getTradeType()));
 			tradeToUpdate.setPaymentType(trade.getPaymentType());
 			trade.setEndTradeDate(LocalDateTime.now());
 			tradeRepo.updateTrade(tradeToUpdate);

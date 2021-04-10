@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.entity.PropertyTypeEntity;
+import com.realestate.app.entity.enums.PropertyTypeNameEnum;
 
 public class PropertyTypeConverter {
 
@@ -13,7 +14,7 @@ public class PropertyTypeConverter {
 
 	public static PropertyTypeDto toDto(PropertyTypeEntity propertyType) {
 		PropertyTypeDto propertyTypeToReturn = new PropertyTypeDto();
-		propertyTypeToReturn.setPropertyTypeName(propertyType.getPropertyTypeName());
+		propertyTypeToReturn.setPropertyTypeName(propertyType.getPropertyTypeName().toString());
 		propertyTypeToReturn.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 		return propertyTypeToReturn;
 	}
@@ -28,7 +29,7 @@ public class PropertyTypeConverter {
 
 	public static PropertyTypeEntity toEntity(PropertyTypeDto propertyType) {
 		PropertyTypeEntity propertyTypeToReturn = new PropertyTypeEntity();
-		propertyTypeToReturn.setPropertyTypeName(propertyType.getPropertyTypeName());
+		propertyTypeToReturn.setPropertyTypeName(PropertyTypeNameEnum.valueOf(propertyType.getPropertyTypeName()));
 		propertyTypeToReturn.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 		return propertyTypeToReturn;
 	}

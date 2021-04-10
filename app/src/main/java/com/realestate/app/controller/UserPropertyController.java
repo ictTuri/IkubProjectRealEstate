@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,8 +44,18 @@ public class UserPropertyController {
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
+	@PostMapping("/myproperties")
+	public ResponseEntity<PropertyDto> insertMyProperties(@Valid @RequestBody FullPropertyDto property){
+		
+		property.setCategory(property.getCategory().toUpperCase());
+		return new ResponseEntity<>(FullPropertyConverter.singleToDto(userPropertyService.insertMyProperty(property)),HttpStatus.CREATED);
+	}
+	
+	@PreAuthorize("hasAnyRole('OWNER')")
 	@PutMapping("/myproperties/{id}")
 	public ResponseEntity<PropertyDto> updateMyProperties(@Valid @RequestBody FullPropertyDto property, @PathVariable int id){
+		
+		property.setCategory(property.getCategory().toUpperCase());
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(userPropertyService.updateMyProperty(property, id)),HttpStatus.CREATED);
 	}
 	
@@ -53,6 +64,5 @@ public class UserPropertyController {
 	public void deleteMyProperties(@PathVariable int id){
 		userPropertyService.deleteMyProperty(id);
 	}
-	
 	
 }

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 
-import com.realestate.app.entity.enums.TradeTypeEnum;
 
 import lombok.Data;
 
@@ -13,7 +12,8 @@ public class TradeDtoForUpdate {
 
 	private LocalDateTime endTradeDate;
 
-	private TradeTypeEnum tradeType;
+	@NotBlank(message = "Need a value of: RENTED or BOUGHT")
+	private String tradeType;
 
 	@NotBlank(message = "Paymment type is mandatory !")
 	private String paymentType;

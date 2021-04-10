@@ -1,6 +1,7 @@
 package com.realestate.app.dto;
 
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +16,7 @@ public class UserDtoForCreate {
 	@NotBlank(message = "Last name is mandatory")
 	private String lastName;
 
-	@NotBlank(message = "Email is mandatory")
+	@Email(message = "Email must be valid")
 	private String email;
 
 	@NotBlank(message = "Username is mandatory")

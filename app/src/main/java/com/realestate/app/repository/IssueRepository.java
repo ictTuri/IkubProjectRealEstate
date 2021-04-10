@@ -25,7 +25,7 @@ public class IssueRepository {
 
 	private static final String GET_ALL_ISSUES = "FROM IssuesEntity";
 	private static final String EXIST_ISSUE_FOR_POPERTY = "FROM IssuesEntity ie WHERE ie.property = :property";
-	private static final String GET_OWNER_RELATED_ISSUES = "FROM IssuesEntity ie INNER JOIN PropertyEntity pe ON ie.property=pe.propertiesId"+
+	private static final String GET_OWNER_RELATED_ISSUES = "SELECT ie FROM IssuesEntity ie LEFT JOIN PropertyEntity pe ON ie.property=pe.propertiesId"+
 	" INNER JOIN UserEntity ue ON pe.owner=ue.userId WHERE pe.owner = :owner";
 	private static final String GET_CLIENT_RELATED_ISSUES = "FROM IssuesEntity ie WHERE ie.client = :client";
 	

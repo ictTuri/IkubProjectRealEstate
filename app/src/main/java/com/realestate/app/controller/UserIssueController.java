@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.realestate.app.converter.IssuesConverter;
 import com.realestate.app.dto.IssueDtoForUpdate;
 import com.realestate.app.dto.IssuesDto;
+import com.realestate.app.dto.IssuesDtoForCreate;
 import com.realestate.app.service.UserIssueService;
 
 @RestController
@@ -41,6 +43,12 @@ public class UserIssueController {
 		return new ResponseEntity<>(IssuesConverter.toDto(userIssueService.allMyIssues()), HttpStatus.OK);
 	} 
 	
+	@PreAuthorize("hasAnyRole('CLIENT')")
+	@PostMapping("/myissues")
+	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody IssuesDtoForCreate issue){
+		return new ResponseEntity<>(IssuesConverter.toDto(userIssueService.insertMyIssue(issue)), HttpStatus.OK);
+	}
+	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
 	@PutMapping("/myissues/{id}")
 	public ResponseEntity<IssuesDto> updateIssueById(@Valid @RequestBody IssueDtoForUpdate issue, @PathVariable int id){
@@ -53,4 +61,5 @@ public class UserIssueController {
 	public void deleteMyIssue(@PathVariable int id) {
 		userIssueService.deleteMyIssue(id);
 	}
+	
 }

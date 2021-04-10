@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.realestate.app.converter.PropertyTypeConverter;
 import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.entity.PropertyTypeEntity;
+import com.realestate.app.entity.enums.PropertyTypeNameEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.TypeRepository;
 import com.realestate.app.service.TypeService;
@@ -64,10 +65,10 @@ public class TypeServiceImpl implements TypeService {
 	public PropertyTypeEntity updatePropertyType(PropertyTypeDto propertyType, int id) {
 		PropertyTypeEntity propertyToUpdate = typeRepo.getPropertyTypeById(id);
 		if (propertyToUpdate != null) {
-			if (typeRepo.existPropertyType(propertyType.getPropertyTypeName(), propertyType.getPropertyTypeDesc())) {
+			if (typeRepo.existPropertyType(PropertyTypeNameEnum.valueOf(propertyType.getPropertyTypeName()), propertyType.getPropertyTypeDesc())) {
 				throw new MyExcMessages("Property type already exist with name and desciption given");
 			} else {
-				propertyToUpdate.setPropertyTypeName(propertyType.getPropertyTypeName());
+				propertyToUpdate.setPropertyTypeName(PropertyTypeNameEnum.valueOf(propertyType.getPropertyTypeName()));
 				propertyToUpdate.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 				typeRepo.updatePropertyType(propertyToUpdate);
 				

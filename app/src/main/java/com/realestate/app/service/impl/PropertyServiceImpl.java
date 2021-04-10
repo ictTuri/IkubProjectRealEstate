@@ -18,6 +18,7 @@ import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.PropertyCategoryEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.PropertyFilter;
 import com.realestate.app.repository.InfoRepository;
@@ -136,7 +137,7 @@ public class PropertyServiceImpl implements PropertyService {
 					propertyInfoToUpdate.setNrBathrooms(property.getNrBathrooms());
 					propertyInfoToUpdate.setNrBedrooms(property.getNrBedrooms());
 					infoRepo.updatePropertyInfo(propertyInfoToUpdate);
-					propertyToUpdate.setCategory(property.getCategory());
+					propertyToUpdate.setCategory(PropertyCategoryEnum.valueOf(property.getCategory()));
 					propertyToUpdate.setDescription(property.getDescription());
 					UserEntity owner = userRepo.getUserById(property.getOwner());
 					LocationEntity location = locationRepo.getLocationById(property.getLocation());

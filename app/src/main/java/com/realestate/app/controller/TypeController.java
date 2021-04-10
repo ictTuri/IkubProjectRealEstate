@@ -59,6 +59,7 @@ public class TypeController {
 	@PostMapping("/propertytypes")
 	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
+		propertyType.setPropertyTypeName(propertyType.getPropertyTypeName().toUpperCase());
 		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.addPropertyType(propertyType)),
 				HttpStatus.CREATED);
 	}
@@ -85,4 +86,5 @@ public class TypeController {
 		// delete property type if not used
 		typeService.deletePropertyType(id);
 	}
+	
 }

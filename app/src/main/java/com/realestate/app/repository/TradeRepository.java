@@ -25,7 +25,7 @@ public class TradeRepository {
 
 	private static final String GET_ALL_TRADES = "FROM TradeEntity";
 	
-	private static final String GET_OWNERS_TRADE = "FROM TradeEntity te INNER JOIN PropertyEntity pe ON te.property = pe.propertiesId INNER JOIN UserEntity ue"+
+	private static final String GET_OWNERS_TRADE = "SELECT te FROM TradeEntity te LEFT JOIN PropertyEntity pe ON te.property = pe.propertiesId INNER JOIN UserEntity ue"+
 	" ON ue.userId = pe.owner WHERE pe.owner= :user";
 	private static final String GET_CLIENTS_TRADE = "FROM TradeEntity te WHERE te.client= :user";
 	private static final String CHECK_USER_WITH_TRADE = "FROM TradeEntity te WHERE te.client = :client AND te.endTradeDate = null AND te.tradeType = RENTED";

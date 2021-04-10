@@ -9,7 +9,7 @@ public class IssueDtoForUpdate {
 	@NotBlank(message = "Category type is mandatory")
 	private String category;
 	
-	@NotBlank(message = "Updated Resolution is mandatory is mandatory")
+	@NotBlank(message = "Need a value of: UNCHECKED, REVIEWED, ON_PROGRESS, FIXED, ESCALATED")
 	private String resoulutionStatus;
 	
 	@NotBlank(message = "Description is mandatory")

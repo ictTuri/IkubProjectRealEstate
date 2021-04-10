@@ -76,10 +76,11 @@ public class PropertyController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/properties")
 	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
 		// return the added property formated by converter
+		property.setCategory(property.getCategory().toUpperCase());
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.addProperty(property)), HttpStatus.CREATED);
 	}
 
@@ -90,6 +91,7 @@ public class PropertyController {
 	@PutMapping("/properties/{id}")
 	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
 			@PathVariable("id") int id) {
+		property.setCategory(property.getCategory().toUpperCase());
 		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.updateProperty(property, id)),
 				HttpStatus.CREATED);
 	}
@@ -102,15 +104,6 @@ public class PropertyController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteProperty(@PathVariable("id") int id) {
 		propertyService.deleteProperty(id);
-	}
-
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-	@RequestMapping("properties/*")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String getBack() {
-		return "nothing here";
 	}
 
 }

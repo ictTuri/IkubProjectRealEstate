@@ -56,7 +56,7 @@ public class IssueController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/issues")
 	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesDtoForCreate issue) {
 		// return the added issue formated by converter
@@ -71,6 +71,7 @@ public class IssueController {
 	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueDtoForUpdate issue,
 			@PathVariable("id") int id) {
 		// return the updated issue if process complete
+		issue.setResoulutionStatus(issue.getResoulutionStatus().toUpperCase());
 		return new ResponseEntity<>(IssuesConverter.toDto(issueService.updateIssues(issue, id)), HttpStatus.OK);
 	}
 
@@ -85,12 +86,4 @@ public class IssueController {
 		issueService.deleteIssue(id);
 	}
 
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-	@RequestMapping("issues/*")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String getBack() {
-		return "nothing here";
-	}
 }

@@ -33,7 +33,7 @@ public class PropertyRepository {
 	private static final String GET_PROPERTY_OWNER = "SELECT pe.owner FROM PropertyEntity pe WHERE pe.propertiesId = :id";
 
 	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id";
-	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info";
+	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info ";
 	private static final String CHECK_LOCATION_INTO_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyLocation = :id";
 	private static final String GET_PROPERTIES_BY_OWNER = "FROM PropertyEntity pe WHERE pe.owner = :owner";
 

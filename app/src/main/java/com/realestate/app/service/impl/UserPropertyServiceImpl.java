@@ -3,6 +3,7 @@ package com.realestate.app.service.impl;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.realestate.app.converter.FullPropertyConverter;
 import com.realestate.app.dto.FullPropertyDto;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.LocationEntity;
@@ -18,6 +20,7 @@ import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.PropertyCategoryEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.InfoRepository;
 import com.realestate.app.repository.IssueRepository;
@@ -67,6 +70,31 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		
 		return propertyRepo.getPropertiesByOwner(user);
 	}
+	
+	@Override
+	public PropertyEntity insertMyProperty(@Valid FullPropertyDto property) {
+		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		if (locationRepo.existLocation(property.getLocation())) {
+			PropertyInfoEntity propertyInfoToAdd = FullPropertyConverter.toInfoEntityForCreate(property);
+			if (typeRepo.existPropertyType(property.getPropertyType())) {
+				LocationEntity location = locationRepo.getLocationById(property.getLocation());
+				PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(property.getPropertyType());
+				PropertyEntity propertyToAdd = FullPropertyConverter.toEntityForCreate(property, user,
+						propertyType, location, propertyInfoToAdd);
+				
+				//LOGGING
+				logger.info("Inserting new Property, property: {}", propertyToAdd);
+				
+				propertyRepo.insertProperties(propertyToAdd);
+				return propertyToAdd;
+			} else {
+				throw new MyExcMessages("No property type with given Id !");
+			}
+		} else {
+			throw new MyExcMessages("No location with given Id !");
+		}
+	}
 
 	@Override
 	public PropertyEntity updateMyProperty(FullPropertyDto property, int id) {
@@ -80,7 +108,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 					PropertyInfoEntity propertyInfoToUpdate = infoRepo
 							.getPropertyInfoById(propertyToUpdate.getPropertyInfo().getPropertyInfoId());
 					RoleEntity role = userRepo.getRoleById(2);
-					return extractedUpdateProcedure(property, propertyToUpdate, propertyInfoToUpdate, role);
+					return extractedUpdateProcedure(property,user, propertyToUpdate, propertyInfoToUpdate, role);
 				} else {
 					throw new MyExcMessages("No Property with such Id / Please check again");
 				}
@@ -91,7 +119,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		return null;
 	}
 
-	private PropertyEntity extractedUpdateProcedure(FullPropertyDto property, PropertyEntity propertyToUpdate,
+	private PropertyEntity extractedUpdateProcedure(FullPropertyDto property,UserEntity user, PropertyEntity propertyToUpdate,
 			PropertyInfoEntity propertyInfoToUpdate, RoleEntity role) {
 		if (userRepo.existUserById(property.getOwner(), role)) {
 			if (locationRepo.existLocation(property.getLocation())) {
@@ -103,12 +131,11 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				propertyInfoToUpdate.setNrBathrooms(property.getNrBathrooms());
 				propertyInfoToUpdate.setNrBedrooms(property.getNrBedrooms());
 				infoRepo.updatePropertyInfo(propertyInfoToUpdate);
-				propertyToUpdate.setCategory(property.getCategory());
+				propertyToUpdate.setCategory(PropertyCategoryEnum.valueOf(property.getCategory()));
 				propertyToUpdate.setDescription(property.getDescription());
-				UserEntity owner = userRepo.getUserById(property.getOwner());
 				LocationEntity location = locationRepo.getLocationById(property.getLocation());
 				PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(property.getPropertyType());
-				propertyToUpdate.setOwner(owner);
+				propertyToUpdate.setOwner(user);
 				propertyToUpdate.setPropertyLocation(location);
 				propertyToUpdate.setPropertyType(propertyType);
 				propertyToUpdate.setPropertyInfo(propertyInfoToUpdate);

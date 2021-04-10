@@ -16,6 +16,7 @@ import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.IssueStatusEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.IssueRepository;
 import com.realestate.app.repository.PropertyRepository;
@@ -75,7 +76,7 @@ public class IssueServiceImpl implements IssueService {
 			PropertyEntity property = propertyRepo.getPropertiesById(issue.getProperty());
 			if (tradeRepo.existTrade(user, property)) {
 				IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
-				issueToAdd.setResoulutionStatus("Unchecked");
+				issueToAdd.setResoulutionStatus(IssueStatusEnum.UNCHECKED);
 				issueRepo.insertIssue(issueToAdd);
 				
 				//LOGGING
@@ -97,7 +98,7 @@ public class IssueServiceImpl implements IssueService {
 		if (issueToUpdate != null) {
 			issueToUpdate.setCategory(issue.getCategory());
 			issueToUpdate.setDescription(issue.getDescription());
-			issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
+			issueToUpdate.setResoulutionStatus(IssueStatusEnum.valueOf(issue.getResoulutionStatus()));
 			issueRepo.updateIssue(issueToUpdate);
 			
 			//LOGGING

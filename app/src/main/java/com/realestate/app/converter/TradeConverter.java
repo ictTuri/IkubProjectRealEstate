@@ -9,6 +9,7 @@ import com.realestate.app.dto.TradeDtoForCreate;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.TradeTypeEnum;
 
 public class TradeConverter {
 	
@@ -42,7 +43,7 @@ public class TradeConverter {
 		toReturn.setTradeDate(LocalDateTime.now());
 		toReturn.setEndTradeDate(null);
 		toReturn.setPaymentType(dto.getPaymentType());
-		toReturn.setTradeType(dto.getTradeType());
+		toReturn.setTradeType(TradeTypeEnum.valueOf(dto.getTradeType()));
 		return toReturn;
 	}
 }

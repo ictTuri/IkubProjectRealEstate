@@ -11,11 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.realestate.app.converter.IssuesConverter;
 import com.realestate.app.dto.IssueDtoForUpdate;
+import com.realestate.app.dto.IssuesDtoForCreate;
 import com.realestate.app.entity.IssuesEntity;
+import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.IssueStatusEnum;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.repository.IssueRepository;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
 import com.realestate.app.repository.UserRepository;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserIssueService;
@@ -28,12 +34,17 @@ public class UserIssueServiceImpl implements UserIssueService {
 	
 	IssueRepository issueRepo;
 	UserRepository userRepo;
+	PropertyRepository propertyRepo;
+	TradeRepository tradeRepo;
 
 	@Autowired
-	public UserIssueServiceImpl(IssueRepository issueRepo, UserRepository userRepo) {
+	public UserIssueServiceImpl(IssueRepository issueRepo, UserRepository userRepo,
+			PropertyRepository propertyRepo, TradeRepository tradeRepo) {
 		super();
 		this.issueRepo = issueRepo;
 		this.userRepo = userRepo;
+		this.propertyRepo = propertyRepo;
+		this.tradeRepo = tradeRepo;
 	}
 
 	@Override
@@ -69,7 +80,7 @@ public class UserIssueServiceImpl implements UserIssueService {
 			for (IssuesEntity ie : list) {
 				if (ie.getIssueId() == id) {
 					issueToUpdate.setCategory(issue.getCategory());
-					issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
+					issueToUpdate.setResoulutionStatus(IssueStatusEnum.valueOf(issue.getResoulutionStatus()));
 					issueToUpdate.setDescription(issue.getDescription());
 					
 					//LOGGING
@@ -86,7 +97,7 @@ public class UserIssueServiceImpl implements UserIssueService {
 			for (IssuesEntity ie : list2) {
 				if (ie.getIssueId() == id) {
 					issueToUpdate.setCategory(issue.getCategory());
-					issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
+					issueToUpdate.setResoulutionStatus(IssueStatusEnum.valueOf(issue.getResoulutionStatus()));
 					issueToUpdate.setDescription(issue.getDescription());
 					
 					//LOGGING
@@ -138,6 +149,26 @@ public class UserIssueServiceImpl implements UserIssueService {
 			}break;
 		default:
 			throw new MyExcMessages("Please authneticate to proceed here !");
+		}
+	}
+
+	@Override
+	public IssuesEntity insertMyIssue(@Valid IssuesDtoForCreate issue) {
+		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		PropertyEntity property = propertyRepo.getPropertiesById(issue.getProperty());
+		if (tradeRepo.existTrade(user, property)) {
+			IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
+			issueToAdd.setClient(user);
+			issueToAdd.setResoulutionStatus(IssueStatusEnum.UNCHECKED);
+			issueRepo.insertIssue(issueToAdd);
+			
+			//LOGGING
+			logger.info("Inserted new issue: {}",issueToAdd);
+			
+			return issueToAdd;
+		} else {
+			throw new MyExcMessages("There is no relation from you to this property!");
 		}
 	}
 

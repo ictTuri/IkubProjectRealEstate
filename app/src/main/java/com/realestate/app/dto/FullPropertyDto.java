@@ -4,7 +4,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.realestate.app.entity.enums.PropertyCategoryEnum;
 
 import lombok.Data;
 
@@ -21,7 +20,8 @@ public class FullPropertyDto {
 
 	private int sellingPrice;
 
-	private PropertyCategoryEnum category;
+	@NotBlank(message = "Need a value of: REZIDENTIAL,COMMERTIAL,LAND")
+	private String category;
 
 	@NotNull(message = "Property type Id is mandatory !")
 	private int propertyType;

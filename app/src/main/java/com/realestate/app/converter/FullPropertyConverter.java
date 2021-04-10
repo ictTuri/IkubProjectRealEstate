@@ -7,6 +7,7 @@ import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.PropertyCategoryEnum;
 
 public class FullPropertyConverter {
 	
@@ -18,7 +19,7 @@ public class FullPropertyConverter {
 		propertyToReturn.setDescription(property.getDescription());
 		propertyToReturn.setRentingPrice(property.getRentingPrice());
 		propertyToReturn.setSellingPrice(property.getSellingPrice());
-		propertyToReturn.setCategory(property.getCategory());
+		propertyToReturn.setCategory(property.getCategory().toString());
 		propertyToReturn.setPropertyType(property.getPropertyType().getPropertyTypeId());
 		propertyToReturn.setLocation(property.getPropertyLocation().getLocationId());
 		propertyToReturn.setHasGarage(propertyInfo.isHasGarage());
@@ -51,7 +52,7 @@ public class FullPropertyConverter {
 		toReturn.setDescription(dto.getDescription());
 		toReturn.setRentingPrice(dto.getRentingPrice());
 		toReturn.setSellingPrice(dto.getSellingPrice());
-		toReturn.setCategory(dto.getCategory());
+		toReturn.setCategory(PropertyCategoryEnum.valueOf(dto.getCategory()));
 		toReturn.setPropertyType(propertyType);
 		toReturn.setPropertyLocation(location);
 		toReturn.setPropertyInfo(propertyInfo);

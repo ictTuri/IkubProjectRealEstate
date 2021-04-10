@@ -88,12 +88,4 @@ public class LocationController {
 		propertyService.deleteLocation(id);
 	}
 
-	// -----------------------------
-	// EVERY OTHER ROUT REQUEST HANDLED BELOW
-	// -----------------------------
-	@RequestMapping("locations/*")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String getBack() {
-		return "nothing here";
-	}
 }
