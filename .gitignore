@@ -1,0 +1,10 @@
+/.metadata/
+.classpath
+.project
+postman adding values.txt
+.sonarlint
+bin
+app/bin
+app/.mvn
+app/logs
+accesses
