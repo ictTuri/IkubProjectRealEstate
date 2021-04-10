@@ -2,6 +2,7 @@ package com.realestate.app.entity;
 
 import javax.persistence.*;
 
+import com.realestate.app.entity.enums.TradeTypeEnum;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,8 +37,9 @@ public class TradeEntity implements Serializable{
 	@Column(name = "end_trade_date")
 	private LocalDateTime endTradeDate;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "trade_type")
-	private String tradeType;
+	private TradeTypeEnum tradeType;
 	
 	@Column(name = "payment_type")
 	private String paymentType;
@@ -45,4 +47,5 @@ public class TradeEntity implements Serializable{
 	@Version
 	@Column(name = "version")
 	private int version;
+
 }

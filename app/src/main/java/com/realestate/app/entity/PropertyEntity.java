@@ -3,6 +3,9 @@ package com.realestate.app.entity;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import com.realestate.app.entity.enums.PropertyCategoryEnum;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,8 +35,9 @@ public class PropertyEntity implements Serializable {
 	@Column(name = "selling_price")
 	private Integer sellingPrice;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "category")
-	private String category;
+	private PropertyCategoryEnum category;
 	
 	@ManyToOne
 	@JoinColumn(name = "property_type", referencedColumnName = "property_type_id")

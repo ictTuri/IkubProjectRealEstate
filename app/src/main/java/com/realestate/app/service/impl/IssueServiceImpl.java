@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ import com.realestate.app.service.IssueService;
 @Transactional
 public class IssueServiceImpl implements IssueService {
 
+	private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
+	
 	UserRepository userRepo;
 	IssueRepository issueRepo;
 	TradeRepository tradeRepo;
@@ -52,6 +56,10 @@ public class IssueServiceImpl implements IssueService {
 	public IssuesEntity issuesById(int id) {
 		IssuesEntity issue = issueRepo.getIssueById(id);
 		if (issue != null) {
+			
+			//LOGGING
+			logger.info("Showing issue by id, issue: {}",issue);
+			
 			return issue;
 		} else {
 			throw new MyExcMessages("No such issue with given Id !");
@@ -69,6 +77,10 @@ public class IssueServiceImpl implements IssueService {
 				IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
 				issueToAdd.setResoulutionStatus("Unchecked");
 				issueRepo.insertIssue(issueToAdd);
+				
+				//LOGGING
+				logger.info("Inserted new issue: {}",issueToAdd);
+				
 				return issueToAdd;
 			} else {
 				throw new MyExcMessages("Client and Property have no relation !");
@@ -87,6 +99,10 @@ public class IssueServiceImpl implements IssueService {
 			issueToUpdate.setDescription(issue.getDescription());
 			issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
 			issueRepo.updateIssue(issueToUpdate);
+			
+			//LOGGING
+			logger.info("Updated issue: {}",issueToUpdate);
+			
 			return issueToUpdate;
 		} else {
 			throw new MyExcMessages("No issue with given id !");
@@ -99,6 +115,9 @@ public class IssueServiceImpl implements IssueService {
 		IssuesEntity issueToDelete = issueRepo.getIssueById(id);
 		if (issueToDelete != null) {
 			issueRepo.deleteIssue(issueToDelete);
+			
+			//LOGGING
+			logger.info("Deleted issue: {}",issueToDelete);
 		} else {
 			throw new MyExcMessages("Issue with given id does not exist !");
 		}

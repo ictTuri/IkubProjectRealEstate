@@ -29,7 +29,7 @@ public class TradeRepository {
 	private static final String GET_OWNERS_TRADE = "FROM TradeEntity te INNER JOIN PropertyEntity pe ON te.property = pe.propertiesId INNER JOIN UserEntity ue"+
 	" ON ue.userId = pe.owner WHERE pe.owner= :user";
 	private static final String GET_CLIENTS_TRADE = "FROM TradeEntity te WHERE te.client= :user";
-	private static final String CHECK_USER_WITH_TRADE = "FROM TradeEntity te WHERE te.client = :client AND te.endTradeDate = null AND te.tradeType = rented";
+	private static final String CHECK_USER_WITH_TRADE = "FROM TradeEntity te WHERE te.client = :client AND te.endTradeDate = null AND te.tradeType = RENTED";
 	private static final String GET_TRADE_BY_PROPERTY = "FROM TradeEntity te WHERE te.property = :property";
 	private static final String GET_TRADE_BY_CLIENTPROPERTY = "FROM TradeEntity te WHERE te.client = :client and te.property = :properties";
 	private static final String PROPERTY_RENTED_OR_BOUGHT = "FROM TradeEntity te WHERE te.property = :id and te.endTradeDate = null";

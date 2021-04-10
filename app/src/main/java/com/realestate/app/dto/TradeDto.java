@@ -2,6 +2,8 @@ package com.realestate.app.dto;
 
 import java.time.LocalDateTime;
 
+import com.realestate.app.entity.enums.TradeTypeEnum;
+
 import lombok.Data;
 
 @Data
@@ -15,7 +17,7 @@ public class TradeDto {
 
 	private LocalDateTime endTradeDate;
 
-	private String tradeType;
+	private TradeTypeEnum tradeType;
 
 	private String paymentType;
 	

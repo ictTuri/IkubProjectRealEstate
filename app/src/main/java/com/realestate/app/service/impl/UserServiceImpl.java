@@ -21,6 +21,7 @@ import com.realestate.app.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+	
 	PasswordEncoder passwordEncoder;
 	UserRepository userRepository;
 
@@ -33,7 +34,10 @@ public class UserServiceImpl implements UserService {
 	// GET ALL USER OR FILTERED BY NAME
 	@Override
 	public Iterable<UserEntity> getUsers(UserFilter filter) {
+		
+		//LOGGING
 		logger.info("Filtring users with filter {}", filter);
+		
 		return userRepository.getAllUsers(filter);
 	}
 
@@ -42,6 +46,10 @@ public class UserServiceImpl implements UserService {
 	public UserEntity userById(int id) {
 		UserEntity user = userRepository.getUserById(id);
 		if (user != null) {
+			
+			//LOGGING
+			logger.info("Getting users with ID {}", id);
+			
 			return user;
 		} else {
 			throw new MyExcMessages("No such User with given Id !");
@@ -59,6 +67,10 @@ public class UserServiceImpl implements UserService {
 					user.setPassword(encodedPass);
 					UserEntity userToAdd = UserConverter.toEntityForCreate(user, role);
 					userRepository.insertUser(userToAdd);
+					
+					//LOGGING
+					logger.info("User inserted: {}", userToAdd);
+					
 					return userToAdd;
 				} else {
 					throw new MyExcMessages("Role does not exist");
@@ -99,6 +111,10 @@ public class UserServiceImpl implements UserService {
 					userToUpdate.setUsername(user.getUsername());
 					userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
 					userToUpdate.setRole(role);
+					
+					//LOGGING
+					logger.info("User Updated: {}", userToUpdate);
+					
 					userRepository.updateUser(userToUpdate);
 					return userToUpdate;
 				} else {
@@ -115,6 +131,10 @@ public class UserServiceImpl implements UserService {
 		if (userToDelete != null) {
 			if (userToDelete.isActive()) {
 				userToDelete.setActive(false);
+				
+				//LOGGING
+				logger.info("User Soft Deleted: {}", userToDelete);
+				
 				return userRepository.updateUser(userToDelete);
 			} else {
 				throw new MyExcMessages("User Already deleted.");

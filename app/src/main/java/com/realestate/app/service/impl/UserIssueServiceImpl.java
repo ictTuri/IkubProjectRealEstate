@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import com.realestate.app.service.UserIssueService;
 @Transactional
 public class UserIssueServiceImpl implements UserIssueService {
 
+	private static final Logger logger = LogManager.getLogger(UserIssueServiceImpl.class);
+	
 	IssueRepository issueRepo;
 	UserRepository userRepo;
 
@@ -38,8 +42,16 @@ public class UserIssueServiceImpl implements UserIssueService {
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		switch (user.getRole().getRoleName()) {
 		case "ROLE_OWNER":
+			
+			//LOGGING
+			logger.info("Showing issues related to owner: {}",user);
+			
 			return issueRepo.issuesOfOwnersByOwner(user);
 		case "ROLE_CLIENT":
+			
+			//LOGGING
+			logger.info("Showing issues related to client: {}",user);
+			
 			return issueRepo.issuesOfClientByClient(user);
 		default:
 			return issueRepo.getAllIssues();
@@ -59,6 +71,10 @@ public class UserIssueServiceImpl implements UserIssueService {
 					issueToUpdate.setCategory(issue.getCategory());
 					issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
 					issueToUpdate.setDescription(issue.getDescription());
+					
+					//LOGGING
+					logger.info("Updating issue related to owner, issue: {}",issueToUpdate);
+					
 					issueRepo.updateIssue(issueToUpdate);
 				} else {
 					throw new MyExcMessages("You do not own a Issue with given id !");
@@ -72,6 +88,10 @@ public class UserIssueServiceImpl implements UserIssueService {
 					issueToUpdate.setCategory(issue.getCategory());
 					issueToUpdate.setResoulutionStatus(issue.getResoulutionStatus());
 					issueToUpdate.setDescription(issue.getDescription());
+					
+					//LOGGING
+					logger.info("Updating issue related to client, issue: {}",issueToUpdate);
+					
 					issueRepo.updateIssue(issueToUpdate);
 				} else {
 					throw new MyExcMessages("You do not own a Issue with given id !");
@@ -94,6 +114,10 @@ public class UserIssueServiceImpl implements UserIssueService {
 			List<IssuesEntity> list = issueRepo.issuesOfOwnersByOwner(user);
 			for (IssuesEntity ie : list) {
 				if (ie.getIssueId() == id) {
+					
+					//LOGGING
+					logger.info("Owner: {} , deleting issue: {}",user,issueToDelete);
+					
 					issueRepo.deleteIssue(issueToDelete);
 				} else {
 					throw new MyExcMessages("You do not own a Issue with given id !");
@@ -103,6 +127,10 @@ public class UserIssueServiceImpl implements UserIssueService {
 			List<IssuesEntity> list2 = issueRepo.issuesOfClientByClient(user);
 			for (IssuesEntity ie : list2) {
 				if (ie.getIssueId() == id) {
+					
+					//LOGGING
+					logger.info("Client: {} , deleting issue: {}",user,issueToDelete);
+					
 					issueRepo.deleteIssue(issueToDelete);
 				} else {
 					throw new MyExcMessages("You do not own a Issue with given id !");

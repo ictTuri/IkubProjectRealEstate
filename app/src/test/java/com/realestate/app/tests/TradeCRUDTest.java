@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.realestate.app.entity.TradeEntity;
+import com.realestate.app.entity.enums.TradeTypeEnum;
 import com.realestate.app.repository.TradeRepository;
 import com.realestate.app.utils.TradeUtil;
 
@@ -23,11 +24,11 @@ class TradeCRUDTest {
 	void givenTrade_whenUpdate_thenGetUpdatedTrade() {
 		TradeEntity trade = TradeUtil.createTradeTwo();
 		tradeRepo.insertTrade(trade);
-		trade.setTradeType("Bought");
+		trade.setTradeType(TradeTypeEnum.BOUGHT);
 
 		tradeRepo.updateTrade(trade);
 
-		Assertions.assertEquals("Bought", tradeRepo.getTradeById(2).getTradeType());
+		Assertions.assertEquals("BOUGHT", tradeRepo.getTradeById(2).getTradeType());
 	}
 
 	@Test

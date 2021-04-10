@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
+import com.realestate.app.entity.enums.PropertyTypeNameEnum;
 
 @Repository
 public class TypeRepository {
@@ -65,9 +66,9 @@ public class TypeRepository {
 
 	}
 
-	public boolean existPropertyType(String name, String desc) {
+	public boolean existPropertyType(PropertyTypeNameEnum propertyTypeNameEnum, String desc) {
 		TypedQuery<PropertyTypeEntity> query = em.createQuery(CHECK_PROPERTY_TYPE_EXIST, PropertyTypeEntity.class)
-				.setParameter("name", name).setParameter("desc", desc);
+				.setParameter("name", propertyTypeNameEnum).setParameter("desc", desc);
 		try {
 			return query.getResultList().get(0) != null;
 		} catch (IndexOutOfBoundsException e) {

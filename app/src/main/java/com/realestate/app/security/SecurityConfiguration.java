@@ -94,7 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	private String[] getUrlDisabledPaths() {
-		return new String[] { "/api/login", "/open/**", "/api/register/**", "/webjars/**", "/v2/api-docs/**",
+		return new String[] { "/api/login", "/open/**", "/api/register/**","/api/v1/properties", "/webjars/**", "/v2/api-docs/**",
 				"/swagger-resources/**", "/swagger-ui.html", "/swagger/**", "/favicon.ico", "/api/swagger.json",
 				"/actuator/health" };
 	}

@@ -2,6 +2,8 @@ package com.realestate.app.service.impl;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,8 @@ import com.realestate.app.service.UserProfileService;
 @Transactional
 public class UserProfileServiceImpl implements UserProfileService {
 
+	private static final Logger logger = LogManager.getLogger(UserProfileServiceImpl.class);
+	
 	TradeRepository tradeRepo;
 	PasswordEncoder passwordEncoder;
 	UserRepository userRepo;
@@ -34,13 +38,17 @@ public class UserProfileServiceImpl implements UserProfileService {
 	@Override
 	public UserEntity getLoggedUser() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		//LOGGING
+		logger.info("Showing user Profile");
+		
 		return userRepo.getUserByUsername(thisUser.getUsername());
 	}
 
 	@Override
 	public UserEntity updateLoggedUser(UserDtoForCreate user) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserEntity userToUpdate = userRepo.getUserByUsername(thisUser.getUsername());
+		UserEntity userToUpdate = userRepo.getUserByUsername(thisUser.getUsername());	
 		return userUpdateValidation(user, userToUpdate);
 	}
 
@@ -56,6 +64,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 				userToUpdate.setEmail(user.getEmail());
 				userToUpdate.setUsername(user.getUsername());
 				userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+				
+				//LOGGING
+				logger.info("Updating Profile, User: {}",userToUpdate);
+				
 				userRepo.updateUser(userToUpdate);
 				return userToUpdate;
 			}
@@ -70,6 +82,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 			if (userToDelete.isActive()) {
 				userToDelete.setActive(false);
 				userRepo.updateUser(userToDelete);
+				
+				//LOGGING
+				logger.info("Soft Deletion of Profile, User: {}",userToDelete);
+				
 				return "Once the token expires you won be able to lo back in";
 			} else {
 				throw new MyExcMessages("User Already deleted.");

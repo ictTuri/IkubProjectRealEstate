@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,8 @@ import com.realestate.app.service.UserPropertyService;
 @Transactional
 public class UserPropertyServiceImpl implements UserPropertyService {
 
+	private static final Logger logger = LogManager.getLogger(UserPropertyServiceImpl.class);
+	
 	TradeRepository tradeRepo;
 	UserRepository userRepo;
 	PropertyRepository propertyRepo;
@@ -57,6 +61,10 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 	public Iterable<PropertyEntity> showAllMyProperties() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		
+		//LOGGING
+		logger.info("Showing all properties of Owner: {}", thisUser);
+		
 		return propertyRepo.getPropertiesByOwner(user);
 	}
 
@@ -106,6 +114,10 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				propertyToUpdate.setPropertyInfo(propertyInfoToUpdate);
 				propertyToUpdate.setRentingPrice(property.getRentingPrice());
 				propertyToUpdate.setSellingPrice(property.getSellingPrice());
+				
+				//LOGGING
+				logger.info("Owner updateing property {} and property info: {}", propertyToUpdate,propertyInfoToUpdate);
+				
 				propertyRepo.updateProperty(propertyToUpdate);
 				return propertyToUpdate;
 
@@ -125,24 +137,32 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		for(PropertyEntity pe: list) {
 			if(pe.getPropertiesId() == id) {
 				PropertyEntity propertyToDelete = propertyRepo.getPropertiesById(id);
-				if (propertyToDelete != null) {
-					IssuesEntity issue = issueRepo.existIssueWithProperty(propertyToDelete);
-					if (issue == null) {
-						if (tradeRepo.getTradeByProperty(propertyToDelete) == null) {
-							propertyRepo.deleteProperty(propertyToDelete);
-							infoRepo.deletePropertyInfo(propertyToDelete.getPropertyInfo());
-						} else {
-							throw new MyExcMessages("Property is Rented or Bought. Can not delete");
-						}
-					} else {
-						throw new MyExcMessages("Property is linked with a issue !");
-					}
-				} else {
-					throw new MyExcMessages("Can not delete Property / Or property does not exist with given Id");
-				}
+				extractedPropertyDeletionValidation(propertyToDelete);
 			}else {
 				throw new MyExcMessages("You have no property with given id");
 			}
+		}
+	}
+
+	private void extractedPropertyDeletionValidation(PropertyEntity propertyToDelete) {
+		if (propertyToDelete != null) {
+			IssuesEntity issue = issueRepo.existIssueWithProperty(propertyToDelete);
+			if (issue == null) {
+				if (tradeRepo.getTradeByProperty(propertyToDelete) == null) {
+					propertyRepo.deleteProperty(propertyToDelete);
+					
+					//LOGGING
+					logger.info("Owner Deleting property: {}", propertyToDelete);
+					
+					infoRepo.deletePropertyInfo(propertyToDelete.getPropertyInfo());
+				} else {
+					throw new MyExcMessages("Property is Rented or Bought. Can not delete");
+				}
+			} else {
+				throw new MyExcMessages("Property is linked with a issue !");
+			}
+		} else {
+			throw new MyExcMessages("Can not delete Property / Or property does not exist with given Id");
 		}
 	}
 

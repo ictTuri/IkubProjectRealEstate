@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ import com.realestate.app.service.UserTradeService;
 @Service
 @Transactional
 public class UserTradeServiceImpl implements UserTradeService {
+	
+	private static final Logger logger = LogManager.getLogger(UserTradeServiceImpl.class);
+	
 	TradeRepository tradeRepo;
 	UserRepository userRepo;
 	
@@ -38,8 +43,16 @@ public class UserTradeServiceImpl implements UserTradeService {
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		switch(user.getRole().getRoleName()) {
 		case "ROLE_OWNER":
+			
+			//LOGGING
+			logger.info("Showing trades of Owner: {}", thisUser);
+			
 			return tradeRepo.tradesOfOwnersByOwner(user);
 		case "ROLE_CLIENT":
+			
+			//LOGGING
+			logger.info("Showing trades of Client: {}", thisUser);
+			
 			return tradeRepo.tradesOfClientByClient(user);
 		default :
 			return tradeRepo.getAllTrades();
@@ -58,6 +71,10 @@ public class UserTradeServiceImpl implements UserTradeService {
 				tradeToUpdate.setPaymentType(trade.getPaymentType());
 				trade.setEndTradeDate(LocalDateTime.now());
 				tradeRepo.updateTrade(tradeToUpdate);
+				
+				//LOGGING
+				logger.info("Trade Updated: {}", tradeToUpdate);
+				
 				return tradeToUpdate;
 			}else {
 				throw new MyExcMessages("You do not own a property with given id !");
@@ -75,6 +92,10 @@ public class UserTradeServiceImpl implements UserTradeService {
 		for(TradeEntity te :list) {
 			if(te.getTradeId() == id) {
 				if (tradeToDelete != null) {
+					
+					//LOGGING
+					logger.info("Trade Deleted: {}", tradeToDelete);
+					
 					tradeRepo.deleteTrade(tradeToDelete);
 				} else {
 					throw new MyExcMessages("Trade with given id does not exist !");

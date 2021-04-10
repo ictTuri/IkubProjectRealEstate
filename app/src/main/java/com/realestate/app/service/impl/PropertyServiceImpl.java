@@ -33,6 +33,8 @@ import com.realestate.app.service.PropertyService;
 @Transactional
 public class PropertyServiceImpl implements PropertyService {
 
+	private static final Logger logger = LogManager.getLogger(PropertyServiceImpl.class);
+	
 	IssueRepository issueRepo;
 	PropertyRepository propertyRepo;
 	UserRepository userRepo;
@@ -40,8 +42,6 @@ public class PropertyServiceImpl implements PropertyService {
 	TradeRepository tradeRepo;
 	TypeRepository typeRepo;
 	InfoRepository infoRepo;
-
-	private static final Logger logger = LogManager.getLogger(PropertyServiceImpl.class);
 
 	@Autowired
 	public PropertyServiceImpl(PropertyRepository propertyRepo, UserRepository userRepo,
@@ -59,7 +59,10 @@ public class PropertyServiceImpl implements PropertyService {
 
 	@Override
 	public List<PropertyEntity> getAllProperties(PropertyFilter filter) {
+		
+		//LOGGING
 		logger.info("Filtring Properties with filter {}", filter);
+		
 		return propertyRepo.getAllProperties(filter);
 	}
 
@@ -67,6 +70,10 @@ public class PropertyServiceImpl implements PropertyService {
 	public PropertyEntity propertyById(int id) {
 		PropertyEntity property = propertyRepo.getPropertiesById(id);
 		if (property != null) {
+			
+			//LOGGING
+			logger.info("Showing Properties by id, property: {}", property);
+			
 			return property;
 		} else {
 			throw new MyExcMessages("No such property with given Id !");
@@ -75,6 +82,10 @@ public class PropertyServiceImpl implements PropertyService {
 
 	@Override
 	public UserEntity propertyOwner(int id) {
+		
+		//LOGGING
+		logger.info("Showing Properties Owner");
+		
 		return propertyRepo.getPropertyOwner(id);
 	}
 
@@ -91,6 +102,10 @@ public class PropertyServiceImpl implements PropertyService {
 					PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(property.getPropertyType());
 					PropertyEntity propertyToAdd = FullPropertyConverter.toEntityForCreate(property, owner,
 							propertyType, location, propertyInfoToAdd);
+					
+					//LOGGING
+					logger.info("Inserting new Property, property: {}", propertyToAdd);
+					
 					propertyRepo.insertProperties(propertyToAdd);
 					return propertyToAdd;
 				} else {
@@ -132,6 +147,10 @@ public class PropertyServiceImpl implements PropertyService {
 					propertyToUpdate.setPropertyInfo(propertyInfoToUpdate);
 					propertyToUpdate.setRentingPrice(property.getRentingPrice());
 					propertyToUpdate.setSellingPrice(property.getSellingPrice());
+					
+					//LOGGING
+					logger.info("Updating Property, property: {}", propertyToUpdate);
+					
 					propertyRepo.updateProperty(propertyToUpdate);
 					return propertyToUpdate;
 
@@ -156,6 +175,10 @@ public class PropertyServiceImpl implements PropertyService {
 				if (tradeRepo.getTradeByProperty(propertyToDelete) == null) {
 					propertyRepo.deleteProperty(propertyToDelete);
 					infoRepo.deletePropertyInfo(propertyToDelete.getPropertyInfo());
+					
+					//LOGGING
+					logger.info("Delete of Property, property: {}", propertyToDelete);
+					
 					return propertyToDelete;
 				} else {
 					throw new MyExcMessages("Property is Rented or Bought. Can not delete");

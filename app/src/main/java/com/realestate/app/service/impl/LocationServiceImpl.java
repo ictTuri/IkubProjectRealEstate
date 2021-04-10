@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.realestate.app.service.LocationService;
 @Transactional
 public class LocationServiceImpl implements LocationService {
 
+	private static final Logger logger = LogManager.getLogger(LocationServiceImpl.class);
+	
 	PropertyRepository propertyRepo;
 	LocationRepository locationRepo;
 
@@ -40,6 +44,10 @@ public class LocationServiceImpl implements LocationService {
 	public LocationEntity locationById(int id) {
 		LocationEntity location = locationRepo.getLocationById(id);
 		if (location != null) {
+			
+			//LOGGING
+			logger.info("Showing location by id, location {}",location);
+			
 			return location;
 		} else {
 			throw new MyExcMessages("No such location with given Id !");
@@ -51,6 +59,10 @@ public class LocationServiceImpl implements LocationService {
 	public LocationEntity addLocation(LocationDto location) {
 		LocationEntity locationToAdd = LocationConverter.toEntity(location);
 		locationRepo.insertLocation(locationToAdd);
+		
+		//LOGGING
+		logger.info("Inserting location: {}",locationToAdd);
+		
 		return locationToAdd;
 	}
 
@@ -64,6 +76,10 @@ public class LocationServiceImpl implements LocationService {
 			locationToUpdate.setDescription(location.getDescription());
 			locationToUpdate.setZipCode(location.getZipCode());
 			locationRepo.updateLocation(locationToUpdate);
+			
+			//LOGGING
+			logger.info("Updated location: {}",locationToUpdate);
+			
 			return locationToUpdate;
 		} else {
 			throw new MyExcMessages("No Location with such Id / Please check again");
@@ -79,6 +95,9 @@ public class LocationServiceImpl implements LocationService {
 				throw new MyExcMessages("Location attached to a property, can not delete");
 			} else {
 				locationRepo.deleteLocation(locationToDelete);
+				
+				//LOGGING
+				logger.info("Deleted location: {}",locationToDelete);
 			}
 		} else {
 			throw new MyExcMessages("No locatin on given id or already deleted");
