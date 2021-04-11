@@ -1,15 +1,12 @@
 package com.realestate.app.dto;
 
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
 @Data
-public class UserDtoForCreate {
-	
+public class UserRegisterDto {
 	@NotBlank(message = "First name is mandatory")
 	private String firstName;
 
@@ -25,9 +22,7 @@ public class UserDtoForCreate {
 	@NotBlank(message = "Password is mandatory")
 	private String password;
 
-	@NotNull(message = "Role is mandatory")
-	private int role;
+	@NotBlank(message = "Role is mandatory : CLIENT OR OWNER")
+	private String role;
 
-	private boolean active;
-	
 }

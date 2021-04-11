@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class TradeDtoForCreate {
+public class TradeForCreateDto {
 	
 	@NotNull(message = "Client Id is mandatory !")
 	private int client;

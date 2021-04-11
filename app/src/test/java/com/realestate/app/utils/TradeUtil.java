@@ -3,7 +3,7 @@ package com.realestate.app.utils;
 import java.time.LocalDateTime;
 
 import com.realestate.app.entity.TradeEntity;
-import com.realestate.app.entity.enums.TradeTypeEnum;
+import com.realestate.app.entity.enums.TradeType;
 
 public class TradeUtil {
 	public static TradeEntity createTradeOne() {
@@ -12,7 +12,7 @@ public class TradeUtil {
 		trade1.setProperty(null);
 		trade1.setTradeDate(LocalDateTime.now());
 		trade1.setEndTradeDate(null);
-		trade1.setTradeType(TradeTypeEnum.BOUGHT);
+		trade1.setTradeType(TradeType.BOUGHT);
 		trade1.setPaymentType("Kesh");
 		return trade1;
 	}
@@ -23,7 +23,7 @@ public class TradeUtil {
 		trade2.setProperty(null);
 		trade2.setTradeDate(LocalDateTime.now());
 		trade2.setEndTradeDate(null);
-		trade2.setTradeType(TradeTypeEnum.RENTED);
+		trade2.setTradeType(TradeType.RENTED);
 		trade2.setPaymentType("Banka Kombetare Tregtare");
 		return trade2;
 	}

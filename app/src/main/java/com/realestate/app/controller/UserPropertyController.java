@@ -1,6 +1,5 @@
 package com.realestate.app.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.FullPropertyConverter;
 import com.realestate.app.dto.FullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.service.UserPropertyService;
@@ -38,17 +36,15 @@ public class UserPropertyController {
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@GetMapping("/myproperties")
 	public ResponseEntity<List<PropertyDto>> showAllMyProperties(){
-		List<PropertyDto> toReturn = new ArrayList<>();
-		userPropertyService.showAllMyProperties().forEach(entity -> toReturn.add(FullPropertyConverter.singleToDto(entity)));
-		return new ResponseEntity<>(toReturn, HttpStatus.OK);
+		// Return all owner properties
+		return new ResponseEntity<>(userPropertyService.showAllMyProperties(), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@PostMapping("/myproperties")
 	public ResponseEntity<PropertyDto> insertMyProperties(@Valid @RequestBody FullPropertyDto property){
-		
-		property.setCategory(property.getCategory().toUpperCase());
-		return new ResponseEntity<>(FullPropertyConverter.singleToDto(userPropertyService.insertMyProperty(property)),HttpStatus.CREATED);
+		//Insert new property
+		return new ResponseEntity<>(userPropertyService.insertMyProperty(property),HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
@@ -56,13 +52,14 @@ public class UserPropertyController {
 	public ResponseEntity<PropertyDto> updateMyProperties(@Valid @RequestBody FullPropertyDto property, @PathVariable int id){
 		
 		property.setCategory(property.getCategory().toUpperCase());
-		return new ResponseEntity<>(FullPropertyConverter.singleToDto(userPropertyService.updateMyProperty(property, id)),HttpStatus.CREATED);
+		return new ResponseEntity<>(userPropertyService.updateMyProperty(property, id),HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@DeleteMapping("/myproperties/{id}")
-	public void deleteMyProperties(@PathVariable int id){
+	public ResponseEntity<Void> deleteMyProperties(@PathVariable int id){
 		userPropertyService.deleteMyProperty(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 }

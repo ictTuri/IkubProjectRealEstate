@@ -7,7 +7,7 @@ import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.entity.enums.PropertyCategoryEnum;
+import com.realestate.app.entity.enums.PropertyCategory;
 
 public class FullPropertyConverter {
 	
@@ -52,7 +52,7 @@ public class FullPropertyConverter {
 		toReturn.setDescription(dto.getDescription());
 		toReturn.setRentingPrice(dto.getRentingPrice());
 		toReturn.setSellingPrice(dto.getSellingPrice());
-		toReturn.setCategory(PropertyCategoryEnum.valueOf(dto.getCategory()));
+		toReturn.setCategory(PropertyCategory.valueOf(dto.getCategory()));
 		toReturn.setPropertyType(propertyType);
 		toReturn.setPropertyLocation(location);
 		toReturn.setPropertyInfo(propertyInfo);

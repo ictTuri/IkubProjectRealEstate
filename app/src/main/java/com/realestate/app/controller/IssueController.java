@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.IssuesConverter;
-import com.realestate.app.dto.IssueDtoForUpdate;
+import com.realestate.app.dto.IssueForUpdateDto;
 import com.realestate.app.dto.IssuesDto;
-import com.realestate.app.dto.IssuesDtoForCreate;
+import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.service.IssueService;
 
 @RestController
@@ -43,14 +41,14 @@ public class IssueController {
 	@GetMapping("/issues")
 	public ResponseEntity<List<IssuesDto>> showAllIssues() {
 		// show all issues on database
-		return new ResponseEntity<>(IssuesConverter.toDto(issueService.allIssues()), HttpStatus.OK);
+		return new ResponseEntity<>(issueService.allIssues(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/issues/{id}")
 	public ResponseEntity<IssuesDto> showIssueById(@PathVariable("id") int id) {
 		// show issue by id
-		return new ResponseEntity<>(IssuesConverter.toDto(issueService.issuesById(id)), HttpStatus.FOUND);
+		return new ResponseEntity<>(issueService.issuesById(id), HttpStatus.FOUND);
 	}
 
 	// -----------------------------
@@ -58,9 +56,9 @@ public class IssueController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/issues")
-	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesDtoForCreate issue) {
+	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesForCreateDto issue) {
 		// return the added issue formated by converter
-		return new ResponseEntity<>(IssuesConverter.toDto(issueService.addIssues(issue)), HttpStatus.CREATED);
+		return new ResponseEntity<>(issueService.addIssues(issue), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -68,11 +66,10 @@ public class IssueController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/issues/{id}")
-	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueDtoForUpdate issue,
+	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueForUpdateDto issue,
 			@PathVariable("id") int id) {
 		// return the updated issue if process complete
-		issue.setResoulutionStatus(issue.getResoulutionStatus().toUpperCase());
-		return new ResponseEntity<>(IssuesConverter.toDto(issueService.updateIssues(issue, id)), HttpStatus.OK);
+		return new ResponseEntity<>(issueService.updateIssues(issue, id), HttpStatus.OK);
 	}
 
 	// -----------------------------
@@ -80,10 +77,10 @@ public class IssueController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/issues/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteIssue(@PathVariable("id") int id) {
+	public ResponseEntity<Void> deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		issueService.deleteIssue(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

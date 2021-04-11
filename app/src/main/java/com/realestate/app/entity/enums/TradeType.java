@@ -1,6 +1,6 @@
 package com.realestate.app.entity.enums;
 
-public enum TradeTypeEnum {
+public enum TradeType {
 	RENTED,
 	BOUGHT;
 }

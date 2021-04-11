@@ -11,17 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.TradeConverter;
-import com.realestate.app.dto.TradeDtoForCreate;
-import com.realestate.app.dto.TradeDtoForUpdate;
+import com.realestate.app.dto.TradeDto;
+import com.realestate.app.dto.TradeForCreateDto;
+import com.realestate.app.dto.TradeForUpdateDto;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.entity.enums.TradeTypeEnum;
+import com.realestate.app.entity.enums.TradeType;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.PropertyRepository;
-import com.realestate.app.repository.TradeRepository;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.PropertyRepositoryImpl;
+import com.realestate.app.repository.impl.TradeRepositoryImpl;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.service.TradeService;
 
 @Service
@@ -30,14 +31,14 @@ public class TradeServiceImpl implements TradeService {
 
 	private static final Logger logger = LogManager.getLogger(TradeServiceImpl.class);
 	
-	UserRepository userRepo;
-	TradeRepository tradeRepo;
-	PropertyRepository propertyRepo;
+	UserRepositoryImpl userRepo;
+	TradeRepositoryImpl tradeRepo;
+	PropertyRepositoryImpl propertyRepo;
 
 	// CONSTRUCTOR
 	@Autowired
-	public TradeServiceImpl(TradeRepository tradeRepo, UserRepository userRepo,
-			PropertyRepository propertyRepo) {
+	public TradeServiceImpl(TradeRepositoryImpl tradeRepo, UserRepositoryImpl userRepo,
+			PropertyRepositoryImpl propertyRepo) {
 		super();
 		this.tradeRepo = tradeRepo;
 		this.userRepo = userRepo;
@@ -47,24 +48,24 @@ public class TradeServiceImpl implements TradeService {
 
 	// DISPLAY ALL TRADES
 	@Override
-	public List<TradeEntity> allTrades() {
+	public List<TradeDto> allTrades() {
 		
 		//LOGGING
 		logger.info("Showing all trades !");
 		
-		return tradeRepo.getAllTrades();
+		return TradeConverter.toDto(tradeRepo.getAllTrades());
 	}
 
 	// DISPLAY TRADES BY ID
 	@Override
-	public TradeEntity tradesById(int id) {
+	public TradeDto tradesById(int id) {
 		TradeEntity trade = tradeRepo.getTradeById(id);
 		if (trade != null) {
 			
 			//LOGGING
 			logger.info("Returning trade by id :{}", trade);
 			
-			return trade;
+			return TradeConverter.toDto(trade);
 		} else {
 			throw new MyExcMessages("No such trade with given Id !");
 		}
@@ -72,7 +73,8 @@ public class TradeServiceImpl implements TradeService {
 
 	// TRADE INSERT
 	@Override
-	public TradeEntity addTrade(TradeDtoForCreate trade) {
+	public TradeDto addTrade(TradeForCreateDto trade) {
+		trade.setTradeType(trade.getTradeType().toUpperCase());
 		RoleEntity role = userRepo.getRoleById(3);
 		if (userRepo.isClient(trade.getClient(), role)) {
 			PropertyEntity property = propertyRepo.getPropertiesById(trade.getProperties());
@@ -85,7 +87,7 @@ public class TradeServiceImpl implements TradeService {
 						logger.info("Inserting new trade: {} with client: {} and property: {}", tradeToAdd,client,property);
 						
 						tradeRepo.insertTrade(tradeToAdd);
-						return tradeToAdd;
+						return TradeConverter.toDto(tradeToAdd);
 					} else {
 						throw new MyExcMessages("Property is bought or Rented !");
 					}
@@ -99,10 +101,11 @@ public class TradeServiceImpl implements TradeService {
 
 	// TRADE UPDATE
 	@Override
-	public TradeEntity updateTrade(TradeDtoForUpdate trade, int id) {
+	public TradeDto updateTrade(TradeForUpdateDto trade, int id) {
+		trade.setTradeType(trade.getTradeType().toUpperCase());
 		TradeEntity tradeToUpdate = tradeRepo.getTradeById(id);
 		if (tradeToUpdate != null) {
-			tradeToUpdate.setTradeType(TradeTypeEnum.valueOf(trade.getTradeType()));
+			tradeToUpdate.setTradeType(TradeType.valueOf(trade.getTradeType()));
 			tradeToUpdate.setPaymentType(trade.getPaymentType());
 			trade.setEndTradeDate(LocalDateTime.now());
 			tradeRepo.updateTrade(tradeToUpdate);
@@ -110,7 +113,7 @@ public class TradeServiceImpl implements TradeService {
 			//LOGGING
 			logger.info("Updating trade: {}",tradeToUpdate);
 			
-			return tradeToUpdate;
+			return TradeConverter.toDto(tradeToUpdate);
 		} else {
 			throw new MyExcMessages("No trade exist with given id !");
 		}

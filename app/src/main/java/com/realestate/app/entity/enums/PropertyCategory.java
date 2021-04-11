@@ -1,6 +1,6 @@
 package com.realestate.app.entity.enums;
 
-public enum PropertyCategoryEnum {
+public enum PropertyCategory {
 	REZIDENTIAL,
 	COMMERTIAL,
 	LAND;

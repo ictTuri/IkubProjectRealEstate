@@ -9,11 +9,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.realestate.app.dto.UserDtoForCreate;
+import com.realestate.app.converter.UserConverter;
+import com.realestate.app.converter.UserRegisterConverter;
+import com.realestate.app.dto.UserDto;
+import com.realestate.app.dto.UserForCreateDto;
+import com.realestate.app.dto.UserRegisterDto;
+import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
+import com.realestate.app.entity.enums.Roles;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.TradeRepository;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.TradeRepositoryImpl;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserProfileService;
 
@@ -23,12 +29,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
 	private static final Logger logger = LogManager.getLogger(UserProfileServiceImpl.class);
 	
-	TradeRepository tradeRepo;
+	TradeRepositoryImpl tradeRepo;
 	PasswordEncoder passwordEncoder;
-	UserRepository userRepo;
+	UserRepositoryImpl userRepo;
 
 	@Autowired
-	public UserProfileServiceImpl(UserRepository userRepo, PasswordEncoder passwordEncoder, TradeRepository tradeRepo) {
+	public UserProfileServiceImpl(UserRepositoryImpl userRepo, PasswordEncoder passwordEncoder, TradeRepositoryImpl tradeRepo) {
 		super();
 		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
@@ -36,23 +42,88 @@ public class UserProfileServiceImpl implements UserProfileService {
 	}
 
 	@Override
-	public UserEntity getLoggedUser() {
+	public UserDto getLoggedUser() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		//LOGGING
 		logger.info("Showing user Profile");
 		
-		return userRepo.getUserByUsername(thisUser.getUsername());
+		return UserConverter.toDto(userRepo.getUserByUsername(thisUser.getUsername()));
+	}
+	
+
+	@Override
+	public UserRegisterDto addUser(UserRegisterDto user) {
+		user.setRole(user.getRole().toUpperCase());
+		if(user.getRole().equals(Roles.OWNER.getValue())) {
+			if (!userRepo.existUsername(user.getUsername())) {
+				return extractedOwnerRegisterValidation(user);
+			} else {
+				throw new MyExcMessages("Username already exist");
+			}
+		}else {
+			if(user.getRole().equals(Roles.CLIENT.getValue())) {
+				if (!userRepo.existUsername(user.getUsername())) {
+					return extractedClientRegisterValidation(user);
+				} else {
+					throw new MyExcMessages("Username already exist");
+				}
+			}else {
+				throw new MyExcMessages("Please fill one role !");
+			}
+		}
+	}
+
+	private UserRegisterDto extractedOwnerRegisterValidation(UserRegisterDto user) {
+		if (!userRepo.existEmail(user.getEmail())) {
+			RoleEntity role = userRepo.getRoleById(2);
+			if (role != null) {
+				String encodedPass = passwordEncoder.encode(user.getPassword());
+				user.setPassword(encodedPass);
+				UserEntity userToAdd = UserRegisterConverter.toEntityForCreate(user, role);
+				userRepo.insertUser(userToAdd);
+				
+				//LOGGING
+				logger.info("User inserted: {}", userToAdd);
+				
+				return UserRegisterConverter.toDto(userToAdd);
+			} else {
+				throw new MyExcMessages("Role does not exist");
+			}
+		} else {
+			throw new MyExcMessages("Email already registered");
+		}
+	}
+
+	private UserRegisterDto extractedClientRegisterValidation(UserRegisterDto user) {
+		if (!userRepo.existEmail(user.getEmail())) {
+			RoleEntity role = userRepo.getRoleById(3);
+			if (role != null) {
+				String encodedPass = passwordEncoder.encode(user.getPassword());
+				user.setPassword(encodedPass);
+				UserEntity userToAdd = UserRegisterConverter.toEntityForCreate(user, role);
+				userRepo.insertUser(userToAdd);
+				
+				//LOGGING
+				logger.info("User inserted: {}", userToAdd);
+				
+				return UserRegisterConverter.toDto(userToAdd);
+			} else {
+				throw new MyExcMessages("Role does not exist");
+			}
+		} else {
+			throw new MyExcMessages("Email already registered");
+		}
 	}
 
 	@Override
-	public UserEntity updateLoggedUser(UserDtoForCreate user) {
+	public UserDto updateLoggedUser(UserForCreateDto user) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity userToUpdate = userRepo.getUserByUsername(thisUser.getUsername());	
 		return userUpdateValidation(user, userToUpdate);
 	}
 
-	private UserEntity userUpdateValidation(UserDtoForCreate user, UserEntity userToUpdate) {
+	private UserDto userUpdateValidation(UserForCreateDto user, UserEntity userToUpdate) {
 		if (!userToUpdate.getUsername().equals(user.getUsername()) && userRepo.existUsername(user.getUsername())) {
 			throw new MyExcMessages("Can not use this username !");
 		} else {
@@ -69,13 +140,13 @@ public class UserProfileServiceImpl implements UserProfileService {
 				logger.info("Updating Profile, User: {}",userToUpdate);
 				
 				userRepo.updateUser(userToUpdate);
-				return userToUpdate;
+				return UserConverter.toDto(userToUpdate);
 			}
 		}
 	}
 
 	@Override
-	public String deleteLoggedUser() {
+	public void deleteLoggedUser() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity userToDelete = userRepo.getUserByUsername(thisUser.getUsername());
 		if (!(tradeRepo.checkClientInTrade(userToDelete))) {
@@ -86,7 +157,6 @@ public class UserProfileServiceImpl implements UserProfileService {
 				//LOGGING
 				logger.info("Soft Deletion of Profile, User: {}",userToDelete);
 				
-				return "Once the token expires you won be able to lo back in";
 			} else {
 				throw new MyExcMessages("User Already deleted.");
 			}
@@ -95,4 +165,5 @@ public class UserProfileServiceImpl implements UserProfileService {
 		}
 
 	}
+
 }

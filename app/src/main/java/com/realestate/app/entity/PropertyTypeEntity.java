@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.realestate.app.entity.enums.PropertyTypeNameEnum;
+import com.realestate.app.entity.enums.PropertyTypeName;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class PropertyTypeEntity implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "property_type_name")
-	private PropertyTypeNameEnum propertyTypeName;
+	private PropertyTypeName propertyTypeName;
 	
 	@Column(name = "property_type_desc")
 	private String propertyTypeDesc;

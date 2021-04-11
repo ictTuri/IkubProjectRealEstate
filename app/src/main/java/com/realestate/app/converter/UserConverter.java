@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.realestate.app.dto.UserDto;
-import com.realestate.app.dto.UserDtoForCreate;
+import com.realestate.app.dto.UserForCreateDto;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 
@@ -41,7 +41,7 @@ public class UserConverter {
 		return toReturn;
 	}
 
-	public static UserEntity toEntityForCreate(UserDtoForCreate dto, RoleEntity subEntity) {
+	public static UserEntity toEntityForCreate(UserForCreateDto dto, RoleEntity subEntity) {
 		UserEntity toReturn = new UserEntity();
 		toReturn.setUserId(null);
 		toReturn.setFirstName(dto.getFirstName());

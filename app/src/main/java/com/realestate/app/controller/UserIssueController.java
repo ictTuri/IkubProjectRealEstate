@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.IssuesConverter;
-import com.realestate.app.dto.IssueDtoForUpdate;
+import com.realestate.app.dto.IssueForUpdateDto;
 import com.realestate.app.dto.IssuesDto;
-import com.realestate.app.dto.IssuesDtoForCreate;
+import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.service.UserIssueService;
 
 @RestController
@@ -40,26 +38,29 @@ public class UserIssueController {
 	@GetMapping("/myissues")
 	public ResponseEntity<List<IssuesDto>> showMyIssues() {
 		// show all issues on database
-		return new ResponseEntity<>(IssuesConverter.toDto(userIssueService.allMyIssues()), HttpStatus.OK);
+		return new ResponseEntity<>(userIssueService.allMyIssues(), HttpStatus.OK);
 	} 
 	
 	@PreAuthorize("hasAnyRole('CLIENT')")
 	@PostMapping("/myissues")
-	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody IssuesDtoForCreate issue){
-		return new ResponseEntity<>(IssuesConverter.toDto(userIssueService.insertMyIssue(issue)), HttpStatus.OK);
+	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody IssuesForCreateDto issue){
+		// insert issue by client
+		return new ResponseEntity<>(userIssueService.insertMyIssue(issue), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
 	@PutMapping("/myissues/{id}")
-	public ResponseEntity<IssuesDto> updateIssueById(@Valid @RequestBody IssueDtoForUpdate issue, @PathVariable int id){
-		return new ResponseEntity<>(IssuesConverter.toDto(userIssueService.updateMyIssue(issue, id)), HttpStatus.OK);
+	public ResponseEntity<IssuesDto> updateIssueById(@Valid @RequestBody IssueForUpdateDto issue, @PathVariable int id){
+		// update issue by client or owner
+		return new ResponseEntity<>(userIssueService.updateMyIssue(issue, id), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
 	@DeleteMapping("/myissues/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteMyIssue(@PathVariable int id) {
+	public ResponseEntity<Void> deleteMyIssue(@PathVariable int id) {
+		// delete issue and return no content
 		userIssueService.deleteMyIssue(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 }

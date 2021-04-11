@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.TradeConverter;
 import com.realestate.app.dto.TradeDto;
-import com.realestate.app.dto.TradeDtoForCreate;
-import com.realestate.app.dto.TradeDtoForUpdate;
+import com.realestate.app.dto.TradeForCreateDto;
+import com.realestate.app.dto.TradeForUpdateDto;
 import com.realestate.app.service.UserTradeService;
 
 @RestController
@@ -43,7 +41,7 @@ public class UserTradeController {
 	@GetMapping("/mytrades")
 	public ResponseEntity<List<TradeDto>> showMyTrades() {
 		// show all trades on database for logged in user
-		return new ResponseEntity<>(TradeConverter.toDto(userTradeService.allMyTrades()), HttpStatus.OK);
+		return new ResponseEntity<>(userTradeService.allMyTrades(), HttpStatus.OK);
 	}
 
 	// ------------------------------
@@ -51,9 +49,9 @@ public class UserTradeController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@PostMapping("/mytrades")
-	public ResponseEntity<TradeDto> insertMyTradeByOwner(@Valid @RequestBody TradeDtoForCreate trade) {
-		trade.setTradeType(trade.getTradeType().toUpperCase());
-		return new ResponseEntity<>(TradeConverter.toDto(userTradeService.insertMyTrade(trade)), HttpStatus.OK);
+	public ResponseEntity<TradeDto> insertMyTradeByOwner(@Valid @RequestBody TradeForCreateDto trade) {
+		//Insert trade only by owner
+		return new ResponseEntity<>(userTradeService.insertMyTrade(trade), HttpStatus.OK);
 	}
 
 	// ------------------------------
@@ -61,10 +59,10 @@ public class UserTradeController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@PutMapping("/mytrades/{id}")
-	public ResponseEntity<TradeDto> updateMyTradeById(@Valid @RequestBody TradeDtoForUpdate trade,
+	public ResponseEntity<TradeDto> updateMyTradeById(@Valid @RequestBody TradeForUpdateDto trade,
 			@PathVariable int id) {
-		trade.setTradeType(trade.getTradeType().toUpperCase());
-		return new ResponseEntity<>(TradeConverter.toDto(userTradeService.updateMyTrade(trade, id)), HttpStatus.OK);
+		//Update trades based on role
+		return new ResponseEntity<>(userTradeService.updateMyTrade(trade, id), HttpStatus.OK);
 	}
 
 	// ------------------------------
@@ -72,10 +70,10 @@ public class UserTradeController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
 	@DeleteMapping("/mytrades/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteTrade(@PathVariable("id") int id) {
+	public ResponseEntity<Void> deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		userTradeService.deleteTrade(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

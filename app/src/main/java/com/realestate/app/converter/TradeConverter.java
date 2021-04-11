@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.realestate.app.dto.TradeDto;
-import com.realestate.app.dto.TradeDtoForCreate;
+import com.realestate.app.dto.TradeForCreateDto;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.entity.enums.TradeTypeEnum;
+import com.realestate.app.entity.enums.TradeType;
 
 public class TradeConverter {
 	
@@ -35,7 +35,7 @@ public class TradeConverter {
 		return toReturn;
 	}
 
-	public static TradeEntity toEntityForCreate(TradeDtoForCreate dto, UserEntity client,PropertyEntity property) {
+	public static TradeEntity toEntityForCreate(TradeForCreateDto dto, UserEntity client,PropertyEntity property) {
 		TradeEntity toReturn=new TradeEntity();
 		toReturn.setTradeId(null);
 		toReturn.setClient(client);
@@ -43,7 +43,7 @@ public class TradeConverter {
 		toReturn.setTradeDate(LocalDateTime.now());
 		toReturn.setEndTradeDate(null);
 		toReturn.setPaymentType(dto.getPaymentType());
-		toReturn.setTradeType(TradeTypeEnum.valueOf(dto.getTradeType()));
+		toReturn.setTradeType(TradeType.valueOf(dto.getTradeType()));
 		return toReturn;
 	}
 }

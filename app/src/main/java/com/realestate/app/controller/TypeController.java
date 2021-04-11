@@ -15,17 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.PropertyTypeConverter;
 import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.service.TypeService;
 
 @RestController
 @RequestMapping("/api/v1")
 public class TypeController {
-	
+
 	TypeService typeService;
 
 	@Autowired
@@ -41,15 +39,14 @@ public class TypeController {
 	@GetMapping("/propertytypes")
 	public ResponseEntity<List<PropertyTypeDto>> propertyTypes() {
 		// show all property types on database
-		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.allPropertyTypes()), HttpStatus.OK);
+		return new ResponseEntity<>(typeService.allPropertyTypes(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/propertytypes/{id}")
 	public ResponseEntity<PropertyTypeDto> showPropertTypeById(@PathVariable("id") int id) {
 		// show property type by id
-		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.propertyTypeById(id)),
-				HttpStatus.FOUND);
+		return new ResponseEntity<>(typeService.propertyTypeById(id), HttpStatus.FOUND);
 	}
 
 	// -----------------------------
@@ -59,9 +56,7 @@ public class TypeController {
 	@PostMapping("/propertytypes")
 	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
-		propertyType.setPropertyTypeName(propertyType.getPropertyTypeName().toUpperCase());
-		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.addPropertyType(propertyType)),
-				HttpStatus.CREATED);
+		return new ResponseEntity<>(typeService.addPropertyType(propertyType), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -72,8 +67,7 @@ public class TypeController {
 	public ResponseEntity<PropertyTypeDto> updatePropertyType(@Valid @RequestBody PropertyTypeDto propertyType,
 			@PathVariable("id") int id) {
 		// return the updated property type if process complete
-		return new ResponseEntity<>(PropertyTypeConverter.toDto(typeService.updatePropertyType(propertyType, id)),
-				HttpStatus.OK);
+		return new ResponseEntity<>(typeService.updatePropertyType(propertyType, id), HttpStatus.OK);
 	}
 
 	// -----------------------------
@@ -81,10 +75,10 @@ public class TypeController {
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/propertytypes/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletePropertyType(@PathVariable("id") int id) {
+	public ResponseEntity<Void> deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		typeService.deletePropertyType(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
+
 }

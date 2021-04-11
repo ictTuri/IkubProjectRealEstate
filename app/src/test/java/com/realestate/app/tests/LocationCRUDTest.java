@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.realestate.app.entity.LocationEntity;
-import com.realestate.app.repository.LocationRepository;
+import com.realestate.app.repository.impl.LocationRepositoryImpl;
 import com.realestate.app.utils.LocationUtil;
 
 @SpringBootTest
@@ -16,7 +16,7 @@ import com.realestate.app.utils.LocationUtil;
 class LocationCRUDTest {
 
 	@Autowired
-	LocationRepository locationRepo;
+	LocationRepositoryImpl locationRepo;
 	
 	@Test
 	 void givenWrongId_whenRetrieved_thenGetNoResult() {

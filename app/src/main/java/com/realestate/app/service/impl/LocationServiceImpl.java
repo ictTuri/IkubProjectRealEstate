@@ -13,8 +13,8 @@ import com.realestate.app.converter.LocationConverter;
 import com.realestate.app.dto.LocationDto;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.LocationRepository;
-import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.impl.LocationRepositoryImpl;
+import com.realestate.app.repository.impl.PropertyRepositoryImpl;
 import com.realestate.app.service.LocationService;
 
 @Service
@@ -23,11 +23,11 @@ public class LocationServiceImpl implements LocationService {
 
 	private static final Logger logger = LogManager.getLogger(LocationServiceImpl.class);
 	
-	PropertyRepository propertyRepo;
-	LocationRepository locationRepo;
+	PropertyRepositoryImpl propertyRepo;
+	LocationRepositoryImpl locationRepo;
 
 	@Autowired
-	public LocationServiceImpl(PropertyRepository propertyRepo, LocationRepository locationRepo) {
+	public LocationServiceImpl(PropertyRepositoryImpl propertyRepo, LocationRepositoryImpl locationRepo) {
 		super();
 		this.propertyRepo = propertyRepo;
 		this.locationRepo = locationRepo;
@@ -35,20 +35,20 @@ public class LocationServiceImpl implements LocationService {
 	
 	// DISPLAY ALL LOCATIONS
 	@Override
-	public List<LocationEntity> allLocations() {
-		return locationRepo.getAllLocations();
+	public List<LocationDto> allLocations() {
+		return LocationConverter.toDto(locationRepo.getAllLocations());
 	}
 
 	// DISPLAY LOCATION BY ID
 	@Override
-	public LocationEntity locationById(int id) {
+	public LocationDto locationById(int id) {
 		LocationEntity location = locationRepo.getLocationById(id);
 		if (location != null) {
 			
 			//LOGGING
 			logger.info("Showing location by id, location {}",location);
 			
-			return location;
+			return LocationConverter.toDto(location);
 		} else {
 			throw new MyExcMessages("No such location with given Id !");
 		}
@@ -56,19 +56,19 @@ public class LocationServiceImpl implements LocationService {
 
 	// LOCATION INSERT
 	@Override
-	public LocationEntity addLocation(LocationDto location) {
+	public LocationDto addLocation(LocationDto location) {
 		LocationEntity locationToAdd = LocationConverter.toEntity(location);
 		locationRepo.insertLocation(locationToAdd);
 		
 		//LOGGING
 		logger.info("Inserting location: {}",locationToAdd);
 		
-		return locationToAdd;
+		return LocationConverter.toDto(locationToAdd);
 	}
 
 	// LOCATION UPDATE
 	@Override
-	public LocationEntity updateLocation(LocationDto location, int id) {
+	public LocationDto updateLocation(LocationDto location, int id) {
 		LocationEntity locationToUpdate = locationRepo.getLocationById(id);
 		if (locationToUpdate != null) {
 			locationToUpdate.setCityName(location.getCityName());
@@ -80,7 +80,7 @@ public class LocationServiceImpl implements LocationService {
 			//LOGGING
 			logger.info("Updated location: {}",locationToUpdate);
 			
-			return locationToUpdate;
+			return LocationConverter.toDto(locationToUpdate);
 		} else {
 			throw new MyExcMessages("No Location with such Id / Please check again");
 		}
