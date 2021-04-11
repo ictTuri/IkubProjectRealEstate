@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 
 @Service(value = "userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepositoryImpl userRepository;
 
 	private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
 	

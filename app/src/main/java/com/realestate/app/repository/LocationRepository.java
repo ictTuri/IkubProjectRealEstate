@@ -2,59 +2,22 @@ package com.realestate.app.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.springframework.stereotype.Repository;
-
 import com.realestate.app.entity.LocationEntity;
 
-@Repository
-public class LocationRepository {
-	EntityManager em;
+public interface LocationRepository {
+	// RETURN ALL LOCATION FROM DB
+	List<LocationEntity> getAllLocations();
+	LocationEntity getLocationById(Integer locationId);
 
-	public LocationRepository(EntityManager em) {
-		super();
-		this.em = em;
-	}
+	// INSERT NEW LOCATION ON DB
+	void insertLocation(LocationEntity location);
 
-	private static final String GET_ALL_LOCATIONS = "FROM LocationEntity";
+	// UPDATE ISSUES ON DB
+	LocationEntity updateLocation(LocationEntity location);
 
-	// LOCATIONS
-	public List<LocationEntity> getAllLocations() {
-		return em.createQuery(GET_ALL_LOCATIONS, LocationEntity.class).getResultList();
-	}
+	// DELETE LOCATION FROM DB
+	void deleteLocation(LocationEntity location);
 
-	public LocationEntity getLocationById(Integer locationId) {
-		try {
-			return em.find(LocationEntity.class, locationId);
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
-	}
-
-	// INSERT OPERATIONS DOWN HERE
-	public void insertLocation(LocationEntity location) {
-		em.persist(location);
-	}
-
-	// UPDATE OPERATIONS DOWN HERE
-	public LocationEntity updateLocation(LocationEntity location) {
-		return em.merge(location);
-	}
-
-	// DELETE OPERATIONS DOWN HERE
-	public void deleteLocation(LocationEntity location) {
-		 em.remove(location);
-	}
-
-	//HELPING METHODS DOWN HERE
-	public boolean existLocation(int locationId) {
-		try {
-			return em.find(LocationEntity.class, locationId)!= null;
-		}catch(IllegalArgumentException e) {
-			return false;
-		}
-		
-	}
-
+	// HELPING METHODS
+	boolean existLocation(int locationId);
 }

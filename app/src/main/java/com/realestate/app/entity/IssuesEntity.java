@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import com.realestate.app.entity.enums.IssueStatusEnum;
+import com.realestate.app.entity.enums.IssueStatus;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class IssuesEntity implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "resolution_status")
-	private IssueStatusEnum resoulutionStatus;
+	private IssueStatus resoulutionStatus;
 	
 	@Column(name = "description")
 	private String description;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.realestate.app.entity.enums.PropertyCategoryEnum;
+import com.realestate.app.entity.enums.PropertyCategory;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class PropertyEntity implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category")
-	private PropertyCategoryEnum category;
+	private PropertyCategory category;
 	
 	@ManyToOne
 	@JoinColumn(name = "property_type", referencedColumnName = "property_type_id")

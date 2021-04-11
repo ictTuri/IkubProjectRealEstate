@@ -28,6 +28,8 @@ public class FullPropertyDto {
 
 	@NotNull(message = "Property Location Id is mandatory !")
 	private int location;
+	
+	private PropertyInfoDto propertyInfoDto;
 
 	private boolean hasGarage;
 

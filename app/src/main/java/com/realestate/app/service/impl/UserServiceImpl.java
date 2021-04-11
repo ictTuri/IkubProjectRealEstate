@@ -1,5 +1,8 @@
 package com.realestate.app.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,12 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.UserConverter;
-import com.realestate.app.dto.UserDtoForCreate;
+import com.realestate.app.dto.UserDto;
+import com.realestate.app.dto.UserForCreateDto;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.UserFilter;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.service.UserService;
 
 @Service
@@ -23,9 +27,9 @@ public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 	
 	PasswordEncoder passwordEncoder;
-	UserRepository userRepository;
+	UserRepositoryImpl userRepository;
 
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepositoryImpl userRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -33,24 +37,26 @@ public class UserServiceImpl implements UserService {
 
 	// GET ALL USER OR FILTERED BY NAME
 	@Override
-	public Iterable<UserEntity> getUsers(UserFilter filter) {
+	public List<UserDto> getUsers(UserFilter filter) {
 		
 		//LOGGING
 		logger.info("Filtring users with filter {}", filter);
 		
-		return userRepository.getAllUsers(filter);
+		List<UserDto> toReturn = new ArrayList<>();
+		userRepository.getAllUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
+		return toReturn;
 	}
 
 	// USER DISPLAY BY ID
 	@Override
-	public UserEntity userById(int id) {
+	public UserDto userById(int id) {
 		UserEntity user = userRepository.getUserById(id);
 		if (user != null) {
 			
 			//LOGGING
 			logger.info("Getting users with ID {}", id);
 			
-			return user;
+			return UserConverter.toDto(user);
 		} else {
 			throw new MyExcMessages("No such User with given Id !");
 		}
@@ -58,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
 	// USER INSERT
 	@Override
-	public UserEntity addUser(UserDtoForCreate user) {
+	public UserDto addUser(UserForCreateDto user) {
 		if (!userRepository.existUsername(user.getUsername())) {
 			if (!userRepository.existEmail(user.getEmail())) {
 				RoleEntity role = userRepository.getRoleById(user.getRole());
@@ -71,7 +77,7 @@ public class UserServiceImpl implements UserService {
 					//LOGGING
 					logger.info("User inserted: {}", userToAdd);
 					
-					return userToAdd;
+					return UserConverter.toDto(userToAdd);
 				} else {
 					throw new MyExcMessages("Role does not exist");
 				}
@@ -85,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
 	// USER UPDATE
 	@Override
-	public UserEntity updateUser(UserDtoForCreate user, int id) {
+	public UserDto updateUser(UserForCreateDto user, int id) {
 		UserEntity userToUpdate = userRepository.getUserById(id);
 		if (userToUpdate != null) {
 			return userUpdateValidation(user, userToUpdate);
@@ -95,7 +101,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// Validations for the User Update Extracted
-	private UserEntity userUpdateValidation(UserDtoForCreate user, UserEntity userToUpdate) {
+	private UserDto userUpdateValidation(UserForCreateDto user, UserEntity userToUpdate) {
 		if (!userToUpdate.getUsername().equals(user.getUsername())
 				&& userRepository.existUsername(user.getUsername())) {
 			throw new MyExcMessages("Can not use this username !");
@@ -116,7 +122,7 @@ public class UserServiceImpl implements UserService {
 					logger.info("User Updated: {}", userToUpdate);
 					
 					userRepository.updateUser(userToUpdate);
-					return userToUpdate;
+					return UserConverter.toDto(userToUpdate);
 				} else {
 					throw new MyExcMessages("Role given does not exist");
 				}
@@ -126,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
 	// USER DELETION
 	@Override
-	public UserEntity deleteUser(int id) {
+	public void deleteUser(int id) {
 		UserEntity userToDelete = userRepository.getUserById(id);
 		if (userToDelete != null) {
 			if (userToDelete.isActive()) {
@@ -135,7 +141,7 @@ public class UserServiceImpl implements UserService {
 				//LOGGING
 				logger.info("User Soft Deleted: {}", userToDelete);
 				
-				return userRepository.updateUser(userToDelete);
+				userRepository.updateUser(userToDelete);
 			} else {
 				throw new MyExcMessages("User Already deleted.");
 			}

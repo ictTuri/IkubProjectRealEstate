@@ -1,22 +1,24 @@
 package com.realestate.app.service;
 
-import com.realestate.app.dto.UserDtoForCreate;
-import com.realestate.app.entity.UserEntity;
+import java.util.List;
+
+import com.realestate.app.dto.UserDto;
+import com.realestate.app.dto.UserForCreateDto;
 import com.realestate.app.filter.UserFilter;
 
 public interface UserService {
 
 	// FUNCTIONS TO GET DATA FROM DATABASE
-	UserEntity userById(int id);
-	Iterable<UserEntity> getUsers(UserFilter filter);
+	UserDto userById(int id);
+	List<UserDto> getUsers(UserFilter filter);
 
 	// FUNCTIONS TO STORE DATA TO DATABASE
-	UserEntity addUser(UserDtoForCreate user);
+	UserDto addUser(UserForCreateDto user);
 
 	// FUNCTIONS TO UPDATE DATA ON DATABASE
-	UserEntity updateUser(UserDtoForCreate user, int id);
+	UserDto updateUser(UserForCreateDto user, int id);
 
 	// FUNCTIONS TO DELETE DATA FROM DATABASE
-	UserEntity deleteUser(int id);
+	void deleteUser(int id);
 
 }

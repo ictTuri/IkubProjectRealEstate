@@ -2,20 +2,20 @@ package com.realestate.app.service;
 
 import java.util.List;
 
-import com.realestate.app.dto.IssueDtoForUpdate;
-import com.realestate.app.dto.IssuesDtoForCreate;
-import com.realestate.app.entity.IssuesEntity;
+import com.realestate.app.dto.IssueForUpdateDto;
+import com.realestate.app.dto.IssuesDto;
+import com.realestate.app.dto.IssuesForCreateDto;
 
 public interface IssueService {
 	//FUNCTIONS TO GET DATA FROM DATABASE 
-	List<IssuesEntity> allIssues();
-	IssuesEntity issuesById(int id);
+	List<IssuesDto> allIssues();
+	IssuesDto issuesById(int id);
 	
 	//FUNCTIONS TO INSERT DATA TO DATABASE
-	IssuesEntity addIssues(IssuesDtoForCreate issue);
+	IssuesDto addIssues(IssuesForCreateDto issue);
 	
 	//FUNSTIONS TO UPDATE DATA ON DATABASE
-	IssuesEntity updateIssues(IssueDtoForUpdate issue, int id);
+	IssuesDto updateIssues(IssueForUpdateDto issue, int id);
 	
 	//FUNTIONS TO DELETE DATA FROM DATABASE
 	void deleteIssue(int id);

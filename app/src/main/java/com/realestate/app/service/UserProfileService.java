@@ -1,16 +1,20 @@
 package com.realestate.app.service;
 
-import com.realestate.app.dto.UserDtoForCreate;
-import com.realestate.app.entity.UserEntity;
+import com.realestate.app.dto.UserDto;
+import com.realestate.app.dto.UserForCreateDto;
+import com.realestate.app.dto.UserRegisterDto;
 
 public interface UserProfileService {
 	//SHOW PROFILE (USER)
-	UserEntity getLoggedUser();
+	UserDto getLoggedUser();
+	
+	// REGISTER USER
+	UserRegisterDto addUser(UserRegisterDto user);
 	
 	//UPDATE PROFILE (USER)
-	UserEntity updateLoggedUser(UserDtoForCreate user);
+	UserDto updateLoggedUser(UserForCreateDto user);
 
 	//DELETE PROFILE (USER)
-	String deleteLoggedUser();
+	void deleteLoggedUser();
 
 }

@@ -1,6 +1,6 @@
 package com.realestate.app.entity.enums;
 
-public enum PropertyTypeNameEnum {
+public enum PropertyTypeName {
 	HOME,
 	BARACS,
 	APARTAMENT,

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.utils.UserUtil;
 
 @SpringBootTest
@@ -16,7 +16,7 @@ import com.realestate.app.utils.UserUtil;
 class UserCRUDTest {
 	
 	@Autowired
-	UserRepository userRepository;
+	UserRepositoryImpl userRepository;
 	
 	@Test
 	 void givenUsername_whenRetrieved_thenGetUserData() {

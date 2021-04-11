@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.realestate.app.controller.UserController;
 import com.realestate.app.entity.UserEntity;
 
 import lombok.Data;
@@ -19,7 +18,7 @@ import lombok.Data;
 @Data
 public class UserPrincipal implements UserDetails{
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LogManager.getLogger(UserController.class);
+	private static final Logger logger = LogManager.getLogger(UserPrincipal.class);
 	private String id;
 
 	private String firstName;

@@ -4,19 +4,19 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.realestate.app.dto.TradeDtoForCreate;
-import com.realestate.app.dto.TradeDtoForUpdate;
-import com.realestate.app.entity.TradeEntity;
+import com.realestate.app.dto.TradeDto;
+import com.realestate.app.dto.TradeForCreateDto;
+import com.realestate.app.dto.TradeForUpdateDto;
 
 public interface UserTradeService {
 	//SHOW TRADES OF PROPERTY OWNERS OR CLIENTS 
-	List<TradeEntity> allMyTrades();
+	List<TradeDto> allMyTrades();
 
 	//INSERT NEW TRADE BY OWNER
-	TradeEntity insertMyTrade(@Valid TradeDtoForCreate trade);
+	TradeDto insertMyTrade(@Valid TradeForCreateDto trade);
 	
 	//UPDATE MY TRADES (OWNER)
-	TradeEntity updateMyTrade(@Valid TradeDtoForUpdate trade, int id);
+	TradeDto updateMyTrade(@Valid TradeForUpdateDto trade, int id);
 
 	//DELETE MY TRADES (OWNER)
 	void deleteTrade(int id);

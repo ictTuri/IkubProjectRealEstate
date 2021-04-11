@@ -1,5 +1,6 @@
 package com.realestate.app.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.FullPropertyConverter;
 import com.realestate.app.dto.FullPropertyDto;
+import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.entity.PropertyEntity;
@@ -20,15 +22,15 @@ import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.entity.enums.PropertyCategoryEnum;
+import com.realestate.app.entity.enums.PropertyCategory;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.InfoRepository;
-import com.realestate.app.repository.IssueRepository;
-import com.realestate.app.repository.LocationRepository;
-import com.realestate.app.repository.PropertyRepository;
-import com.realestate.app.repository.TradeRepository;
-import com.realestate.app.repository.TypeRepository;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.InfoRepositoryImpl;
+import com.realestate.app.repository.impl.IssueRepositoryImpl;
+import com.realestate.app.repository.impl.LocationRepositoryImpl;
+import com.realestate.app.repository.impl.PropertyRepositoryImpl;
+import com.realestate.app.repository.impl.TradeRepositoryImpl;
+import com.realestate.app.repository.impl.TypeRepositoryImpl;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserPropertyService;
 
@@ -38,18 +40,18 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 
 	private static final Logger logger = LogManager.getLogger(UserPropertyServiceImpl.class);
 	
-	TradeRepository tradeRepo;
-	UserRepository userRepo;
-	PropertyRepository propertyRepo;
-	LocationRepository locationRepo;
-	InfoRepository infoRepo;
-	TypeRepository typeRepo;
-	IssueRepository issueRepo;
+	TradeRepositoryImpl tradeRepo;
+	UserRepositoryImpl userRepo;
+	PropertyRepositoryImpl propertyRepo;
+	LocationRepositoryImpl locationRepo;
+	InfoRepositoryImpl infoRepo;
+	TypeRepositoryImpl typeRepo;
+	IssueRepositoryImpl issueRepo;
 	
 	@Autowired
-	public UserPropertyServiceImpl(UserRepository userRepo, PropertyRepository propertyRepo,
-			LocationRepository locationRepo, InfoRepository infoRepo, TypeRepository typeRepo,
-			TradeRepository tradeRepo, IssueRepository issueRepo) {
+	public UserPropertyServiceImpl(UserRepositoryImpl userRepo, PropertyRepositoryImpl propertyRepo,
+			LocationRepositoryImpl locationRepo, InfoRepositoryImpl infoRepo, TypeRepositoryImpl typeRepo,
+			TradeRepositoryImpl tradeRepo, IssueRepositoryImpl issueRepo) {
 		super();
 		this.userRepo = userRepo;
 		this.propertyRepo = propertyRepo;
@@ -60,19 +62,23 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		this.issueRepo = issueRepo;
 	}
 
+	// Get all properties filter by oner
 	@Override
-	public Iterable<PropertyEntity> showAllMyProperties() {
+	public List<PropertyDto> showAllMyProperties() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		
 		//LOGGING
 		logger.info("Showing all properties of Owner: {}", thisUser);
-		
-		return propertyRepo.getPropertiesByOwner(user);
+		List<PropertyDto> toReturn = new ArrayList<>();
+		propertyRepo.getPropertiesByOwner(user).forEach(entity -> toReturn.add(FullPropertyConverter.singleToDto(entity)));
+		return toReturn;
 	}
 	
+	// Owner insert new property
 	@Override
-	public PropertyEntity insertMyProperty(@Valid FullPropertyDto property) {
+	public PropertyDto insertMyProperty(@Valid FullPropertyDto property) {
+		property.setCategory(property.getCategory().toUpperCase());
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		if (locationRepo.existLocation(property.getLocation())) {
@@ -87,7 +93,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				logger.info("Inserting new Property, property: {}", propertyToAdd);
 				
 				propertyRepo.insertProperties(propertyToAdd);
-				return propertyToAdd;
+				return FullPropertyConverter.singleToDto(propertyToAdd);
 			} else {
 				throw new MyExcMessages("No property type with given Id !");
 			}
@@ -96,11 +102,12 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		}
 	}
 
+	// Update Owner Property
 	@Override
-	public PropertyEntity updateMyProperty(FullPropertyDto property, int id) {
+	public PropertyDto updateMyProperty(FullPropertyDto property, int id) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
-		List<PropertyEntity> list = (List<PropertyEntity>) propertyRepo.getPropertiesByOwner(user);
+		List<PropertyEntity> list = propertyRepo.getPropertiesByOwner(user);
 		for (PropertyEntity pe : list) {
 			if (pe.getPropertiesId() == id) {
 				PropertyEntity propertyToUpdate = propertyRepo.getPropertiesById(id);
@@ -119,7 +126,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 		return null;
 	}
 
-	private PropertyEntity extractedUpdateProcedure(FullPropertyDto property,UserEntity user, PropertyEntity propertyToUpdate,
+	private PropertyDto extractedUpdateProcedure(FullPropertyDto property,UserEntity user, PropertyEntity propertyToUpdate,
 			PropertyInfoEntity propertyInfoToUpdate, RoleEntity role) {
 		if (userRepo.existUserById(property.getOwner(), role)) {
 			if (locationRepo.existLocation(property.getLocation())) {
@@ -131,7 +138,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				propertyInfoToUpdate.setNrBathrooms(property.getNrBathrooms());
 				propertyInfoToUpdate.setNrBedrooms(property.getNrBedrooms());
 				infoRepo.updatePropertyInfo(propertyInfoToUpdate);
-				propertyToUpdate.setCategory(PropertyCategoryEnum.valueOf(property.getCategory()));
+				propertyToUpdate.setCategory(PropertyCategory.valueOf(property.getCategory()));
 				propertyToUpdate.setDescription(property.getDescription());
 				LocationEntity location = locationRepo.getLocationById(property.getLocation());
 				PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(property.getPropertyType());
@@ -146,7 +153,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				logger.info("Owner updateing property {} and property info: {}", propertyToUpdate,propertyInfoToUpdate);
 				
 				propertyRepo.updateProperty(propertyToUpdate);
-				return propertyToUpdate;
+				return FullPropertyConverter.singleToDto(propertyToUpdate);
 
 			} else {
 				throw new MyExcMessages("Updated Location does not exist !");
@@ -160,7 +167,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 	public void deleteMyProperty(int id) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
-		List<PropertyEntity> list = (List<PropertyEntity>) propertyRepo.getPropertiesByOwner(user);
+		List<PropertyEntity> list = propertyRepo.getPropertiesByOwner(user);
 		for(PropertyEntity pe: list) {
 			if(pe.getPropertiesId() == id) {
 				PropertyEntity propertyToDelete = propertyRepo.getPropertiesById(id);

@@ -12,17 +12,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.IssuesConverter;
-import com.realestate.app.dto.IssueDtoForUpdate;
-import com.realestate.app.dto.IssuesDtoForCreate;
+import com.realestate.app.dto.IssueForUpdateDto;
+import com.realestate.app.dto.IssuesDto;
+import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.entity.enums.IssueStatusEnum;
+import com.realestate.app.entity.enums.IssueStatus;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.IssueRepository;
-import com.realestate.app.repository.PropertyRepository;
-import com.realestate.app.repository.TradeRepository;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.repository.impl.IssueRepositoryImpl;
+import com.realestate.app.repository.impl.PropertyRepositoryImpl;
+import com.realestate.app.repository.impl.TradeRepositoryImpl;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserIssueService;
 
@@ -31,15 +32,17 @@ import com.realestate.app.service.UserIssueService;
 public class UserIssueServiceImpl implements UserIssueService {
 
 	private static final Logger logger = LogManager.getLogger(UserIssueServiceImpl.class);
+	private static final String OWNER = "ROLE_OWNER";
+	private static final String CLIENT = "ROLE_CLIENT";
 	
-	IssueRepository issueRepo;
-	UserRepository userRepo;
-	PropertyRepository propertyRepo;
-	TradeRepository tradeRepo;
+	IssueRepositoryImpl issueRepo;
+	UserRepositoryImpl userRepo;
+	PropertyRepositoryImpl propertyRepo;
+	TradeRepositoryImpl tradeRepo;
 
 	@Autowired
-	public UserIssueServiceImpl(IssueRepository issueRepo, UserRepository userRepo,
-			PropertyRepository propertyRepo, TradeRepository tradeRepo) {
+	public UserIssueServiceImpl(IssueRepositoryImpl issueRepo, UserRepositoryImpl userRepo,
+			PropertyRepositoryImpl propertyRepo, TradeRepositoryImpl tradeRepo) {
 		super();
 		this.issueRepo = issueRepo;
 		this.userRepo = userRepo;
@@ -47,128 +50,133 @@ public class UserIssueServiceImpl implements UserIssueService {
 		this.tradeRepo = tradeRepo;
 	}
 
+	// GET ALL ISSUES BASED ON USER
 	@Override
-	public List<IssuesEntity> allMyIssues() {
+	public List<IssuesDto> allMyIssues() {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		switch (user.getRole().getRoleName()) {
-		case "ROLE_OWNER":
-			
-			//LOGGING
-			logger.info("Showing issues related to owner: {}",user);
-			
-			return issueRepo.issuesOfOwnersByOwner(user);
-		case "ROLE_CLIENT":
-			
-			//LOGGING
-			logger.info("Showing issues related to client: {}",user);
-			
-			return issueRepo.issuesOfClientByClient(user);
+		case OWNER:
+			// LOGGING
+			logger.info("Showing issues related to owner: {}", user);
+
+			return IssuesConverter.toDto(issueRepo.issuesOfOwnersByOwner(user));
+		case CLIENT:
+
+			// LOGGING
+			logger.info("Showing issues related to client: {}", user);
+
+			return IssuesConverter.toDto(issueRepo.issuesOfClientByClient(user));
 		default:
-			return issueRepo.getAllIssues();
+			return IssuesConverter.toDto(issueRepo.getAllIssues());
 		}
 	}
 
+	// INSERT NEW ISSUE
 	@Override
-	public IssuesEntity updateMyIssue(@Valid IssueDtoForUpdate issue, int id) {
-		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
-		IssuesEntity issueToUpdate = issueRepo.getIssueById(id);
-		switch (user.getRole().getRoleName()) {
-		case "ROLE_OWNER":
-			List<IssuesEntity> list = issueRepo.issuesOfOwnersByOwner(user);
-			for (IssuesEntity ie : list) {
-				if (ie.getIssueId() == id) {
-					issueToUpdate.setCategory(issue.getCategory());
-					issueToUpdate.setResoulutionStatus(IssueStatusEnum.valueOf(issue.getResoulutionStatus()));
-					issueToUpdate.setDescription(issue.getDescription());
-					
-					//LOGGING
-					logger.info("Updating issue related to owner, issue: {}",issueToUpdate);
-					
-					issueRepo.updateIssue(issueToUpdate);
-				} else {
-					throw new MyExcMessages("You do not own a Issue with given id !");
-				}
-			}
-			return issueToUpdate;
-		case "ROLE_CLIENT":
-			List<IssuesEntity> list2 = issueRepo.issuesOfClientByClient(user);
-			for (IssuesEntity ie : list2) {
-				if (ie.getIssueId() == id) {
-					issueToUpdate.setCategory(issue.getCategory());
-					issueToUpdate.setResoulutionStatus(IssueStatusEnum.valueOf(issue.getResoulutionStatus()));
-					issueToUpdate.setDescription(issue.getDescription());
-					
-					//LOGGING
-					logger.info("Updating issue related to client, issue: {}",issueToUpdate);
-					
-					issueRepo.updateIssue(issueToUpdate);
-				} else {
-					throw new MyExcMessages("You do not own a Issue with given id !");
-				}
-			}
-			return issueToUpdate;
-		default:
-			throw new MyExcMessages("Please authneticate to proceed here !");
-		}
-
-	}
-
-	@Override
-	public void deleteMyIssue(int id) {
-		IssuesEntity issueToDelete = issueRepo.getIssueById(id);
-		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
-		switch (user.getRole().getRoleName()) {
-		case "ROLE_OWNER":
-			List<IssuesEntity> list = issueRepo.issuesOfOwnersByOwner(user);
-			for (IssuesEntity ie : list) {
-				if (ie.getIssueId() == id) {
-					
-					//LOGGING
-					logger.info("Owner: {} , deleting issue: {}",user,issueToDelete);
-					
-					issueRepo.deleteIssue(issueToDelete);
-				} else {
-					throw new MyExcMessages("You do not own a Issue with given id !");
-				}
-			}break;
-		case "ROLE_CLIENT":
-			List<IssuesEntity> list2 = issueRepo.issuesOfClientByClient(user);
-			for (IssuesEntity ie : list2) {
-				if (ie.getIssueId() == id) {
-					
-					//LOGGING
-					logger.info("Client: {} , deleting issue: {}",user,issueToDelete);
-					
-					issueRepo.deleteIssue(issueToDelete);
-				} else {
-					throw new MyExcMessages("You do not own a Issue with given id !");
-				}
-			}break;
-		default:
-			throw new MyExcMessages("Please authneticate to proceed here !");
-		}
-	}
-
-	@Override
-	public IssuesEntity insertMyIssue(@Valid IssuesDtoForCreate issue) {
+	public IssuesDto insertMyIssue(@Valid IssuesForCreateDto issue) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		PropertyEntity property = propertyRepo.getPropertiesById(issue.getProperty());
 		if (tradeRepo.existTrade(user, property)) {
 			IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
 			issueToAdd.setClient(user);
-			issueToAdd.setResoulutionStatus(IssueStatusEnum.UNCHECKED);
+			issueToAdd.setResoulutionStatus(IssueStatus.UNCHECKED);
 			issueRepo.insertIssue(issueToAdd);
-			
-			//LOGGING
-			logger.info("Inserted new issue: {}",issueToAdd);
-			
-			return issueToAdd;
+
+			// LOGGING
+			logger.info("Inserted new issue: {}", issueToAdd);
+
+			return IssuesConverter.toDto(issueToAdd);
 		} else {
 			throw new MyExcMessages("There is no relation from you to this property!");
+		}
+	}
+
+	// UPDATE ISSUE BASED ON USER
+	@Override
+	public IssuesDto updateMyIssue(@Valid IssueForUpdateDto issue, int id) {
+		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		IssuesEntity issueToUpdate = issueRepo.getIssueById(id);
+		switch (user.getRole().getRoleName()) {
+		case OWNER:
+			List<IssuesEntity> ownerIssuesList = issueRepo.issuesOfOwnersByOwner(user);
+			for (IssuesEntity ie : ownerIssuesList) {
+				if (ie.getIssueId() == id) {
+					issueToUpdate.setCategory(issue.getCategory());
+					issueToUpdate.setResoulutionStatus(IssueStatus.valueOf(issue.getResoulutionStatus()));
+					issueToUpdate.setDescription(issue.getDescription());
+
+					// LOGGING
+					logger.info("Updating issue related to owner, issue: {}", issueToUpdate);
+
+					issueRepo.updateIssue(issueToUpdate);
+				} else {
+					throw new MyExcMessages("You do not own a Issue with given  id !");
+				}
+			}
+			break;
+		case CLIENT:
+			List<IssuesEntity> clientIssuesList = issueRepo.issuesOfClientByClient(user);
+			for (IssuesEntity ie : clientIssuesList) {
+				if (ie.getIssueId() == id) {
+					issueToUpdate.setCategory(issue.getCategory());
+					issueToUpdate.setResoulutionStatus(IssueStatus.valueOf(issue.getResoulutionStatus()));
+					issueToUpdate.setDescription(issue.getDescription());
+
+					// LOGGING
+					logger.info("Updating issue related to client, issue: {}", issueToUpdate);
+
+					issueRepo.updateIssue(issueToUpdate);
+				} else {
+					throw new MyExcMessages("You do not own a Issue with given  id !");
+				}
+			}
+			break;
+		default:
+			throw new MyExcMessages("Please authneticate to proceed here !");
+		}
+		return IssuesConverter.toDto(issueToUpdate);
+	}
+
+	//DELETE ISSUE
+	@Override
+	public void deleteMyIssue(int id) {
+		IssuesEntity issueToDelete = issueRepo.getIssueById(id);
+		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		switch (user.getRole().getRoleName()) {
+		case OWNER:
+			List<IssuesEntity> list = issueRepo.issuesOfOwnersByOwner(user);
+			for (IssuesEntity ie : list) {
+				if (ie.getIssueId() == id) {
+
+					// LOGGING
+					logger.info("Owner: {} , deleting issue: {}", user, issueToDelete);
+
+					issueRepo.deleteIssue(issueToDelete);
+				} else {
+					throw new MyExcMessages("You do not own a Issue with given id !");
+				}
+			}
+			break;
+		case CLIENT:
+			List<IssuesEntity> list2 = issueRepo.issuesOfClientByClient(user);
+			for (IssuesEntity ie : list2) {
+				if (ie.getIssueId() == id) {
+
+					// LOGGING
+					logger.info("Client: {} , deleting issue: {}", user, issueToDelete);
+
+					issueRepo.deleteIssue(issueToDelete);
+				} else {
+					throw new MyExcMessages("You do not own a Issue with given id !");
+				}
+			}
+			break;
+		default:
+			throw new MyExcMessages("Please authneticate to proceed here !");
 		}
 	}
 

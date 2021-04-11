@@ -2,7 +2,7 @@ package com.realestate.app.dto;
 
 import java.time.LocalDateTime;
 
-import com.realestate.app.entity.enums.IssueStatusEnum;
+import com.realestate.app.entity.enums.IssueStatus;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ public class IssuesDto {
 
 	private String category;
 
-	private IssueStatusEnum resoulutionStatus;
+	private IssueStatus resoulutionStatus;
 
 	private String description;
 

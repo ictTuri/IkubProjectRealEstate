@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import com.realestate.app.converter.PropertyTypeConverter;
 import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.entity.PropertyTypeEntity;
-import com.realestate.app.entity.enums.PropertyTypeNameEnum;
+import com.realestate.app.entity.enums.PropertyTypeName;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.TypeRepository;
+import com.realestate.app.repository.impl.TypeRepositoryImpl;
 import com.realestate.app.service.TypeService;
 
 @Service
@@ -23,65 +23,72 @@ public class TypeServiceImpl implements TypeService {
 
 	private static final Logger logger = LogManager.getLogger(TypeServiceImpl.class);
 	
-	TypeRepository typeRepo;
+	TypeRepositoryImpl typeRepo;
 
 	@Autowired
-	public TypeServiceImpl(TypeRepository typeRepo) {
+	public TypeServiceImpl(TypeRepositoryImpl typeRepo) {
 		super();
 		this.typeRepo = typeRepo;
 	}
 
+	//GET ALL PROPERTIES
 	@Override
-	public List<PropertyTypeEntity> allPropertyTypes() {
-		return typeRepo.getAllPropertyTypes();
+	public List<PropertyTypeDto> allPropertyTypes() {
+		return PropertyTypeConverter.toDto(typeRepo.getAllPropertyTypes());
 	}
 
+	// GET PROPERTY BY ID
 	@Override
-	public PropertyTypeEntity propertyTypeById(int id) {
+	public PropertyTypeDto propertyTypeById(int id) {
 		PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(id);
 		if (propertyType != null) {
 			
 			//LOGGING
 			logger.info("Showing property type by id, {}",propertyType);
 			
-			return propertyType;
+			return PropertyTypeConverter.toDto(propertyType);
 		} else {
 			throw new MyExcMessages("No such property type with given Id !");
 		}
 	}
 
+	// INSERT NEW PROPERTY TYPE
 	@Override
-	public PropertyTypeEntity addPropertyType(PropertyTypeDto propertyType) {
+	public PropertyTypeDto addPropertyType(PropertyTypeDto propertyType) {
+		propertyType.setPropertyTypeName(propertyType.getPropertyTypeName().toUpperCase());
 		PropertyTypeEntity propertyTypeToAdd = PropertyTypeConverter.toEntity(propertyType);
 		
 		//LOGGING
 		logger.info("Inserted new property type, {}",propertyTypeToAdd);
 		
 		typeRepo.insertPropertyType(propertyTypeToAdd);
-		return propertyTypeToAdd;
+		return PropertyTypeConverter.toDto(propertyTypeToAdd);
 	}
 
+	// UPDATE PROPERTY TYPE
 	@Override
-	public PropertyTypeEntity updatePropertyType(PropertyTypeDto propertyType, int id) {
+	public PropertyTypeDto updatePropertyType(PropertyTypeDto propertyType, int id) {
+		propertyType.setPropertyTypeName(propertyType.getPropertyTypeName().toUpperCase());
 		PropertyTypeEntity propertyToUpdate = typeRepo.getPropertyTypeById(id);
 		if (propertyToUpdate != null) {
-			if (typeRepo.existPropertyType(PropertyTypeNameEnum.valueOf(propertyType.getPropertyTypeName()), propertyType.getPropertyTypeDesc())) {
+			if (typeRepo.existPropertyType(PropertyTypeName.valueOf(propertyType.getPropertyTypeName()), propertyType.getPropertyTypeDesc())) {
 				throw new MyExcMessages("Property type already exist with name and desciption given");
 			} else {
-				propertyToUpdate.setPropertyTypeName(PropertyTypeNameEnum.valueOf(propertyType.getPropertyTypeName()));
+				propertyToUpdate.setPropertyTypeName(PropertyTypeName.valueOf(propertyType.getPropertyTypeName()));
 				propertyToUpdate.setPropertyTypeDesc(propertyType.getPropertyTypeDesc());
 				typeRepo.updatePropertyType(propertyToUpdate);
 				
 				//LOGGING
 				logger.info("Updated property type, {}",propertyToUpdate);
 				
-				return propertyToUpdate;
+				return PropertyTypeConverter.toDto(propertyToUpdate);
 			}
 		} else {
 			throw new MyExcMessages("No Property type with such Id / Please check again");
 		}
 	}
 
+	// DELETE PROPERTY TYPE
 	@Override
 	public void deletePropertyType(int id) {
 		PropertyTypeEntity propertyTypeToDelete = typeRepo.getPropertyTypeById(id);

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class TradeDtoForUpdate {
+public class TradeForUpdateDto {
 
 	private LocalDateTime endTradeDate;
 

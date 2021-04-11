@@ -1,7 +1,7 @@
 package com.realestate.app.dto;
 
-import com.realestate.app.entity.enums.PropertyCategoryEnum;
-import com.realestate.app.entity.enums.PropertyTypeNameEnum;
+import com.realestate.app.entity.enums.PropertyCategory;
+import com.realestate.app.entity.enums.PropertyTypeName;
 
 import lombok.Data;
 
@@ -14,9 +14,9 @@ public class PropertyDto {
 
 	private int sellingPrice;
 
-	private PropertyCategoryEnum category;
+	private PropertyCategory category;
 
-	private PropertyTypeNameEnum propertyType;
+	private PropertyTypeName propertyType;
 	
 	private String location;
 	

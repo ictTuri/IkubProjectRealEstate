@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.TradeConverter;
 import com.realestate.app.dto.TradeDto;
-import com.realestate.app.dto.TradeDtoForCreate;
-import com.realestate.app.dto.TradeDtoForUpdate;
+import com.realestate.app.dto.TradeForCreateDto;
+import com.realestate.app.dto.TradeForUpdateDto;
 import com.realestate.app.service.TradeService;
 
 @RestController
@@ -43,14 +41,14 @@ public class TradeController {
 	@GetMapping("/trades")
 	public ResponseEntity<List<TradeDto>> showAllTrades() {
 		// show all trades on database
-		return new ResponseEntity<>(TradeConverter.toDto(tradeService.allTrades()), HttpStatus.OK);
+		return new ResponseEntity<>(tradeService.allTrades(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/trades/{id}")
 	public ResponseEntity<TradeDto> showTradeById(@PathVariable("id") int id) {
 		// show trades by id
-		return new ResponseEntity<>(TradeConverter.toDto(tradeService.tradesById(id)), HttpStatus.FOUND);
+		return new ResponseEntity<>(tradeService.tradesById(id), HttpStatus.FOUND);
 	}
 
 	// -----------------------------
@@ -59,10 +57,9 @@ public class TradeController {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/trades")
-	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeDtoForCreate trade) {
+	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeForCreateDto trade) {
 		// return the added trade formated by converter
-		trade.setTradeType(trade.getTradeType().toUpperCase());
-		return new ResponseEntity<>(TradeConverter.toDto(tradeService.addTrade(trade)), HttpStatus.CREATED);
+		return new ResponseEntity<>(tradeService.addTrade(trade), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -71,11 +68,10 @@ public class TradeController {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/trades/{id}")
-	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeDtoForUpdate trade,
+	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeForUpdateDto trade,
 			@PathVariable("id") int id) {
 		// return the updated trade if process complete
-		trade.setTradeType(trade.getTradeType().toUpperCase());
-		return new ResponseEntity<>(TradeConverter.toDto(tradeService.updateTrade(trade, id)), HttpStatus.OK);
+		return new ResponseEntity<>(tradeService.updateTrade(trade, id), HttpStatus.OK);
 	}
 
 	// -----------------------------
@@ -84,10 +80,10 @@ public class TradeController {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/trades/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteTrade(@PathVariable("id") int id) {
+	public ResponseEntity<Void> deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		tradeService.deleteTrade(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

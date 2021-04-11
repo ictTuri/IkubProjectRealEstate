@@ -10,35 +10,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.UserConverter;
-import com.realestate.app.dto.UserDto;
-import com.realestate.app.dto.UserDtoForCreate;
-import com.realestate.app.service.UserService;
+import com.realestate.app.dto.UserRegisterDto;
+import com.realestate.app.service.UserProfileService;
 
 @RestController
 @RequestMapping("/api")
 public class RegisterController {
 
-	UserService userService;
+	UserProfileService userProfileService;
 	
 	@Autowired
-	public RegisterController(UserService userService) {
+	public RegisterController(UserProfileService userProfileService) {
 		super();
-		this.userService = userService;
+		this.userProfileService = userProfileService;
 	}
 
-
-	@PostMapping("/register/client")
-	public ResponseEntity<UserDto> addClient(@Valid @RequestBody UserDtoForCreate user) {
+	@PostMapping("/register/user")
+	public ResponseEntity<UserRegisterDto> addClient(@Valid @RequestBody UserRegisterDto user) {
 		// return the added user formated by converter
-		user.setRole(3);
-		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
-	}
-	@PostMapping("/register/owner")
-	public ResponseEntity<UserDto> addOwner(@Valid @RequestBody UserDtoForCreate user) {
-		// return the added user formated by converter
-		user.setRole(2);
-		return new ResponseEntity<>(UserConverter.toDto(userService.addUser(user)), HttpStatus.CREATED);
+		return new ResponseEntity<>(userProfileService.addUser(user), HttpStatus.CREATED);
 	}
 	
 }

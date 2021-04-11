@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.realestate.app.dto.IssuesDto;
-import com.realestate.app.dto.IssuesDtoForCreate;
+import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.UserEntity;
@@ -41,7 +41,7 @@ public class IssuesConverter {
 		return issueToReturn;
 	}
 	
-	public static IssuesEntity toEntityForCreate(IssuesDtoForCreate dto, UserEntity client, PropertyEntity property) {
+	public static IssuesEntity toEntityForCreate(IssuesForCreateDto dto, UserEntity client, PropertyEntity property) {
 		IssuesEntity toReturn=new IssuesEntity();
 		toReturn.setCategory(dto.getCategory());
 		toReturn.setClient(client);

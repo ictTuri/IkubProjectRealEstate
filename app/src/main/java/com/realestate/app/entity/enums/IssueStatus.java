@@ -1,6 +1,6 @@
 package com.realestate.app.entity.enums;
 
-public enum IssueStatusEnum {
+public enum IssueStatus {
 	UNCHECKED,
 	REVIEWED,
 	ON_PROGRESS,

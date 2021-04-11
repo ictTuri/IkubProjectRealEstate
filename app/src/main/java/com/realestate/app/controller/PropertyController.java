@@ -1,6 +1,5 @@
 package com.realestate.app.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,11 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.converter.FullPropertyConverter;
-import com.realestate.app.converter.UserConverter;
 import com.realestate.app.dto.FullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.dto.UserDto;
@@ -42,7 +38,7 @@ public class PropertyController {
 		this.propertyService = propertyService;
 	}
 
-	private static final Logger logger = LogManager.getLogger(UserController.class);
+	private static final Logger logger = LogManager.getLogger(PropertyController.class);
 	
 	// -----------------------------
 	// GET ROUTES STARTS HERE
@@ -53,24 +49,25 @@ public class PropertyController {
 			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
 		
 		// show all properties on database
-		List<PropertyDto> toReturn = new ArrayList<>();
 		PropertyFilter filter = new PropertyFilter(category, min, max, sortBy, order);
-		propertyService.getAllProperties(filter).forEach(entity -> toReturn.add(FullPropertyConverter.singleToDto(entity)));
+		
+		//LOGGING
 		logger.info("Getting all properties filtering by filter: {}", filter);
-		return new ResponseEntity<>(toReturn, HttpStatus.OK);
+		
+		return new ResponseEntity<>(propertyService.getAllProperties(filter), HttpStatus.OK);
 	}
 
 	@GetMapping("/properties/{id}")
 	public ResponseEntity<PropertyDto> showPropertyById(@PathVariable("id") int id) {
 		// show property by id
-		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.propertyById(id)), HttpStatus.FOUND);
+		return new ResponseEntity<>(propertyService.propertyById(id), HttpStatus.FOUND);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/properties/{id}/owner")
 	public ResponseEntity<UserDto> showPropertyOwner(@PathVariable("id") int id) {
 		// show property by id
-		return new ResponseEntity<>(UserConverter.toDto(propertyService.propertyOwner(id)), HttpStatus.FOUND);
+		return new ResponseEntity<>(propertyService.propertyOwner(id), HttpStatus.FOUND);
 	}
 
 	// -----------------------------
@@ -80,8 +77,7 @@ public class PropertyController {
 	@PostMapping("/properties")
 	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
 		// return the added property formated by converter
-		property.setCategory(property.getCategory().toUpperCase());
-		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.addProperty(property)), HttpStatus.CREATED);
+		return new ResponseEntity<>(propertyService.addProperty(property), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -91,9 +87,8 @@ public class PropertyController {
 	@PutMapping("/properties/{id}")
 	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
 			@PathVariable("id") int id) {
-		property.setCategory(property.getCategory().toUpperCase());
-		return new ResponseEntity<>(FullPropertyConverter.singleToDto(propertyService.updateProperty(property, id)),
-				HttpStatus.CREATED);
+		// return the updated property 
+		return new ResponseEntity<>(propertyService.updateProperty(property, id),HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -101,9 +96,10 @@ public class PropertyController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/properties/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteProperty(@PathVariable("id") int id) {
+	public ResponseEntity<Void> deleteProperty(@PathVariable("id") int id) {
+		// delete property by id
 		propertyService.deleteProperty(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
