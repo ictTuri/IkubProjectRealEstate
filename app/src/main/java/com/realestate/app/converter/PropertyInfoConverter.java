@@ -10,7 +10,6 @@ public class PropertyInfoConverter {
 	
 	public static PropertyInfoDto toDto(PropertyInfoEntity propertyInfo) {
 		PropertyInfoDto propertyInfoToReturn = new PropertyInfoDto();
-		propertyInfoToReturn.setPropertyInfoId(propertyInfo.getPropertyInfoId());
 		propertyInfoToReturn.setHasGarage(propertyInfo.isHasGarage());
 		propertyInfoToReturn.setHasElevator(propertyInfo.isHasElevator());
 		propertyInfoToReturn.setHasPool(propertyInfo.isHasPool());
@@ -18,7 +17,6 @@ public class PropertyInfoConverter {
 		propertyInfoToReturn.setArea(propertyInfo.getArea());
 		propertyInfoToReturn.setNrBathrooms(propertyInfo.getNrBathrooms());
 		propertyInfoToReturn.setNrBedrooms(propertyInfo.getNrBedrooms());
-		propertyInfoToReturn.setVersion(propertyInfo.getVersion());
 		return propertyInfoToReturn;
 	}
 

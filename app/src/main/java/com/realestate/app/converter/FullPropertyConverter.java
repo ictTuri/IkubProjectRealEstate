@@ -10,7 +10,7 @@ import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.PropertyCategory;
 
 public class FullPropertyConverter {
-	
+
 	private FullPropertyConverter() {
 	}
 
@@ -22,16 +22,12 @@ public class FullPropertyConverter {
 		propertyToReturn.setCategory(property.getCategory().toString());
 		propertyToReturn.setPropertyType(property.getPropertyType().getPropertyTypeId());
 		propertyToReturn.setLocation(property.getPropertyLocation().getLocationId());
-		propertyToReturn.setHasGarage(propertyInfo.isHasGarage());
-		propertyToReturn.setHasElevator(propertyInfo.isHasElevator());
-		propertyToReturn.setHasPool(propertyInfo.isHasPool());
-		propertyToReturn.setFloorNumber(propertyInfo.getFloorNumber());
-		propertyToReturn.setNrBathrooms(propertyInfo.getNrBathrooms());
-		propertyToReturn.setNrBedrooms(propertyInfo.getNrBedrooms());
-		propertyToReturn.setArea(propertyInfo.getArea());
+		propertyToReturn.setPropertyInfo(propertyInfo.isHasGarage(), propertyInfo.isHasElevator(),
+				propertyInfo.isHasPool(), propertyInfo.getArea(), propertyInfo.getNrBathrooms(),
+				propertyInfo.getNrBedrooms(), propertyInfo.getFloorNumber());
 		return propertyToReturn;
 	}
-	
+
 	public static PropertyDto singleToDto(PropertyEntity property) {
 		PropertyDto propertyToReturn = new PropertyDto();
 		propertyToReturn.setDescription(property.getDescription());
@@ -43,7 +39,7 @@ public class FullPropertyConverter {
 		propertyToReturn.setPropertyInfo(PropertyInfoConverter.toDto(property.getPropertyInfo()));
 		return propertyToReturn;
 	}
-	
+
 	public static PropertyEntity toEntityForCreate(FullPropertyDto dto, UserEntity owner,
 			PropertyTypeEntity propertyType, LocationEntity location, PropertyInfoEntity propertyInfo) {
 		PropertyEntity toReturn = new PropertyEntity();
@@ -58,16 +54,16 @@ public class FullPropertyConverter {
 		toReturn.setPropertyInfo(propertyInfo);
 		return toReturn;
 	}
-	
+
 	public static PropertyInfoEntity toInfoEntityForCreate(FullPropertyDto propertyInfo) {
 		PropertyInfoEntity propertyInfoToReturn = new PropertyInfoEntity();
-		propertyInfoToReturn.setHasGarage(propertyInfo.isHasGarage());
-		propertyInfoToReturn.setHasElevator(propertyInfo.isHasElevator());
-		propertyInfoToReturn.setHasPool(propertyInfo.isHasPool());
-		propertyInfoToReturn.setFloorNumber(propertyInfo.getFloorNumber());
-		propertyInfoToReturn.setArea(propertyInfo.getArea());
-		propertyInfoToReturn.setNrBathrooms(propertyInfo.getNrBathrooms());
-		propertyInfoToReturn.setNrBedrooms(propertyInfo.getNrBedrooms());
+		propertyInfoToReturn.setHasGarage(propertyInfo.getPropertyInfo().isHasGarage());
+		propertyInfoToReturn.setHasElevator(propertyInfo.getPropertyInfo().isHasElevator());
+		propertyInfoToReturn.setHasPool(propertyInfo.getPropertyInfo().isHasPool());
+		propertyInfoToReturn.setFloorNumber(propertyInfo.getPropertyInfo().getFloorNumber());
+		propertyInfoToReturn.setArea(propertyInfo.getPropertyInfo().getArea());
+		propertyInfoToReturn.setNrBathrooms(propertyInfo.getPropertyInfo().getNrBathrooms());
+		propertyInfoToReturn.setNrBedrooms(propertyInfo.getPropertyInfo().getNrBedrooms());
 		return propertyInfoToReturn;
 	}
 }

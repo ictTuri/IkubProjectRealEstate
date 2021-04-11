@@ -140,13 +140,13 @@ public class PropertyServiceImpl implements PropertyService {
 			RoleEntity role = userRepo.getRoleById(2);
 			if (userRepo.existUserById(property.getOwner(), role)) {
 				if (locationRepo.existLocation(property.getLocation())) {
-					propertyInfoToUpdate.setHasGarage(property.isHasGarage());
-					propertyInfoToUpdate.setHasElevator(property.isHasElevator());
-					propertyInfoToUpdate.setHasPool(property.isHasPool());
-					propertyInfoToUpdate.setArea(property.getArea());
-					propertyInfoToUpdate.setFloorNumber(property.getFloorNumber());
-					propertyInfoToUpdate.setNrBathrooms(property.getNrBathrooms());
-					propertyInfoToUpdate.setNrBedrooms(property.getNrBedrooms());
+					propertyInfoToUpdate.setHasGarage(property.getPropertyInfo().isHasGarage());
+					propertyInfoToUpdate.setHasElevator(property.getPropertyInfo().isHasElevator());
+					propertyInfoToUpdate.setHasPool(property.getPropertyInfo().isHasPool());
+					propertyInfoToUpdate.setArea(property.getPropertyInfo().getArea());
+					propertyInfoToUpdate.setFloorNumber(property.getPropertyInfo().getFloorNumber());
+					propertyInfoToUpdate.setNrBathrooms(property.getPropertyInfo().getNrBathrooms());
+					propertyInfoToUpdate.setNrBedrooms(property.getPropertyInfo().getNrBedrooms());
 					infoRepo.updatePropertyInfo(propertyInfoToUpdate);
 					propertyToUpdate.setCategory(PropertyCategory.valueOf(property.getCategory()));
 					propertyToUpdate.setDescription(property.getDescription());
