@@ -20,7 +20,7 @@ import com.realestate.app.filter.PropertyFilter;
 import com.realestate.app.repository.PropertyRepository;
 
 @Repository
-public class PropertyRepositoryImpl implements PropertyRepository{
+public class PropertyRepositoryImpl implements PropertyRepository {
 	EntityManager em;
 	LocationRepositoryImpl locRepo;
 
@@ -43,18 +43,18 @@ public class PropertyRepositoryImpl implements PropertyRepository{
 	@Override
 	public List<PropertyEntity> getAllProperties(PropertyFilter filter) {
 		// Starting query
-		String queryString = "SELECT prop from PropertyEntity prop where 1=1 ";
+		String queryString = "SELECT pe from PropertyEntity pe where 1=1 ";
 
 		// Creating query string for all filtrabl
 		queryString = extractedFilterCheck(filter, queryString);
 
 		// setting sort field
 		if (filter.getSortBy() != null && !filter.getSortBy().isEmpty()) {
-			if (filter.getSortBy().equals("category") || filter.getSortBy().equals("location")
+			if (filter.getSortBy().equals("category") || filter.getSortBy().equals("propertyLocation")
 					|| filter.getSortBy().equals("sellingPrice") || filter.getSortBy().equals("rentingPrice")) {
-				queryString = queryString + " order by prop." + filter.getSortBy();
+				queryString = queryString + " order by pe." + filter.getSortBy();
 			} else {
-				throw new MyExcMessages("Sort by must be category, location, sellingPrice or RentingPrice");
+				throw new MyExcMessages("Sort by must be category, propertyLocation, sellingPrice or RentingPrice");
 			}
 		}
 		// setting order
@@ -73,17 +73,19 @@ public class PropertyRepositoryImpl implements PropertyRepository{
 	// Extracted
 	private String extractedFilterCheck(PropertyFilter filter, String queryString) {
 		if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
-			queryString = queryString + " and prop.category = :category ";
+			queryString = queryString + " and pe.category = :category ";
 		}
-		if (filter.getMinPrice() != null) {
-			queryString = queryString + " and ( prop.rentingPrice > :minone OR prop.sellingPrice > :mintwo ) ";
+		if (filter.getCity() != null && !filter.getCity().isEmpty()) {
+			queryString = queryString + " and pe.propertyLocation.cityName = :city ";
 		}
-		if (filter.getMaxPrice() != null && filter.getMinPrice() != null
-				&& filter.getMaxPrice() > filter.getMinPrice()) {
-			queryString = queryString + " and ( prop.rentingPrice < :maxone OR prop.sellingPrice < :maxtwo ) ";
-		} else {
-			if (filter.getMaxPrice() != null && filter.getMinPrice() == null) {
-				queryString = queryString + " and ( prop.rentingPrice < :maxone OR prop.sellingPrice < :maxtwo ) ";
+		if (filter.getMinPrice() != null ) {
+			queryString = queryString + " and ( pe.rentingPrice > :minone OR pe.sellingPrice > :mintwo ) ";
+		}
+		if (filter.getMaxPrice() != null && filter.getMinPrice() != null && filter.getMaxPrice() > filter.getMinPrice()) {
+			queryString = queryString + " and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ";
+		}else {
+			if(filter.getMaxPrice() != null && filter.getMinPrice() == null) {
+				queryString = queryString + " and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ";
 			}
 		}
 		return queryString;
@@ -97,18 +99,23 @@ public class PropertyRepositoryImpl implements PropertyRepository{
 		if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
 			query.setParameter("category", PropertyCategory.valueOf(filter.getCategory()));
 		}
+		if (filter.getCity() != null && !filter.getCity().isEmpty()) {
+			query.setParameter("city", filter.getCity());
+		}
 		if (filter.getMinPrice() != null) {
 			query.setParameter("minone", filter.getMinPrice()).setParameter("mintwo", filter.getMinPrice());
 		}
-		if (filter.getMaxPrice() != null && filter.getMinPrice() != null
-				&& filter.getMaxPrice() > filter.getMinPrice()) {
+		if (filter.getMaxPrice() != null && filter.getMinPrice() != null && filter.getMaxPrice() > filter.getMinPrice()) {
 			query.setParameter("maxone", filter.getMaxPrice()).setParameter("maxtwo", filter.getMaxPrice());
-		} else {
-			if (filter.getMaxPrice() != null && filter.getMinPrice() == null) {
+		}else {
+			if(filter.getMaxPrice() != null && filter.getMinPrice() == null) {
 				query.setParameter("maxone", filter.getMaxPrice()).setParameter("maxtwo", filter.getMaxPrice());
 			}
 		}
+	
+
 		return query.getResultList();
+
 	}
 
 	// Get Property by id
