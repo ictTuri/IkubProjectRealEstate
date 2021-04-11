@@ -1,6 +1,5 @@
 package com.realestate.app.dto;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -28,28 +27,10 @@ public class FullPropertyDto {
 
 	@NotNull(message = "Property Location Id is mandatory !")
 	private int location;
-	
-	private PropertyInfoDto propertyInfoDto;
 
-	private boolean hasGarage;
+	private PropertyInfoDto propertyInfo;
 
-	private boolean hasElevator;
-
-	private boolean hasPool;
-	
-	@NotNull(message = "Floor number is mandatory")
-	@Min(value = -10, message = "Minimum value for floor numbers is minus 10 !")
-	private int floorNumber;
-	
-	@NotNull(message = "Number of Bathrooms is mandatory")
-	@Min(value = 0, message = "Minimum value for bathroom numbers is zero !")
-	private int nrBathrooms;
-
-	@NotNull(message = "Number of Bedrooms is mandatory")
-	@Min(value = 0, message = "Minimum value for bedroom numbers is zero !")
-	private int nrBedrooms;
-
-	@NotNull(message = "Area is mandatory")
-	@Min(value = 25, message = "Minimum value for area is twenty-five !")
-	private int area;
+	public void setPropertyInfo(boolean hasGarage, boolean hasElevator, boolean hasPool, Integer area,
+			Integer nrBathrooms, Integer nrBedrooms, Integer floorNumber) {
+	}
 }
