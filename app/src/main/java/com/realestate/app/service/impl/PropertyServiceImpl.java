@@ -69,6 +69,7 @@ public class PropertyServiceImpl implements PropertyService {
 		//LOGGING
 		logger.info("Filtring Properties with filter {}", filter);
 		
+		filter.setCategory(filter.getCategory().toUpperCase());
 		List<PropertyDto> toReturn= new ArrayList<>();
 		propertyRepo.getAllProperties(filter).forEach(entity -> toReturn.add(FullPropertyConverter.singleToDto(entity)));
 		return toReturn;

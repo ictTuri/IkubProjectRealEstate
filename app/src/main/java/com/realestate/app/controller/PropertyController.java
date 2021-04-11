@@ -46,10 +46,11 @@ public class PropertyController {
 	@GetMapping("/properties")
 	public ResponseEntity<List<PropertyDto>> showAllProperties(@RequestParam(required = false) String category,
 			@RequestParam(required = false) Integer min, @RequestParam(required = false) Integer max,
+			 @RequestParam(required = false) String city,
 			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
 		
 		// show all properties on database
-		PropertyFilter filter = new PropertyFilter(category, min, max, sortBy, order);
+		PropertyFilter filter = new PropertyFilter(category, min, max, city, sortBy, order);
 		
 		//LOGGING
 		logger.info("Getting all properties filtering by filter: {}", filter);
