@@ -1,6 +1,5 @@
 package com.realestate.app.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -107,7 +106,6 @@ public class TradeServiceImpl implements TradeService {
 		if (tradeToUpdate != null) {
 			tradeToUpdate.setTradeType(TradeType.valueOf(trade.getTradeType()));
 			tradeToUpdate.setPaymentType(trade.getPaymentType());
-			trade.setEndTradeDate(LocalDateTime.now());
 			tradeRepo.updateTrade(tradeToUpdate);
 			
 			//LOGGING
