@@ -23,13 +23,13 @@ import com.realestate.app.service.LocationService;
 @RestController
 @RequestMapping("/api/v1")
 public class LocationController {
-	
-	LocationService propertyService;
-	
+
+	LocationService locationService;
+
 	@Autowired
-	public LocationController(LocationService propertyService) {
+	public LocationController(LocationService locationService) {
 		super();
-		this.propertyService = propertyService;
+		this.locationService = locationService;
 	}
 
 	// -----------------------------
@@ -39,14 +39,14 @@ public class LocationController {
 	@GetMapping("/locations")
 	public ResponseEntity<List<LocationDto>> showAllLocations() {
 		// show all locations on database
-		return new ResponseEntity<>(propertyService.allLocations(), HttpStatus.OK);
+		return new ResponseEntity<>(locationService.allLocations(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
+	//@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
 	@GetMapping("/locations/{id}")
 	public ResponseEntity<LocationDto> showLocationById(@PathVariable("id") int id) {
 		// show location by id
-		return new ResponseEntity<>(propertyService.locationById(id), HttpStatus.FOUND);
+		return new ResponseEntity<>(locationService.locationById(id), HttpStatus.FOUND);
 	}
 
 	// -----------------------------
@@ -56,9 +56,9 @@ public class LocationController {
 	@PostMapping("/locations")
 	public ResponseEntity<LocationDto> addLocation(@Valid @RequestBody LocationDto location) {
 		// return the added location formated by converter
-		return new ResponseEntity<>(propertyService.addLocation(location), HttpStatus.CREATED);
+		return new ResponseEntity<>(locationService.addLocation(location), HttpStatus.CREATED);
 	}
-	
+
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
@@ -66,7 +66,7 @@ public class LocationController {
 	@PutMapping("/locations/{id}")
 	public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody LocationDto location,
 			@PathVariable("id") int id) {
-		return new ResponseEntity<>(propertyService.updateLocation(location, id),HttpStatus.CREATED);
+		return new ResponseEntity<>(locationService.updateLocation(location, id), HttpStatus.CREATED);
 	}
 
 	// -----------------------------
@@ -75,7 +75,7 @@ public class LocationController {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/locations/{id}")
 	public ResponseEntity<Void> deleteLocation(@PathVariable("id") int id) {
-		propertyService.deleteLocation(id);
+		locationService.deleteLocation(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

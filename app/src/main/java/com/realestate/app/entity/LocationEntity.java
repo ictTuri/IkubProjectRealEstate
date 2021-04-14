@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "LOCATIONS")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class LocationEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

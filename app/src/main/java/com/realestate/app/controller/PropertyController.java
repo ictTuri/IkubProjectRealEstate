@@ -64,7 +64,6 @@ public class PropertyController {
 		return new ResponseEntity<>(propertyService.propertyById(id), HttpStatus.FOUND);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/properties/{id}/owner")
 	public ResponseEntity<UserDto> showPropertyOwner(@PathVariable("id") int id) {
 		// show property by id
