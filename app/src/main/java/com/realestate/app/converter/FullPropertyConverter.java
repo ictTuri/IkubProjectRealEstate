@@ -1,7 +1,9 @@
 package com.realestate.app.converter;
 
+import com.realestate.app.dto.AdminFullPropertyDto;
 import com.realestate.app.dto.FullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
+import com.realestate.app.dto.PropertyInfoDto;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
@@ -65,5 +67,33 @@ public class FullPropertyConverter {
 		propertyInfoToReturn.setNrBathrooms(propertyInfo.getPropertyInfo().getNrBathrooms());
 		propertyInfoToReturn.setNrBedrooms(propertyInfo.getPropertyInfo().getNrBedrooms());
 		return propertyInfoToReturn;
+	}
+
+
+	public static PropertyInfoEntity adminPropertyToInfoEntity(PropertyInfoDto propertyInfo) {
+		PropertyInfoEntity propertyInfoToReturn = new PropertyInfoEntity();
+		propertyInfoToReturn.setHasGarage(propertyInfo.isHasGarage());
+		propertyInfoToReturn.setHasElevator(propertyInfo.isHasElevator());
+		propertyInfoToReturn.setHasPool(propertyInfo.isHasPool());
+		propertyInfoToReturn.setFloorNumber(propertyInfo.getFloorNumber());
+		propertyInfoToReturn.setArea(propertyInfo.getArea());
+		propertyInfoToReturn.setNrBathrooms(propertyInfo.getNrBathrooms());
+		propertyInfoToReturn.setNrBedrooms(propertyInfo.getNrBedrooms());
+		return propertyInfoToReturn;
+	}
+
+	public static PropertyEntity adminPropertyEntityForCreate(AdminFullPropertyDto property, UserEntity owner,
+			PropertyTypeEntity propertyType, LocationEntity location, PropertyInfoEntity propertyInfo) {
+		PropertyEntity toReturn = new PropertyEntity();
+		toReturn.setPropertiesId(null);
+		toReturn.setOwner(owner);
+		toReturn.setDescription(property.getDescription());
+		toReturn.setRentingPrice(property.getRentingPrice());
+		toReturn.setSellingPrice(property.getSellingPrice());
+		toReturn.setCategory(PropertyCategory.valueOf(property.getCategory()));
+		toReturn.setPropertyType(propertyType);
+		toReturn.setPropertyLocation(location);
+		toReturn.setPropertyInfo(propertyInfo);
+		return toReturn;
 	}
 }

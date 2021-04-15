@@ -20,7 +20,6 @@ import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.PropertyInfoEntity;
 import com.realestate.app.entity.PropertyTypeEntity;
-import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.PropertyCategory;
 import com.realestate.app.exceptions.MyExcMessages;
@@ -114,8 +113,7 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 				if (propertyToUpdate != null) {
 					PropertyInfoEntity propertyInfoToUpdate = infoRepo
 							.getPropertyInfoById(propertyToUpdate.getPropertyInfo().getPropertyInfoId());
-					RoleEntity role = userRepo.getRoleById(2);
-					return extractedUpdateProcedure(property,user, propertyToUpdate, propertyInfoToUpdate, role);
+					return extractedUpdateProcedure(property,user, propertyToUpdate, propertyInfoToUpdate);
 				} else {
 					throw new MyExcMessages("No Property with such Id / Please check again");
 				}
@@ -127,8 +125,8 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 	}
 
 	private PropertyDto extractedUpdateProcedure(FullPropertyDto property,UserEntity user, PropertyEntity propertyToUpdate,
-			PropertyInfoEntity propertyInfoToUpdate, RoleEntity role) {
-		if (userRepo.existUserById(property.getOwner(), role)) {
+			PropertyInfoEntity propertyInfoToUpdate) {
+		
 			if (locationRepo.existLocation(property.getLocation())) {
 				propertyInfoToUpdate.setHasGarage(property.getPropertyInfo().isHasGarage());
 				propertyInfoToUpdate.setHasElevator(property.getPropertyInfo().isHasElevator());
@@ -158,9 +156,6 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 			} else {
 				throw new MyExcMessages("Updated Location does not exist !");
 			}
-		} else {
-			throw new MyExcMessages("Updated Owner does not exist !");
-		}
 	}
 
 	@Override

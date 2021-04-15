@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,6 @@ import com.realestate.app.entity.UserEntity;
 import com.realestate.app.repository.IssueRepository;
 
 @Repository
-@Transactional
 public class IssueRepositoryImpl implements IssueRepository {
 	EntityManager em;
 

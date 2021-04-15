@@ -23,7 +23,7 @@ import com.realestate.app.dto.TradeForUpdateDto;
 import com.realestate.app.service.UserTradeService;
 
 @RestController
-@RequestMapping("/api/v1/trade")
+@RequestMapping("/api/v1/trade/mytrades")
 public class UserTradeController {
 
 	UserTradeService userTradeService;
@@ -38,7 +38,7 @@ public class UserTradeController {
 	// GET ROUTES TO RETRIEVE TRADES
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN','OWNER','CLIENT')")
-	@GetMapping("/mytrades")
+	@GetMapping()
 	public ResponseEntity<List<TradeDto>> showMyTrades() {
 		// show all trades on database for logged in user
 		return new ResponseEntity<>(userTradeService.allMyTrades(), HttpStatus.OK);
@@ -48,7 +48,7 @@ public class UserTradeController {
 	// POST ROUTES TO CREATE TRADE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@PostMapping("/mytrades")
+	@PostMapping()
 	public ResponseEntity<TradeDto> insertMyTradeByOwner(@Valid @RequestBody TradeForCreateDto trade) {
 		//Insert trade only by owner
 		return new ResponseEntity<>(userTradeService.insertMyTrade(trade), HttpStatus.OK);
@@ -58,7 +58,7 @@ public class UserTradeController {
 	// PUT ROUTES TO UPDATE TRADE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@PutMapping("/mytrades/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<TradeDto> updateMyTradeById(@Valid @RequestBody TradeForUpdateDto trade,
 			@PathVariable int id) {
 		//Update trades based on role
@@ -69,7 +69,7 @@ public class UserTradeController {
 	// DELETE ROUTES TO DELETE TRADE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@DeleteMapping("/mytrades/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		userTradeService.deleteTrade(id);

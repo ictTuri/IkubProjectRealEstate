@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.dto.FullPropertyDto;
+import com.realestate.app.dto.AdminFullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.dto.UserDto;
 import com.realestate.app.filter.PropertyFilter;
 import com.realestate.app.service.PropertyService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/properties")
 public class PropertyController {
 
 	PropertyService propertyService;
@@ -43,7 +43,7 @@ public class PropertyController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
-	@GetMapping("/properties")
+	@GetMapping()
 	public ResponseEntity<List<PropertyDto>> showAllProperties(@RequestParam(required = false) String category,
 			@RequestParam(required = false) Integer min, @RequestParam(required = false) Integer max,
 			 @RequestParam(required = false) String city,
@@ -58,13 +58,13 @@ public class PropertyController {
 		return new ResponseEntity<>(propertyService.getAllProperties(filter), HttpStatus.OK);
 	}
 
-	@GetMapping("/properties/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<PropertyDto> showPropertyById(@PathVariable("id") int id) {
 		// show property by id
 		return new ResponseEntity<>(propertyService.propertyById(id), HttpStatus.FOUND);
 	}
 
-	@GetMapping("/properties/{id}/owner")
+	@GetMapping("/{id}/owner")
 	public ResponseEntity<UserDto> showPropertyOwner(@PathVariable("id") int id) {
 		// show property by id
 		return new ResponseEntity<>(propertyService.propertyOwner(id), HttpStatus.FOUND);
@@ -73,9 +73,9 @@ public class PropertyController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PostMapping("/properties")
-	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping()
+	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody AdminFullPropertyDto property) {
 		// return the added property formated by converter
 		return new ResponseEntity<>(propertyService.addProperty(property), HttpStatus.CREATED);
 	}
@@ -84,8 +84,8 @@ public class PropertyController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PutMapping("/properties/{id}")
-	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
+	@PutMapping("/{id}")
+	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody AdminFullPropertyDto property,
 			@PathVariable("id") int id) {
 		// return the updated property 
 		return new ResponseEntity<>(propertyService.updateProperty(property, id),HttpStatus.CREATED);
@@ -95,7 +95,7 @@ public class PropertyController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping("/properties/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProperty(@PathVariable("id") int id) {
 		// delete property by id
 		propertyService.deleteProperty(id);

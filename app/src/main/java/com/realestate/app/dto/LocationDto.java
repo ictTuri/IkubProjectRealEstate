@@ -27,6 +27,4 @@ public class LocationDto {
 
 	@NotBlank(message = "Description is mandatory")
 	private String description;
-
-	private int version;
 }

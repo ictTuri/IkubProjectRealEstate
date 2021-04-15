@@ -26,7 +26,7 @@ import com.realestate.app.filter.UserFilter;
 import com.realestate.app.service.UserService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
 	UserService userService;
@@ -43,7 +43,7 @@ public class UserController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/users")
+	@GetMapping()
 	public ResponseEntity<List<UserDto>> showAllUsers(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String lastName, @RequestParam(required = false) String username,
 			@RequestParam(required = false) String sortBy, @RequestParam(required = false) String order) {
@@ -58,7 +58,7 @@ public class UserController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> showUserById(@PathVariable("id") int id) {
 		// show user by id
 		return new ResponseEntity<>(userService.userById(id), HttpStatus.FOUND);
@@ -68,7 +68,7 @@ public class UserController {
 	// POST ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/users")
+	@PostMapping()
 	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserForCreateDto user) {
 		// return the added user formated by converter
 		return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
@@ -78,7 +78,7 @@ public class UserController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("/users/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserForCreateDto user, @PathVariable("id") int id) {
 		// return the updated user
 		return new ResponseEntity<>(userService.updateUser(user, id), HttpStatus.CREATED);
@@ -88,7 +88,7 @@ public class UserController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -33,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository{
 	private static final String CHECK_EMAIL_EXIST = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
 	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username =?1 and u.active = true";
 	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username";
-	private static final String CHECK_IF_CLIENT = "FROM UserEntity u WHERE u.userId = :id and u.role = :role";
+	private static final String CHECK_IF_CLIENT = "SELECT u FROM UserEntity u WHERE u.username = :username and u.role = :role";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	@Override
@@ -203,8 +203,8 @@ public class UserRepositoryImpl implements UserRepository{
 	}
 
 	@Override
-	public boolean isClient(int id, RoleEntity role) {
-		TypedQuery<UserEntity> query = em.createQuery(CHECK_IF_CLIENT, UserEntity.class).setParameter("id", id)
+	public boolean isClient(String username, RoleEntity role) {
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_IF_CLIENT, UserEntity.class).setParameter(USERNAME, username)
 				.setParameter("role", role);
 		try {
 			return query.getSingleResult() != null;

@@ -22,7 +22,7 @@ import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.service.UserPropertyService;
 
 @RestController
-@RequestMapping("/api/v1/property")
+@RequestMapping("/api/v1/property/myproperties")
 public class UserPropertyController {
 
 	UserPropertyService userPropertyService;
@@ -34,21 +34,21 @@ public class UserPropertyController {
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@GetMapping("/myproperties")
+	@GetMapping()
 	public ResponseEntity<List<PropertyDto>> showAllMyProperties(){
 		// Return all owner properties
 		return new ResponseEntity<>(userPropertyService.showAllMyProperties(), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@PostMapping("/myproperties")
+	@PostMapping()
 	public ResponseEntity<PropertyDto> insertMyProperties(@Valid @RequestBody FullPropertyDto property){
 		//Insert new property
 		return new ResponseEntity<>(userPropertyService.insertMyProperty(property),HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@PutMapping("/myproperties/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<PropertyDto> updateMyProperties(@Valid @RequestBody FullPropertyDto property, @PathVariable int id){
 		
 		property.setCategory(property.getCategory().toUpperCase());
@@ -56,7 +56,7 @@ public class UserPropertyController {
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER')")
-	@DeleteMapping("/myproperties/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteMyProperties(@PathVariable int id){
 		userPropertyService.deleteMyProperty(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

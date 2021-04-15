@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class TradeForCreateDto {
 	
-	@NotNull(message = "Client Id is mandatory !")
-	private int client;
+	@NotBlank(message = "Client Username is mandatory !")
+	private String client;
 	
 	@NotNull(message = "Property Id is mandatory !")
 	private int properties;

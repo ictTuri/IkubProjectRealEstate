@@ -14,8 +14,8 @@ public class IssuesForCreateDto {
 	@NotBlank(message = "Description is mandatory")
 	private String description;
 	
-	@NotNull(message = "Client id is mandatory")
-	private int client;
+	@NotBlank(message = "Client Username is mandatory")
+	private String client;
 
 	@NotNull(message = "Property id is mandatory")
 	private int property;
