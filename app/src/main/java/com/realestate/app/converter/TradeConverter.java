@@ -35,7 +35,7 @@ public class TradeConverter {
 		return toReturn;
 	}
 
-	public static TradeEntity toEntityForCreate(TradeForCreateDto dto, UserEntity client,PropertyEntity property) {
+	public static TradeEntity toEntityForCreate(TradeForCreateDto dto, UserEntity client, PropertyEntity property) {
 		TradeEntity toReturn=new TradeEntity();
 		toReturn.setTradeId(null);
 		toReturn.setClient(client);

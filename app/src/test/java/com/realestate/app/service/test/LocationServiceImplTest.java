@@ -1,4 +1,4 @@
-package com.realestate.app.service.impl;
+package com.realestate.app.service.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

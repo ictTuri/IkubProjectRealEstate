@@ -20,10 +20,10 @@ import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.IssueStatus;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.IssueRepositoryImpl;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.IssueRepository;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserIssueService;
 
@@ -35,14 +35,14 @@ public class UserIssueServiceImpl implements UserIssueService {
 	private static final String OWNER = "ROLE_OWNER";
 	private static final String CLIENT = "ROLE_CLIENT";
 	
-	IssueRepositoryImpl issueRepo;
-	UserRepositoryImpl userRepo;
-	PropertyRepositoryImpl propertyRepo;
-	TradeRepositoryImpl tradeRepo;
+	IssueRepository issueRepo;
+	UserRepository userRepo;
+	PropertyRepository propertyRepo;
+	TradeRepository tradeRepo;
 
 	@Autowired
-	public UserIssueServiceImpl(IssueRepositoryImpl issueRepo, UserRepositoryImpl userRepo,
-			PropertyRepositoryImpl propertyRepo, TradeRepositoryImpl tradeRepo) {
+	public UserIssueServiceImpl(IssueRepository issueRepo, UserRepository userRepo,
+			PropertyRepository propertyRepo, TradeRepository tradeRepo) {
 		super();
 		this.issueRepo = issueRepo;
 		this.userRepo = userRepo;

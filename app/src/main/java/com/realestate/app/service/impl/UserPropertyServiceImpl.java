@@ -23,13 +23,13 @@ import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.PropertyCategory;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.InfoRepositoryImpl;
-import com.realestate.app.repository.impl.IssueRepositoryImpl;
-import com.realestate.app.repository.impl.LocationRepositoryImpl;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.TypeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.InfoRepository;
+import com.realestate.app.repository.IssueRepository;
+import com.realestate.app.repository.LocationRepository;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.TypeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserPropertyService;
 
@@ -39,18 +39,18 @@ public class UserPropertyServiceImpl implements UserPropertyService {
 
 	private static final Logger logger = LogManager.getLogger(UserPropertyServiceImpl.class);
 	
-	TradeRepositoryImpl tradeRepo;
-	UserRepositoryImpl userRepo;
-	PropertyRepositoryImpl propertyRepo;
-	LocationRepositoryImpl locationRepo;
-	InfoRepositoryImpl infoRepo;
-	TypeRepositoryImpl typeRepo;
-	IssueRepositoryImpl issueRepo;
+	TradeRepository tradeRepo;
+	UserRepository userRepo;
+	PropertyRepository propertyRepo;
+	LocationRepository locationRepo;
+	InfoRepository infoRepo;
+	TypeRepository typeRepo;
+	IssueRepository issueRepo;
 	
 	@Autowired
-	public UserPropertyServiceImpl(UserRepositoryImpl userRepo, PropertyRepositoryImpl propertyRepo,
-			LocationRepositoryImpl locationRepo, InfoRepositoryImpl infoRepo, TypeRepositoryImpl typeRepo,
-			TradeRepositoryImpl tradeRepo, IssueRepositoryImpl issueRepo) {
+	public UserPropertyServiceImpl(UserRepository userRepo, PropertyRepository propertyRepo,
+			LocationRepository locationRepo, InfoRepository infoRepo, TypeRepository typeRepo,
+			TradeRepository tradeRepo, IssueRepository issueRepo) {
 		super();
 		this.userRepo = userRepo;
 		this.propertyRepo = propertyRepo;

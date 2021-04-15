@@ -17,7 +17,7 @@ import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.UserFilter;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.service.UserService;
 
 @Service
@@ -27,9 +27,9 @@ public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 	
 	PasswordEncoder passwordEncoder;
-	UserRepositoryImpl userRepository;
+	UserRepository userRepository;
 
-	public UserServiceImpl(UserRepositoryImpl userRepository, PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;

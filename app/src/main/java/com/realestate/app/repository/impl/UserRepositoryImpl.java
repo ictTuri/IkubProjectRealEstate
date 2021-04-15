@@ -31,8 +31,8 @@ public class UserRepositoryImpl implements UserRepository{
 
 	private static final String CHECK_USERNAME_EXIST = "SELECT u.username FROM UserEntity u WHERE u.username = :username";
 	private static final String CHECK_EMAIL_EXIST = "SELECT u.email FROM UserEntity u WHERE u.email = :email";
-	private static final String USER_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username =?1 and u.active = true";
-	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username";
+	private static final String USER_BY_USERNAME = "FROM UserEntity ue WHERE ue.username = :username and ue.active = true";
+	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username and u.active = true";
 	private static final String CHECK_IF_CLIENT = "SELECT u FROM UserEntity u WHERE u.username = :username and u.role = :role";
 
 	// RETRIEVE OPERATIONS DOWN HERE
@@ -148,8 +148,7 @@ public class UserRepositoryImpl implements UserRepository{
 	// HELPING METHODS BELOW HERE
 	@Override
 	public boolean existUsername(String username) {
-		TypedQuery<String> query = em.createQuery(CHECK_USERNAME_EXIST, String.class).setParameter(USERNAME,
-				username);
+		TypedQuery<String> query = em.createQuery(CHECK_USERNAME_EXIST, String.class).setParameter(USERNAME,username);
 		try {
 			return query.getResultList().get(0) != null;
 		} catch (IndexOutOfBoundsException e) {
@@ -181,8 +180,8 @@ public class UserRepositoryImpl implements UserRepository{
 	}
 
 	@Override
-	public UserEntity getUserByUsername(String username) {
-		TypedQuery<UserEntity> query = em.createQuery(USER_BY_USERNAME, UserEntity.class).setParameter(1, username);
+	public UserEntity getUserByUsername(String userName) {
+		TypedQuery<UserEntity> query = em.createQuery(USER_BY_USERNAME, UserEntity.class).setParameter(USERNAME,userName);
 		try {
 			return query.getSingleResult();
 		} catch (NoResultException e) {
@@ -212,4 +211,5 @@ public class UserRepositoryImpl implements UserRepository{
 			return false;
 		}
 	}
+
 }

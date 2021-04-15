@@ -25,13 +25,13 @@ import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.PropertyCategory;
 import com.realestate.app.exceptions.MyExcMessages;
 import com.realestate.app.filter.PropertyFilter;
-import com.realestate.app.repository.impl.InfoRepositoryImpl;
-import com.realestate.app.repository.impl.IssueRepositoryImpl;
-import com.realestate.app.repository.impl.LocationRepositoryImpl;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.TypeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.InfoRepository;
+import com.realestate.app.repository.IssueRepository;
+import com.realestate.app.repository.LocationRepository;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.TypeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.service.PropertyService;
 
 @Service
@@ -40,18 +40,18 @@ public class PropertyServiceImpl implements PropertyService {
 
 	private static final Logger logger = LogManager.getLogger(PropertyServiceImpl.class);
 	
-	IssueRepositoryImpl issueRepo;
-	PropertyRepositoryImpl propertyRepo;
-	UserRepositoryImpl userRepo;
-	LocationRepositoryImpl locationRepo;
-	TradeRepositoryImpl tradeRepo;
-	TypeRepositoryImpl typeRepo;
-	InfoRepositoryImpl infoRepo;
+	IssueRepository issueRepo;
+	PropertyRepository propertyRepo;
+	UserRepository userRepo;
+	LocationRepository locationRepo;
+	TradeRepository tradeRepo;
+	TypeRepository typeRepo;
+	InfoRepository infoRepo;
 
 	@Autowired
-	public PropertyServiceImpl(PropertyRepositoryImpl propertyRepo, UserRepositoryImpl userRepo,
-			LocationRepositoryImpl locationRepo, TradeRepositoryImpl tradeRepo, IssueRepositoryImpl issueRepo,
-			TypeRepositoryImpl typeRepo, InfoRepositoryImpl infoRepo) {
+	public PropertyServiceImpl(PropertyRepository propertyRepo, UserRepository userRepo,
+			LocationRepository locationRepo, TradeRepository tradeRepo, IssueRepository issueRepo,
+			TypeRepository typeRepo, InfoRepository infoRepo) {
 		super();
 		this.propertyRepo = propertyRepo;
 		this.userRepo = userRepo;

@@ -13,8 +13,8 @@ import com.realestate.app.converter.LocationConverter;
 import com.realestate.app.dto.LocationDto;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.LocationRepositoryImpl;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
+import com.realestate.app.repository.LocationRepository;
+import com.realestate.app.repository.PropertyRepository;
 import com.realestate.app.service.LocationService;
 
 @Service
@@ -23,11 +23,11 @@ public class LocationServiceImpl implements LocationService {
 
 	private static final Logger logger = LogManager.getLogger(LocationServiceImpl.class);
 	
-	PropertyRepositoryImpl propertyRepo;
-	LocationRepositoryImpl locationRepo;
+	PropertyRepository propertyRepo;
+	LocationRepository locationRepo;
 
 	@Autowired
-	public LocationServiceImpl(PropertyRepositoryImpl propertyRepo, LocationRepositoryImpl locationRepo) {
+	public LocationServiceImpl(PropertyRepository propertyRepo, LocationRepository locationRepo) {
 		super();
 		this.propertyRepo = propertyRepo;
 		this.locationRepo = locationRepo;

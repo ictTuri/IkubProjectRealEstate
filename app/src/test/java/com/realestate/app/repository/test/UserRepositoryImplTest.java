@@ -1,4 +1,4 @@
-package com.realestate.app.repository.impl;
+package com.realestate.app.repository.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;

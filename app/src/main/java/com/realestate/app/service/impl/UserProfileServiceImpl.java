@@ -18,8 +18,8 @@ import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.Roles;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserProfileService;
 
@@ -29,12 +29,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
 	private static final Logger logger = LogManager.getLogger(UserProfileServiceImpl.class);
 	
-	TradeRepositoryImpl tradeRepo;
+	TradeRepository tradeRepo;
 	PasswordEncoder passwordEncoder;
-	UserRepositoryImpl userRepo;
+	UserRepository userRepo;
 
 	@Autowired
-	public UserProfileServiceImpl(UserRepositoryImpl userRepo, PasswordEncoder passwordEncoder, TradeRepositoryImpl tradeRepo) {
+	public UserProfileServiceImpl(UserRepository userRepo, PasswordEncoder passwordEncoder, TradeRepository tradeRepo) {
 		super();
 		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
@@ -81,6 +81,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 				String encodedPass = passwordEncoder.encode(user.getPassword());
 				user.setPassword(encodedPass);
 				UserEntity userToAdd = UserRegisterConverter.toEntityForCreate(user, role);
+				userToAdd.setActive(true);
 				userRepo.insertUser(userToAdd);
 				
 				//LOGGING

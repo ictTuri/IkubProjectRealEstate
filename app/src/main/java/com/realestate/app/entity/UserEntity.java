@@ -12,19 +12,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserEntity implements Serializable {
-
-	public UserEntity(UserEntity user) {
-		this.userId = user.getUserId();
-		this.firstName = user.getFirstName();
-		this.lastName = user.getLastName();
-		this.email = user.getEmail();
-		this.username = user.getUsername();
-		this.password = user.getPassword();
-		this.active = user.isActive();
-		this.role = user.getRole();
-		this.version = user.getVersion();
-	}
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -53,7 +40,7 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "is_active")
 	private boolean active;
-	
+
 	@Version
 	@Column(name = "version")
 	private int version;
