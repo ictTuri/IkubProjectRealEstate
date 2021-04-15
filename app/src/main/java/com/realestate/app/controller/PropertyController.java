@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realestate.app.dto.FullPropertyDto;
+import com.realestate.app.dto.AdminFullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.dto.UserDto;
 import com.realestate.app.filter.PropertyFilter;
@@ -73,9 +73,9 @@ public class PropertyController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping()
-	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
+	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody AdminFullPropertyDto property) {
 		// return the added property formated by converter
 		return new ResponseEntity<>(propertyService.addProperty(property), HttpStatus.CREATED);
 	}
@@ -85,7 +85,7 @@ public class PropertyController {
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/{id}")
-	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
+	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody AdminFullPropertyDto property,
 			@PathVariable("id") int id) {
 		// return the updated property 
 		return new ResponseEntity<>(propertyService.updateProperty(property, id),HttpStatus.CREATED);

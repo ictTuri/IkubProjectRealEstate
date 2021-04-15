@@ -36,7 +36,7 @@ public class LocationController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN','OWNER')")
-	@GetMapping("locations")
+	@GetMapping()
 	public ResponseEntity<List<LocationDto>> showAllLocations() {
 		// show all locations on database
 		return new ResponseEntity<>(locationService.allLocations(), HttpStatus.OK);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.FullPropertyConverter;
 import com.realestate.app.converter.UserConverter;
-import com.realestate.app.dto.FullPropertyDto;
+import com.realestate.app.dto.AdminFullPropertyDto;
 import com.realestate.app.dto.PropertyDto;
 import com.realestate.app.dto.UserDto;
 import com.realestate.app.entity.IssuesEntity;
@@ -102,17 +102,17 @@ public class PropertyServiceImpl implements PropertyService {
 
 	// CREATE NEW PROPERTY
 	@Override
-	public PropertyDto addProperty(FullPropertyDto property) {
+	public PropertyDto addProperty(AdminFullPropertyDto property) {
 		property.setCategory(property.getCategory().toUpperCase());
 		RoleEntity role = userRepo.getRoleById(2);
 		if (userRepo.existUserById(property.getOwner(), role)) {
 			if (locationRepo.existLocation(property.getLocation())) {
-				PropertyInfoEntity propertyInfoToAdd = FullPropertyConverter.toInfoEntityForCreate(property);
+				PropertyInfoEntity propertyInfoToAdd = FullPropertyConverter.adminPropertyToInfoEntity(property.getPropertyInfo());
 				if (typeRepo.existPropertyType(property.getPropertyType())) {
 					UserEntity owner = userRepo.getUserById(property.getOwner());
 					LocationEntity location = locationRepo.getLocationById(property.getLocation());
 					PropertyTypeEntity propertyType = typeRepo.getPropertyTypeById(property.getPropertyType());
-					PropertyEntity propertyToAdd = FullPropertyConverter.toEntityForCreate(property, owner,
+					PropertyEntity propertyToAdd = FullPropertyConverter.adminPropertyEntityForCreate(property, owner,
 							propertyType, location, propertyInfoToAdd);
 					
 					//LOGGING
@@ -133,7 +133,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 	// UPDATE EXISTING PROPERTY
 	@Override
-	public PropertyDto updateProperty(FullPropertyDto property, int id) {
+	public PropertyDto updateProperty(AdminFullPropertyDto property, int id) {
 		property.setCategory(property.getCategory().toUpperCase());
 		PropertyEntity propertyToUpdate = propertyRepo.getPropertiesById(id);
 		if (propertyToUpdate != null) {

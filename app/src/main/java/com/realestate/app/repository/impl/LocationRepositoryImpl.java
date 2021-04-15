@@ -9,10 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.realestate.app.entity.LocationEntity;
 import com.realestate.app.repository.LocationRepository;
 
-import lombok.NoArgsConstructor;
 
 @Repository
-@NoArgsConstructor
 public class LocationRepositoryImpl implements LocationRepository{
 	EntityManager em;
 
