@@ -23,7 +23,7 @@ import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.service.UserIssueService;
 
 @RestController
-@RequestMapping("/api/v1/issue")
+@RequestMapping("/api/v1/issue/myissues")
 public class UserIssueController {
 	
 	UserIssueService userIssueService;
@@ -35,28 +35,28 @@ public class UserIssueController {
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
-	@GetMapping("/myissues")
+	@GetMapping()
 	public ResponseEntity<List<IssuesDto>> showMyIssues() {
 		// show all issues on database
 		return new ResponseEntity<>(userIssueService.allMyIssues(), HttpStatus.OK);
 	} 
 	
 	@PreAuthorize("hasAnyRole('CLIENT')")
-	@PostMapping("/myissues")
+	@PostMapping()
 	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody IssuesForCreateDto issue){
 		// insert issue by client
 		return new ResponseEntity<>(userIssueService.insertMyIssue(issue), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
-	@PutMapping("/myissues/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<IssuesDto> updateIssueById(@Valid @RequestBody IssueForUpdateDto issue, @PathVariable int id){
 		// update issue by client or owner
 		return new ResponseEntity<>(userIssueService.updateMyIssue(issue, id), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('OWNER','CLIENT')")
-	@DeleteMapping("/myissues/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteMyIssue(@PathVariable int id) {
 		// delete issue and return no content
 		userIssueService.deleteMyIssue(id);

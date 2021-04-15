@@ -27,7 +27,7 @@ import com.realestate.app.filter.PropertyFilter;
 import com.realestate.app.service.PropertyService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/properties")
 public class PropertyController {
 
 	PropertyService propertyService;
@@ -43,7 +43,7 @@ public class PropertyController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
-	@GetMapping("/properties")
+	@GetMapping()
 	public ResponseEntity<List<PropertyDto>> showAllProperties(@RequestParam(required = false) String category,
 			@RequestParam(required = false) Integer min, @RequestParam(required = false) Integer max,
 			 @RequestParam(required = false) String city,
@@ -58,13 +58,13 @@ public class PropertyController {
 		return new ResponseEntity<>(propertyService.getAllProperties(filter), HttpStatus.OK);
 	}
 
-	@GetMapping("/properties/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<PropertyDto> showPropertyById(@PathVariable("id") int id) {
 		// show property by id
 		return new ResponseEntity<>(propertyService.propertyById(id), HttpStatus.FOUND);
 	}
 
-	@GetMapping("/properties/{id}/owner")
+	@GetMapping("/{id}/owner")
 	public ResponseEntity<UserDto> showPropertyOwner(@PathVariable("id") int id) {
 		// show property by id
 		return new ResponseEntity<>(propertyService.propertyOwner(id), HttpStatus.FOUND);
@@ -74,7 +74,7 @@ public class PropertyController {
 	// POST ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PostMapping("/properties")
+	@PostMapping()
 	public ResponseEntity<PropertyDto> addProperty(@Valid @RequestBody FullPropertyDto property) {
 		// return the added property formated by converter
 		return new ResponseEntity<>(propertyService.addProperty(property), HttpStatus.CREATED);
@@ -84,7 +84,7 @@ public class PropertyController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PutMapping("/properties/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<PropertyDto> updateProperty(@Valid @RequestBody FullPropertyDto property,
 			@PathVariable("id") int id) {
 		// return the updated property 
@@ -95,7 +95,7 @@ public class PropertyController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping("/properties/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProperty(@PathVariable("id") int id) {
 		// delete property by id
 		propertyService.deleteProperty(id);

@@ -14,7 +14,7 @@ import com.realestate.app.dto.UserRegisterDto;
 import com.realestate.app.service.UserProfileService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/register/user")
 public class RegisterController {
 
 	UserProfileService userProfileService;
@@ -25,7 +25,7 @@ public class RegisterController {
 		this.userProfileService = userProfileService;
 	}
 
-	@PostMapping("/register/user")
+	@PostMapping()
 	public ResponseEntity<UserRegisterDto> addClient(@Valid @RequestBody UserRegisterDto user) {
 		// return the added user formated by converter
 		return new ResponseEntity<>(userProfileService.addUser(user), HttpStatus.CREATED);

@@ -17,7 +17,6 @@ public class LocationConverter {
 		locationToReturn.setStreetName(location.getStreetName());
 		locationToReturn.setZipCode(location.getZipCode());
 		locationToReturn.setDescription(location.getDescription());
-		locationToReturn.setVersion(location.getVersion());
 		return locationToReturn;
 	}
 

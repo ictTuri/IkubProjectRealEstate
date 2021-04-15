@@ -21,7 +21,7 @@ import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.service.TypeService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/propertytypes")
 public class TypeController {
 
 	TypeService typeService;
@@ -36,14 +36,14 @@ public class TypeController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/propertytypes")
+	@GetMapping()
 	public ResponseEntity<List<PropertyTypeDto>> propertyTypes() {
 		// show all property types on database
 		return new ResponseEntity<>(typeService.allPropertyTypes(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/propertytypes/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<PropertyTypeDto> showPropertTypeById(@PathVariable("id") int id) {
 		// show property type by id
 		return new ResponseEntity<>(typeService.propertyTypeById(id), HttpStatus.FOUND);
@@ -53,7 +53,7 @@ public class TypeController {
 	// POST ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/propertytypes")
+	@PostMapping()
 	public ResponseEntity<PropertyTypeDto> addPropertyType(@Valid @RequestBody PropertyTypeDto propertyType) {
 		// return the added property type formated by converter
 		return new ResponseEntity<>(typeService.addPropertyType(propertyType), HttpStatus.CREATED);
@@ -63,7 +63,7 @@ public class TypeController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("/propertytypes/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<PropertyTypeDto> updatePropertyType(@Valid @RequestBody PropertyTypeDto propertyType,
 			@PathVariable("id") int id) {
 		// return the updated property type if process complete
@@ -74,7 +74,7 @@ public class TypeController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/propertytypes/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletePropertyType(@PathVariable("id") int id) {
 		// delete property type if not used
 		typeService.deletePropertyType(id);

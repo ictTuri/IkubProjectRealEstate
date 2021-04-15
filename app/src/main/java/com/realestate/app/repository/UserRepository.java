@@ -28,6 +28,6 @@ public interface UserRepository {
 	boolean existUserById(int id, RoleEntity role);
 	UserEntity getUserByUsername(String username);
 	boolean isActiveUser(String username);
-	 boolean isClient(int id, RoleEntity role);
+	 boolean isClient(String username, RoleEntity role);
 	 
 }

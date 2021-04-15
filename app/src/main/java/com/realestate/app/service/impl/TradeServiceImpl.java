@@ -79,7 +79,7 @@ public class TradeServiceImpl implements TradeService {
 			PropertyEntity property = propertyRepo.getPropertiesById(trade.getProperties());
 				if(property != null) {
 					if (!tradeRepo.isInRentedStatus(property)) {
-						UserEntity client = userRepo.getUserById(trade.getClient());
+						UserEntity client = userRepo.getUserByUsername(trade.getClient());
 						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, property);
 						
 						//LOGGING

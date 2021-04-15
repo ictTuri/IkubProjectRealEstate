@@ -86,7 +86,7 @@ public class UserTradeServiceImpl implements UserTradeService {
 				RoleEntity role = userRepo.getRoleById(3);
 				if (userRepo.isClient(trade.getClient(), role)) {
 					if (!tradeRepo.isInRentedStatus(prop)) {
-						UserEntity client = userRepo.getUserById(trade.getClient());
+						UserEntity client = userRepo.getUserByUsername(trade.getClient());
 						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, prop);
 
 						// LOGGING

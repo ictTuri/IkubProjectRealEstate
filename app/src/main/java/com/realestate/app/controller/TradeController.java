@@ -23,7 +23,7 @@ import com.realestate.app.dto.TradeForUpdateDto;
 import com.realestate.app.service.TradeService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/trades")
 public class TradeController {
 
 	TradeService tradeService;
@@ -38,14 +38,14 @@ public class TradeController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/trades")
+	@GetMapping()
 	public ResponseEntity<List<TradeDto>> showAllTrades() {
 		// show all trades on database
 		return new ResponseEntity<>(tradeService.allTrades(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/trades/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<TradeDto> showTradeById(@PathVariable("id") int id) {
 		// show trades by id
 		return new ResponseEntity<>(tradeService.tradesById(id), HttpStatus.FOUND);
@@ -56,7 +56,7 @@ public class TradeController {
 	// -----------------------------
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PostMapping("/trades")
+	@PostMapping()
 	public ResponseEntity<TradeDto> addTrade(@Valid @RequestBody TradeForCreateDto trade) {
 		// return the added trade formated by converter
 		return new ResponseEntity<>(tradeService.addTrade(trade), HttpStatus.CREATED);
@@ -67,7 +67,7 @@ public class TradeController {
 	// -----------------------------
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PutMapping("/trades/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<TradeDto> updateTrade(@Valid @RequestBody TradeForUpdateDto trade,
 			@PathVariable("id") int id) {
 		// return the updated trade if process complete
@@ -79,7 +79,7 @@ public class TradeController {
 	// -----------------------------
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping("/trades/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTrade(@PathVariable("id") int id) {
 		// delete trade if needed to
 		tradeService.deleteTrade(id);

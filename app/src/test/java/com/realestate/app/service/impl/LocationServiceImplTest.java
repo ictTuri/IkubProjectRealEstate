@@ -25,7 +25,7 @@ class LocationServiceImplTest {
 
 	@Test
 	void whenGetById_thenReturnCorrectObject() {
-		LocationDto location = new LocationDto("Tirane", "Street", 1000, "Description", 0);
+		LocationDto location = new LocationDto("Tirane", "Street", 1000, "Description");
 
 		when(locationService.locationById(1)).thenReturn(location);
 
@@ -37,9 +37,9 @@ class LocationServiceImplTest {
 	@Test
 	void whenGetList_thenReturnCorrectSIze() {
 		List<LocationDto> locations = new ArrayList<LocationDto>();
-		locations.add(new LocationDto("Tirane", "Street One", 1000, "Description One", 0));
-		locations.add(new LocationDto("Tirane", "Street Two", 1000, "Description Two", 3));
-		locations.add(new LocationDto("Durres", "Street One", 2000, "Description One", 0));
+		locations.add(new LocationDto("Tirane", "Street One", 1000, "Description One"));
+		locations.add(new LocationDto("Tirane", "Street Two", 1000, "Description Two"));
+		locations.add(new LocationDto("Durres", "Street One", 2000, "Description One"));
 
 		when(locationService.allLocations()).thenReturn(locations);
 
@@ -53,27 +53,25 @@ class LocationServiceImplTest {
 	
 	@Test
 	void whenInsertLocation_thenReturnCorrectLocation() {
-		LocationDto location = new LocationDto("Tirane", "Street One", 1000, "Description One", 0);
+		LocationDto location = new LocationDto("Tirane", "Street One", 1000, "Description One");
 
 		when(locationService.addLocation(location)).thenReturn(location);
 
 		LocationDto locationToGet = locationService.addLocation(location);
 		assertNotNull(locationToGet);
-		assertEquals(0, locationToGet.getVersion());
 		assertEquals(locationToGet.getDescription(), location.getDescription());
 		assertEquals("Street One", locationToGet.getStreetName());
 	}
 	
 	@Test
 	void whenUpdateLocation_thenReturnUpdatedLocation() {
-		LocationDto location = new LocationDto("Tirane", "Street One", 1000, "Description One", 0);
+		LocationDto location = new LocationDto("Tirane", "Street One", 1000, "Description One");
 		location.setCityName("Durres");
 
 		when(locationService.updateLocation(location, 1)).thenReturn(location);
 		
 		LocationDto locationToGet = locationService.updateLocation(location,1);
 		assertNotNull(locationToGet);
-		assertEquals(0, locationToGet.getVersion());
 		assertEquals(locationToGet.getDescription(), location.getDescription());
 		assertEquals("Durres",locationToGet.getCityName());
 	}

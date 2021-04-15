@@ -23,7 +23,7 @@ import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.service.IssueService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/issues")
 public class IssueController {
 
 	IssueService issueService;
@@ -38,14 +38,14 @@ public class IssueController {
 	// GET ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/issues")
+	@GetMapping()
 	public ResponseEntity<List<IssuesDto>> showAllIssues() {
 		// show all issues on database
 		return new ResponseEntity<>(issueService.allIssues(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/issues/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<IssuesDto> showIssueById(@PathVariable("id") int id) {
 		// show issue by id
 		return new ResponseEntity<>(issueService.issuesById(id), HttpStatus.FOUND);
@@ -55,7 +55,7 @@ public class IssueController {
 	// POST ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PostMapping("/issues")
+	@PostMapping()
 	public ResponseEntity<IssuesDto> addPropertyInfo(@Valid @RequestBody IssuesForCreateDto issue) {
 		// return the added issue formated by converter
 		return new ResponseEntity<>(issueService.addIssues(issue), HttpStatus.CREATED);
@@ -65,7 +65,7 @@ public class IssueController {
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PutMapping("/issues/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<IssuesDto> updateIssue(@Valid @RequestBody IssueForUpdateDto issue,
 			@PathVariable("id") int id) {
 		// return the updated issue if process complete
@@ -76,7 +76,7 @@ public class IssueController {
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping("/issues/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteIssue(@PathVariable("id") int id) {
 		// delete issue if needed to
 		issueService.deleteIssue(id);

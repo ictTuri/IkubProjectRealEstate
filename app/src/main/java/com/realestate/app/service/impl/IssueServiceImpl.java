@@ -73,7 +73,7 @@ public class IssueServiceImpl implements IssueService {
 	public IssuesDto addIssues(IssuesForCreateDto issue) {
 		RoleEntity role = userRepo.getRoleById(3);
 		if (userRepo.isClient(issue.getClient(), role)) {
-			UserEntity user = userRepo.getUserById(issue.getClient());
+			UserEntity user = userRepo.getUserByUsername(issue.getClient());
 			PropertyEntity property = propertyRepo.getPropertiesById(issue.getProperty());
 			if (tradeRepo.existTrade(user, property)) {
 				IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
