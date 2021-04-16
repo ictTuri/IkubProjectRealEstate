@@ -26,7 +26,7 @@ public class RegisterController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<UserRegisterDto> addClient(@Valid @RequestBody UserRegisterDto user) {
+	public ResponseEntity<UserRegisterDto> addUser(@Valid @RequestBody UserRegisterDto user) {
 		// return the added user formated by converter
 		return new ResponseEntity<>(userProfileService.addUser(user), HttpStatus.CREATED);
 	}
