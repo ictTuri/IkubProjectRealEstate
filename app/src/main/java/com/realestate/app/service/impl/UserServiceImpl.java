@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService {
 					userToUpdate.setUsername(user.getUsername());
 					userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
 					userToUpdate.setRole(role);
+					userToUpdate.setActive(user.isActive());
 					
 					//LOGGING
 					logger.info("User Updated: {}", userToUpdate);

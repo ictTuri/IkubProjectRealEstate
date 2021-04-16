@@ -42,7 +42,7 @@ public class UserController {
 	// -----------------------------
 	// GET ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasRole('ADMIN','OWNER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping()
 	public ResponseEntity<List<UserDto>> showAllUsers(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String lastName, @RequestParam(required = false) String username,
@@ -57,7 +57,7 @@ public class UserController {
 		return new ResponseEntity<>(userService.getUsers(filter), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN','OWNER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> showUserById(@PathVariable("id") int id) {
 		// show user by id
@@ -67,7 +67,7 @@ public class UserController {
 	// -----------------------------
 	// POST ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasRole('ADMIN','OWNER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping()
 	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserForCreateDto user) {
 		// return the added user formated by converter
@@ -77,7 +77,7 @@ public class UserController {
 	// -----------------------------
 	// PUT ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasRole('ADMIN','OWNER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserForCreateDto user, @PathVariable("id") int id) {
 		// return the updated user
@@ -87,7 +87,7 @@ public class UserController {
 	// -----------------------------
 	// DELETE ROUTES STARTS HERE
 	// -----------------------------
-	@PreAuthorize("hasRole('ADMIN','OWNER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
 		userService.deleteUser(id);

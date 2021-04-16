@@ -1,0 +1,1498 @@
+{
+	"info": {
+		"_postman_id": "d63a9cfd-9f40-4d77-911a-51a41c42c24f",
+		"name": "REAL_ESTATE PROJECT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "POST to add a new user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDZhMWY3My0wMDA4LTQ1ZWYtODRkMy1mOWI0ZjQ0MDNmNzciLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODQ5MjI5NSwiZXhwIjoxNjE4NTI4Mjk1LCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.klHUOy1ltmOG_LgbqpZo57vRHqOl4krP1pQvbGTYT8Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"client2\",\r\n    \"lastName\":\"client2\",\r\n    \"email\":\"client2@gmail.com\",\r\n    \"username\":\"client2\",\r\n    \"password\":\"client2\",\r\n    \"role\":3,\r\n    \"active\":true\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxZDFiMDk4Yi04NDgyLTQ2YmEtYmQ0Mi03YzczOTAyMmUyMTMiLCJzdWIiOiJvd25lcjIiLCJpYXQiOjE2MTg1MDI2ODYsImV4cCI6MTYxODUzODY4Niwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfT1dORVIifV19.f1uiuu4AYhIsCmx-5KNzzuwYqrcZ1YbH0oDKMi61bSM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlMDA3MjA3Zi0xZWZhLTRkNjUtYmQ1My0yOTBhZjE3NzAzNjMiLCJzdWIiOiJhcm1vbmVsbW9sbGEiLCJpYXQiOjE2MTc2MjgwNjcsImV4cCI6MTYxNzY2NDA2Nywicm9sZXMiOlt7ImF1dGhvcml0eSI6IkFETUlOIn1dfQ.y3AOsVDtK6evU9-32ikBnxNaCihZW4tRB7QdjG2VKE8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET user by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0YTdmNWYzMS04MzYwLTQxNTctYmMwOS1mMjdlNTBmNWZhYzciLCJzdWIiOiJhcnR1cm1vbGxhIiwiaWF0IjoxNjE3NjE4NzMxLCJleHAiOjE2MTc2NTQ3MzEsInJvbGVzIjpbeyJhdXRob3JpdHkiOiJBRE1JTiJ9XX0.myHQd9kEc7wBZjqUdmPBEOxTVwtBwnb9pwHYqZoAn-I",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update user if exist",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0NTc2NTI1Ni02MzJmLTRlYjEtYmJlOC1lZDk3OGM0ZjlhNGIiLCJzdWIiOiJhcnRhbmZvdG8iLCJpYXQiOjE2MTc2MjAxMjcsImV4cCI6MTYxNzY1NjEyNywicm9sZXMiOlt7ImF1dGhvcml0eSI6Ik9XTkVSIn1dfQ.Sy7iNw64K54iiLjmG3o2ONK7l4J9eSP1m1WR0-l8BVY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Artur\",\r\n    \"lastName\":\"Molla\",\r\n    \"email\":\"mollaartur13@gmail.com\",\r\n    \"username\":\"arturmolla\",\r\n    \"password\":\"apple\",\r\n    \"role\":3,\r\n    \"isActive\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to soft delete a user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MTg5MzllZi1iOTk2LTQ2NGEtYWRhNC03YmVjMWNhMDg3NWQiLCJzdWIiOiJhcnR1cm1vbGxhIiwiaWF0IjoxNjE3NjI1NTY3LCJleHAiOjE2MTc2NjE1NjcsInJvbGVzIjpbeyJhdXRob3JpdHkiOiJDTElFTlQifV19.ayrRR7q8J4k1nHRAMATzafdYt2XovXJrJe6y_dOYko4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Full Property",
+			"item": [
+				{
+					"name": "POST to add new property",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"REZIDENTIAL\",\r\n  \"description\": \"very cozy home\",\r\n  \"location\": 1,\r\n  \"owner\":1,\r\n  \"propertyInfo\": {\r\n    \"area\": 0,\r\n    \"floorNumber\": 0,\r\n    \"hasElevator\": true,\r\n    \"hasGarage\": false,\r\n    \"hasPool\": false,\r\n    \"nrBathrooms\": 1,\r\n    \"nrBedrooms\": 1\r\n  },\r\n  \"propertyType\": 1,\r\n  \"rentingPrice\": 300,\r\n  \"sellingPrice\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all properties ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDZhMWY3My0wMDA4LTQ1ZWYtODRkMy1mOWI0ZjQ0MDNmNzciLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODQ5MjI5NSwiZXhwIjoxNjE4NTI4Mjk1LCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.klHUOy1ltmOG_LgbqpZo57vRHqOl4krP1pQvbGTYT8Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET property by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to remove property if is in no trade",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owner\":1,\r\n    \"description\":\"very cozy home\",\r\n    \"rentingPrice\":300,\r\n    \"sellingPrice\":0,\r\n    \"category\":\"Residential\",\r\n    \"propertyType\":1,\r\n    \"propertyLocation\":1,\r\n    \"propertyInfo\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update property",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"REZIDENTIAL\",\r\n  \"description\": \"string\",\r\n  \"location\": \"string\",\r\n  \"propertyInfo\": {\r\n    \"area\": 0,\r\n    \"floorNumber\": 0,\r\n    \"hasElevator\": true,\r\n    \"hasGarage\": true,\r\n    \"hasPool\": true,\r\n    \"nrBathrooms\": 0,\r\n    \"nrBedrooms\": 0\r\n  },\r\n  \"propertyType\": \"HOME\",\r\n  \"rentingPrice\": 0,\r\n  \"sellingPrice\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get property owner",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/properties/1/owner",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"properties",
+								"1",
+								"owner"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "POST  to add new locations locations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDZhMWY3My0wMDA4LTQ1ZWYtODRkMy1mOWI0ZjQ0MDNmNzciLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODQ5MjI5NSwiZXhwIjoxNjE4NTI4Mjk1LCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.klHUOy1ltmOG_LgbqpZo57vRHqOl4krP1pQvbGTYT8Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cityName\":\"Tirane\",\r\n    \"streetName\":\"Muhamed Gjollesha\",\r\n    \"zipCode\":1001,\r\n    \"description\":\"Near Hotel Mondial\"\r\n}\r\n\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show all locations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDZhMWY3My0wMDA4LTQ1ZWYtODRkMy1mOWI0ZjQ0MDNmNzciLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODQ5MjI5NSwiZXhwIjoxNjE4NTI4Mjk1LCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.klHUOy1ltmOG_LgbqpZo57vRHqOl4krP1pQvbGTYT8Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show location by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/locations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update location ",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cityName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"streetName\": \"string\",\r\n  \"zipCode\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/locations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to delete location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"locationId\": 1,\r\n        \"cityName\": \"Tirane\",\r\n        \"streetName\": \"21 Dhjetori\",\r\n        \"zipCode\": 1000,\r\n        \"description\": \"near the hotest place\",\r\n        \"version\": 0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/locations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trades",
+			"item": [
+				{
+					"name": "POST to add new trade",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0NTZjNmQ5NS01ZWI0LTRiODgtOTI5OC01MTE1NDI3ZTM5MWEiLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODUwMzkyOSwiZXhwIjoxNjE4NTM5OTI5LCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.m-VD-KpHjcbW04A51-Xi4LaYzxjvapZ5lEO89dwxXso",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlNzllMGJmMy1hMjNhLTQ3NGUtYWRkZC0wZGZkZGIxOTFhMmEiLCJzdWIiOiJhcm1vbmVsbW9sbGEiLCJpYXQiOjE2MTc3MDMzODAsImV4cCI6MTYxNzczOTM4MCwicm9sZXMiOlt7ImF1dGhvcml0eSI6IkFETUlOIn1dfQ.8RQiDDOHeWceYel-xoFArN0JNtcBzUGrNvHdemF_t_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":\"client1\",\r\n    \"properties\":1,\r\n    \"tradeType\":\"rented\",\r\n    \"paymentType\":\"kesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show trades by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show all trades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to remove trade by id if exist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update trade",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"paymentType\": \"string\",\r\n  \"tradeType\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issue",
+			"item": [
+				{
+					"name": "POST to add new issue",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category\":\"electricity\",\r\n    \"description\":\"Dont know what happened, call a electrician please.\",\r\n    \"client\":3,\r\n    \"property\":2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show all issue",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show issue by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issues/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update issues",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"string\",\r\n  \"description\": \"string\",\r\n  \"resoulutionStatus\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issues/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to remove issue",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issues/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Types",
+			"item": [
+				{
+					"name": "POST to add new property type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"propertyTypeName\":\"Duplex\",\r\n    \"propertyTypeDesc\":\"Just like giant space with open rooms\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/propertytypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"propertytypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show all property types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/propertytypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"propertytypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET to show property type by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/propertytypes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"propertytypes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to update property type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"propertyTypeDesc\": \"string\",\r\n  \"propertyTypeName\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/propertytypes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"propertytypes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE to remove property type if not used in properties",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/propertytypes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"propertytypes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"item": [
+				{
+					"name": "Create a new User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"owner1\",\r\n    \"lastName\":\"owner1\",\r\n    \"email\":\"owner1@gmail.com\",\r\n    \"username\":\"owner1\",\r\n    \"password\":\"owner1\",\r\n    \"role\":\"ROLE_OWNER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/register/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"register",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "LOGIN HERE",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "1111",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ictturi",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"client1\",\r\n    \"password\":\"client1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "Show you account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3Y2E2MGI5My1mODdmLTRhNjMtOTU4ZC0xYTExYjI0NWIwYWMiLCJzdWIiOiJhcm1vIiwiaWF0IjoxNjE4MDY2Mjg5LCJleHAiOjE2MTgxMDIyODksInJvbGVzIjpbeyJhdXRob3JpdHkiOiJST0xFX09XTkVSIn1dfQ.fF7U5ncSoNxrNJ7FBqM6zLlhBB1pGVBKJIH9qs__omY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Your Account",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Your Account",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Trades",
+			"item": [
+				{
+					"name": "Show owners or client trades",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlNzA2Y2M2Ni1iYmRkLTQ4YTYtOTk2OC1kNzljN2E5OTNlZmYiLCJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNjE4NTY2MzY5LCJleHAiOjE2MTg2MDIzNjksInJvbGVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0NMSUVOVCJ9XX0.GLm4eRDHSg8cD8XDIfFz72ojv1k078tM3wBGlIh7AEg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trade/mytrades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trade",
+								"mytrades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Owner Create new trade",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MmNmMjk5Ny1iOTVkLTRlZTItYWUxMC05N2ZkYzdkMWZlOTAiLCJzdWIiOiJvd25lcjEiLCJpYXQiOjE2MTg1NjU0MDAsImV4cCI6MTYxODYwMTQwMCwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfT1dORVIifV19.R6qIkUxu2DHena5Zaa6BJNDDl-n5Zr9AlgtD7C-OTJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"client\": \"client1\",\r\n  \"paymentType\": \"kesh\",\r\n  \"properties\": 2,\r\n  \"tradeType\": \"RENTED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trade/mytrades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trade",
+								"mytrades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a trade /close a rent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"paymentType\": \"string\",\r\n  \"tradeType\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trade/mytrades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trade",
+								"mytrades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a trade",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/trade/mytrades/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"trade",
+								"mytrades",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Issues",
+			"item": [
+				{
+					"name": "Show Issues of owners or clients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlNzA2Y2M2Ni1iYmRkLTQ4YTYtOTk2OC1kNzljN2E5OTNlZmYiLCJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNjE4NTY2MzY5LCJleHAiOjE2MTg2MDIzNjksInJvbGVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0NMSUVOVCJ9XX0.GLm4eRDHSg8cD8XDIfFz72ojv1k078tM3wBGlIh7AEg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issue/myissues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issue",
+								"myissues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update issues from Owner or client",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"string\",\r\n  \"description\": \"string\",\r\n  \"resoulutionStatus\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/issue/myissues/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issue",
+								"myissues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete issues",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/issue/myissues/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issue",
+								"myissues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post a new issue",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlY2VkNzA2NS1hYzIzLTQyZDUtYjNhMi1mODY2ZWI3ZDIxNDciLCJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNjE4NTY1NDU2LCJleHAiOjE2MTg2MDE0NTYsInJvbGVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0NMSUVOVCJ9XX0.jXhwie0u4TCgw3f4_dpAdlcd5dsDYiqf39EKbSi6mhM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"Electricity\",\r\n  \"description\": \"i dont know man\",\r\n  \"property\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/issue/myissues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"issue",
+								"myissues"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Properties",
+			"item": [
+				{
+					"name": "Show Onwers Properties",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmODVjNTAyMy02OTBkLTRjYzgtOWZiOS0zZTIzNTNjMzhjNTgiLCJzdWIiOiJhZG1pbiIsImlhdCI6MTYxNzkxMzI1MywiZXhwIjoxNjE3OTQ5MjUzLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XX0.w4Hzldzt51VZNwZbS44f0MZcANaN8ToJhgmQ7hV9jNY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/property/myproperties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"property",
+								"myproperties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Onwers Properties",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"area\": 0,\r\n  \"category\": \"string\",\r\n  \"description\": \"string\",\r\n  \"floorNumber\": 0,\r\n  \"hasElevator\": true,\r\n  \"hasGarage\": true,\r\n  \"hasPool\": true,\r\n  \"location\": 0,\r\n  \"nrBathrooms\": 0,\r\n  \"nrBedrooms\": 0,\r\n  \"propertyType\": 0,\r\n  \"rentingPrice\": 0,\r\n  \"sellingPrice\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/property/myproperties/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"property",
+								"myproperties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Onwers Properties",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/property/myproperties/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"property",
+								"myproperties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Owner adds new property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlZjdlNzIxNi0xMTNjLTQzYWEtODBlNy1mN2M0OTZlZjBlYTUiLCJzdWIiOiJvd25lcjIiLCJpYXQiOjE2MTg0OTg0NDUsImV4cCI6MTYxODUzNDQ0NSwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfT1dORVIifV19.HRxybWk7zH30Gj0-exqwS62sb_7OP_lJYyAzkfWCvL4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"category\": \"REZIDENTIAL\",\r\n  \"description\": \"for small families\",\r\n  \"location\": 1,\r\n  \"propertyInfo\": {\r\n    \"area\": 80,\r\n    \"floorNumber\": 22,\r\n    \"hasElevator\": true,\r\n    \"hasGarage\": true,\r\n    \"hasPool\": false,\r\n    \"nrBathrooms\": 2,\r\n    \"nrBedrooms\": 2\r\n  },\r\n  \"propertyType\": 1,\r\n  \"rentingPrice\": 500,\r\n  \"sellingPrice\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/property/myproperties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"property",
+								"myproperties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
