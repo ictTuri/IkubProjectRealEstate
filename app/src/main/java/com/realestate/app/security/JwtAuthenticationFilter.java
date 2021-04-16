@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	 private static final Logger LOGGER = LogManager.getLogger(JwtAuthenticationFilter.class);
 	    private static final String AUTHORIZATION_SCHEMA = "Bearer";
