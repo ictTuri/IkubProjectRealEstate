@@ -69,7 +69,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 					throw new MyExcMessages("Username already exist");
 				}
 			}else {
-				throw new MyExcMessages("Please fill one role !");
+				throw new MyExcMessages("Please fill one role: ROLE_CLIENT or ROLE_OWNER!");
 			}
 		}
 	}
