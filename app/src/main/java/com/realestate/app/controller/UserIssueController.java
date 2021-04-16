@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realestate.app.dto.ClientIssueForCreateDto;
 import com.realestate.app.dto.IssueForUpdateDto;
 import com.realestate.app.dto.IssuesDto;
-import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.service.UserIssueService;
 
 @RestController
@@ -43,7 +43,7 @@ public class UserIssueController {
 	
 	@PreAuthorize("hasAnyRole('CLIENT')")
 	@PostMapping()
-	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody IssuesForCreateDto issue){
+	public ResponseEntity<IssuesDto> insertIssueByClient(@Valid @RequestBody ClientIssueForCreateDto issue){
 		// insert issue by client
 		return new ResponseEntity<>(userIssueService.insertMyIssue(issue), HttpStatus.OK);
 	}

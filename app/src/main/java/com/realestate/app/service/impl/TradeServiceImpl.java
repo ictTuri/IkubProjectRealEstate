@@ -19,9 +19,9 @@ import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.TradeType;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.service.TradeService;
 
 @Service
@@ -30,14 +30,14 @@ public class TradeServiceImpl implements TradeService {
 
 	private static final Logger logger = LogManager.getLogger(TradeServiceImpl.class);
 	
-	UserRepositoryImpl userRepo;
-	TradeRepositoryImpl tradeRepo;
-	PropertyRepositoryImpl propertyRepo;
+	UserRepository userRepo;
+	TradeRepository tradeRepo;
+	PropertyRepository propertyRepo;
 
 	// CONSTRUCTOR
 	@Autowired
-	public TradeServiceImpl(TradeRepositoryImpl tradeRepo, UserRepositoryImpl userRepo,
-			PropertyRepositoryImpl propertyRepo) {
+	public TradeServiceImpl(TradeRepository tradeRepo, UserRepository userRepo,
+			PropertyRepository propertyRepo) {
 		super();
 		this.tradeRepo = tradeRepo;
 		this.userRepo = userRepo;

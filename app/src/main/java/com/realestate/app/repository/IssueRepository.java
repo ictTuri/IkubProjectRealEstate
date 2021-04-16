@@ -24,4 +24,5 @@ public interface IssueRepository {
 	IssuesEntity existIssueWithProperty(PropertyEntity property);
 	List<IssuesEntity> issuesOfOwnersByOwner(UserEntity user);
 	List<IssuesEntity> issuesOfClientByClient(UserEntity user);
+	boolean existIssueForProperty(UserEntity user, PropertyEntity property);
 }

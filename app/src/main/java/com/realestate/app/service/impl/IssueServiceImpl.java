@@ -19,10 +19,10 @@ import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.IssueStatus;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.IssueRepositoryImpl;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.IssueRepository;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.service.IssueService;
 
 @Service
@@ -31,15 +31,15 @@ public class IssueServiceImpl implements IssueService {
 
 	private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
 	
-	UserRepositoryImpl userRepo;
-	IssueRepositoryImpl issueRepo;
-	TradeRepositoryImpl tradeRepo;
-	PropertyRepositoryImpl propertyRepo;
+	UserRepository userRepo;
+	IssueRepository issueRepo;
+	TradeRepository tradeRepo;
+	PropertyRepository propertyRepo;
 
 	// CONSTRUCTOR
 	@Autowired
-	public IssueServiceImpl(TradeRepositoryImpl tradeRepo, UserRepositoryImpl userRepo,
-			PropertyRepositoryImpl propertyRepo,IssueRepositoryImpl issueRepo) {
+	public IssueServiceImpl(TradeRepository tradeRepo, UserRepository userRepo,
+			PropertyRepository propertyRepo,IssueRepository issueRepo) {
 		super();
 		this.tradeRepo = tradeRepo;
 		this.issueRepo = issueRepo;

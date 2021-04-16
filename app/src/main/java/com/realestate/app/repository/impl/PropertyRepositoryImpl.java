@@ -36,7 +36,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 	private static final String GET_PROPERTY_INFO_BY_ID = "FROM PropertyInfoEntity pie WHERE pie.propertyInfoId = :id ";
 	private static final String CHECK_PROPERTY_INFO_TAKEN = "FROM PropertyEntity pe WHERE pe.propertiesId != :id and pe.propertyInfo = :info ";
 	private static final String CHECK_LOCATION_INTO_PROPERTY = "FROM PropertyEntity pe WHERE pe.propertyLocation = :id ";
-	private static final String GET_PROPERTIES_BY_OWNER = "FROM PropertyEntity pe WHERE pe.owner = :owner";
+	private static final String GET_PROPERTIES_BY_OWNER = "SELECT pe FROM PropertyEntity pe WHERE pe.owner = :owner";
 	String fetchquery = "From PropertyEntity pe Left join fetch pe.propertyLocation pl where pl.cityName = :city ";
 
 	// RETRIEVE OPERATIONS DOWN HERE
@@ -183,9 +183,9 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 	}
 
 	@Override
-	public List<PropertyEntity> getPropertiesByOwner(UserEntity user) {
-		return em.createQuery(GET_PROPERTIES_BY_OWNER, PropertyEntity.class).setParameter("owner", user)
-				.getResultList();
+	public List<PropertyEntity> getPropertiesByOwner(UserEntity owner) {
+		TypedQuery<PropertyEntity> query = em.createQuery(GET_PROPERTIES_BY_OWNER, PropertyEntity.class).setParameter("owner", owner);
+		return query.getResultList();
 	}
 
 	@Override

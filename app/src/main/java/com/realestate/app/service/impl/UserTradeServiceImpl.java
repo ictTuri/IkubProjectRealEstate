@@ -22,9 +22,9 @@ import com.realestate.app.entity.TradeEntity;
 import com.realestate.app.entity.UserEntity;
 import com.realestate.app.entity.enums.TradeType;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.PropertyRepositoryImpl;
-import com.realestate.app.repository.impl.TradeRepositoryImpl;
-import com.realestate.app.repository.impl.UserRepositoryImpl;
+import com.realestate.app.repository.PropertyRepository;
+import com.realestate.app.repository.TradeRepository;
+import com.realestate.app.repository.UserRepository;
 import com.realestate.app.security.UserPrincipal;
 import com.realestate.app.service.UserTradeService;
 
@@ -32,22 +32,22 @@ import com.realestate.app.service.UserTradeService;
 @Transactional
 public class UserTradeServiceImpl implements UserTradeService {
 
+	PropertyRepository propertyRepo;
+	TradeRepository tradeRepo;
+	UserRepository userRepo;
+
+	@Autowired
+	public UserTradeServiceImpl(TradeRepository tradeRepo, PropertyRepository propertyRepo, UserRepository userRepo) {
+		super();
+		this.tradeRepo = tradeRepo;
+		this.propertyRepo = propertyRepo;
+		this.userRepo = userRepo;
+	}
+	
 	private static final Logger logger = LogManager.getLogger(UserTradeServiceImpl.class);
 	private static final String OWNER = "ROLE_OWNER";
 	private static final String CLIENT = "ROLE_CLIENT";
 
-	PropertyRepositoryImpl propertyRepo;
-	TradeRepositoryImpl tradeRepo;
-	UserRepositoryImpl userRepo;
-
-	@Autowired
-	public UserTradeServiceImpl(TradeRepositoryImpl tradeRepo, UserRepositoryImpl userRepo,
-			PropertyRepositoryImpl propertyRepo) {
-		super();
-		this.tradeRepo = tradeRepo;
-		this.userRepo = userRepo;
-		this.propertyRepo = propertyRepo;
-	}
 
 	// Get all trades if you are a client with trade or owner whose property is part
 	// of a trade / if admin access here it returns all trades
@@ -75,20 +75,20 @@ public class UserTradeServiceImpl implements UserTradeService {
 
 	// Insert new trade for owners property
 	@Override
-	public TradeDto insertMyTrade(@Valid TradeForCreateDto trade) {
+	public TradeDto insertMyTrade(TradeForCreateDto trade) {
 		trade.setTradeType(trade.getTradeType().toUpperCase());
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
+		UserEntity owner = userRepo.getUserByUsername(thisUser.getUsername());
+		RoleEntity role = userRepo.getRoleById(3);
 		PropertyEntity prop = propertyRepo.getPropertiesById(trade.getProperties());
-		Iterable<PropertyEntity> propertyList = propertyRepo.getPropertiesByOwner(user);
+		List<PropertyEntity> propertyList = propertyRepo.getPropertiesByOwner(owner);
 		for (PropertyEntity pe : propertyList) {
 			if (pe.getPropertiesId().equals(prop.getPropertiesId())) {
-				RoleEntity role = userRepo.getRoleById(3);
 				if (userRepo.isClient(trade.getClient(), role)) {
 					if (!tradeRepo.isInRentedStatus(prop)) {
 						UserEntity client = userRepo.getUserByUsername(trade.getClient());
 						TradeEntity tradeToAdd = TradeConverter.toEntityForCreate(trade, client, prop);
-
+						
 						// LOGGING
 						logger.info("Inserting new trade: {} with client: {} and property: {}", tradeToAdd, client,
 								prop);
@@ -99,14 +99,11 @@ public class UserTradeServiceImpl implements UserTradeService {
 						throw new MyExcMessages("Property is bought or Rented !");
 					}
 				} else {
-					throw new MyExcMessages("User Passes is not a client!");
+					throw new MyExcMessages("User Passes is not a client or has been deactivated !");
 				}
-
-			} else {
-				throw new MyExcMessages("Property Passes is not one of yours!");
 			}
 		}
-		throw new MyExcMessages("Process can not be completed at this time!");
+		throw new MyExcMessages("Property id passed is not on the list of your properties!");
 	}
 
 	// Update the trades by owner whose property is part of a trade. if rented it

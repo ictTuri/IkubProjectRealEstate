@@ -37,7 +37,6 @@ public class UserTradeController {
 	// ------------------------------
 	// GET ROUTES TO RETRIEVE TRADES
 	// -----------------------------
-	@PreAuthorize("hasAnyRole('ADMIN','OWNER','CLIENT')")
 	@GetMapping()
 	public ResponseEntity<List<TradeDto>> showMyTrades() {
 		// show all trades on database for logged in user

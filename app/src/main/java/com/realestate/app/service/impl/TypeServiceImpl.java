@@ -14,7 +14,7 @@ import com.realestate.app.dto.PropertyTypeDto;
 import com.realestate.app.entity.PropertyTypeEntity;
 import com.realestate.app.entity.enums.PropertyTypeName;
 import com.realestate.app.exceptions.MyExcMessages;
-import com.realestate.app.repository.impl.TypeRepositoryImpl;
+import com.realestate.app.repository.TypeRepository;
 import com.realestate.app.service.TypeService;
 
 @Service
@@ -23,10 +23,10 @@ public class TypeServiceImpl implements TypeService {
 
 	private static final Logger logger = LogManager.getLogger(TypeServiceImpl.class);
 	
-	TypeRepositoryImpl typeRepo;
+	TypeRepository typeRepo;
 
 	@Autowired
-	public TypeServiceImpl(TypeRepositoryImpl typeRepo) {
+	public TypeServiceImpl(TypeRepository typeRepo) {
 		super();
 		this.typeRepo = typeRepo;
 	}
