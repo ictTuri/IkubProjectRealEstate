@@ -27,6 +27,8 @@ public class IssueRepositoryImpl implements IssueRepository {
 	private static final String GET_OWNER_RELATED_ISSUES = "SELECT ie FROM IssuesEntity ie LEFT JOIN PropertyEntity pe ON ie.property=pe.propertiesId"
 			+ " INNER JOIN UserEntity ue ON pe.owner=ue.userId WHERE pe.owner = :owner";
 	private static final String GET_CLIENT_RELATED_ISSUES = "FROM IssuesEntity ie WHERE ie.client = :client";
+	private static final String EXIST_ISSUE_FOR_PROPERTY = "SELECT ie FROM IssuesEntity ie WHERE ie.client = :client AND ie.property = :property AND (ie.resoulutionStatus"+
+	"= 'UNCHECKED' OR ie.resoulutionStatus = 'REVIEWED' OR ie.resoulutionStatus = 'ON_PROGRESS')";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	@Override
@@ -81,5 +83,15 @@ public class IssueRepositoryImpl implements IssueRepository {
 	public List<IssuesEntity> issuesOfClientByClient(UserEntity user) {
 		return em.createQuery(GET_CLIENT_RELATED_ISSUES, IssuesEntity.class).setParameter("client", user)
 				.getResultList();
+	}
+
+	@Override
+	public boolean existIssueForProperty(UserEntity user, PropertyEntity property) {
+			TypedQuery<IssuesEntity> query = em.createQuery(EXIST_ISSUE_FOR_PROPERTY,IssuesEntity.class).setParameter("client", user).setParameter("property", property);
+			try {
+				return query.getSingleResult() != null;
+			}catch(NoResultException e) {
+				return false;
+			}
 	}
 }

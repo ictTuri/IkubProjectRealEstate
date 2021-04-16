@@ -3,7 +3,6 @@ package com.realestate.app.service.impl;
 import java.util.List;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.IssuesConverter;
+import com.realestate.app.dto.ClientIssueForCreateDto;
 import com.realestate.app.dto.IssueForUpdateDto;
 import com.realestate.app.dto.IssuesDto;
-import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.entity.IssuesEntity;
 import com.realestate.app.entity.PropertyEntity;
 import com.realestate.app.entity.UserEntity;
@@ -74,20 +73,23 @@ public class UserIssueServiceImpl implements UserIssueService {
 
 	// INSERT NEW ISSUE
 	@Override
-	public IssuesDto insertMyIssue(@Valid IssuesForCreateDto issue) {
+	public IssuesDto insertMyIssue(ClientIssueForCreateDto issue) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		PropertyEntity property = propertyRepo.getPropertiesById(issue.getProperty());
 		if (tradeRepo.existTrade(user, property)) {
-			IssuesEntity issueToAdd = IssuesConverter.toEntityForCreate(issue, user, property);
-			issueToAdd.setClient(user);
-			issueToAdd.setResoulutionStatus(IssueStatus.UNCHECKED);
-			issueRepo.insertIssue(issueToAdd);
-
-			// LOGGING
-			logger.info("Inserted new issue: {}", issueToAdd);
-
-			return IssuesConverter.toDto(issueToAdd);
+			if(!issueRepo.existIssueForProperty(user,property)) {
+				IssuesEntity issueToAdd = IssuesConverter.toClientEntityForCreate(issue, user, property);
+				issueToAdd.setResoulutionStatus(IssueStatus.UNCHECKED);
+				issueRepo.insertIssue(issueToAdd);
+				
+				// LOGGING
+				logger.info("Inserted new issue: {}", issueToAdd);
+				
+				return IssuesConverter.toDto(issueToAdd);
+			}else {
+				throw new MyExcMessages("Already one issue is process for this property!");
+			}
 		} else {
 			throw new MyExcMessages("There is no relation from you to this property!");
 		}
@@ -95,7 +97,7 @@ public class UserIssueServiceImpl implements UserIssueService {
 
 	// UPDATE ISSUE BASED ON USER
 	@Override
-	public IssuesDto updateMyIssue(@Valid IssueForUpdateDto issue, int id) {
+	public IssuesDto updateMyIssue(IssueForUpdateDto issue, int id) {
 		UserPrincipal thisUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserEntity user = userRepo.getUserByUsername(thisUser.getUsername());
 		IssuesEntity issueToUpdate = issueRepo.getIssueById(id);

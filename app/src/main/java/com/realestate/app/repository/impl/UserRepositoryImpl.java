@@ -191,8 +191,7 @@ public class UserRepositoryImpl implements UserRepository{
 
 	@Override
 	public boolean isActiveUser(String username) {
-		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter(USERNAME,
-				username);
+		TypedQuery<UserEntity> query = em.createQuery(CHECK_BY_USERNAME, UserEntity.class).setParameter(USERNAME,username);
 		try {
 			UserEntity u = query.getSingleResult();
 			return u.isActive() == Boolean.TRUE;

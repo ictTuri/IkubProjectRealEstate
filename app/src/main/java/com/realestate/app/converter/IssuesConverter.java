@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.realestate.app.dto.ClientIssueForCreateDto;
 import com.realestate.app.dto.IssuesDto;
 import com.realestate.app.dto.IssuesForCreateDto;
 import com.realestate.app.entity.IssuesEntity;
@@ -47,6 +48,18 @@ public class IssuesConverter {
 		toReturn.setClient(client);
 		toReturn.setCreatedDate(LocalDateTime.now());
 		toReturn.setDescription(dto.getDescription());
+		toReturn.setProperty(property);
+		toReturn.setIssueId(null);
+		return toReturn;
+	}
+
+	public static IssuesEntity toClientEntityForCreate(ClientIssueForCreateDto issue, UserEntity user,
+			PropertyEntity property) {
+		IssuesEntity toReturn=new IssuesEntity();
+		toReturn.setCategory(issue.getCategory());
+		toReturn.setClient(user);
+		toReturn.setCreatedDate(LocalDateTime.now());
+		toReturn.setDescription(issue.getDescription());
 		toReturn.setProperty(property);
 		toReturn.setIssueId(null);
 		return toReturn;
