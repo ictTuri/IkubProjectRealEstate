@@ -18,7 +18,7 @@ public class LocationRepositoryImpl implements LocationRepository{
 		super();
 		this.em = em;
 	}
-
+	
 	private static final String GET_ALL_LOCATIONS = "FROM LocationEntity";
 
 	// LOCATIONS
@@ -31,7 +31,7 @@ public class LocationRepositoryImpl implements LocationRepository{
 	public LocationEntity getLocationById(Integer locationId) {
 		try {
 			return em.find(LocationEntity.class, locationId);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException  e) {
 			return null;
 		}
 	}

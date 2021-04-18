@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.PropertyTypeConverter;
@@ -25,7 +24,6 @@ public class TypeServiceImpl implements TypeService {
 	
 	TypeRepository typeRepo;
 
-	@Autowired
 	public TypeServiceImpl(TypeRepository typeRepo) {
 		super();
 		this.typeRepo = typeRepo;

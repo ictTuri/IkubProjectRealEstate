@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.FullPropertyConverter;
@@ -48,7 +47,6 @@ public class PropertyServiceImpl implements PropertyService {
 	TypeRepository typeRepo;
 	InfoRepository infoRepo;
 
-	@Autowired
 	public PropertyServiceImpl(PropertyRepository propertyRepo, UserRepository userRepo,
 			LocationRepository locationRepo, TradeRepository tradeRepo, IssueRepository issueRepo,
 			TypeRepository typeRepo, InfoRepository infoRepo) {

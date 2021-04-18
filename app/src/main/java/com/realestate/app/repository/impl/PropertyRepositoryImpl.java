@@ -43,16 +43,16 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 	@Override
 	public List<PropertyEntity> getAllProperties(PropertyFilter filter) {
 		// Starting query
-		String queryString = "SELECT pe from PropertyEntity pe where 1=1 ";
-
+		StringBuilder queryString = new StringBuilder("SELECT pe from PropertyEntity pe where 1=1 ");
+		
 		// Creating query string for all filtrabl
-		queryString = extractedFilterCheck(filter, queryString);
+		extractedFilterCheck(filter, queryString);
 
 		// setting sort field
 		if (filter.getSortBy() != null && !filter.getSortBy().isEmpty()) {
 			if (filter.getSortBy().equals("category") || filter.getSortBy().equals("propertyLocation")
 					|| filter.getSortBy().equals("sellingPrice") || filter.getSortBy().equals("rentingPrice")) {
-				queryString = queryString + " order by pe." + filter.getSortBy();
+				queryString.append(" order by pe." + filter.getSortBy());
 			} else {
 				throw new MyExcMessages("Sort by must be category, propertyLocation, sellingPrice or RentingPrice");
 			}
@@ -61,31 +61,31 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 		if (filter.getOrder() != null && !filter.getOrder().isEmpty() && filter.getSortBy() != null
 				&& !filter.getSortBy().isEmpty()) {
 			if (filter.getOrder().equalsIgnoreCase("ASC") || filter.getOrder().equalsIgnoreCase("DESC")) {
-				queryString = queryString + " " + filter.getOrder();
+				queryString.append(" " + filter.getOrder());
 			} else {
 				throw new MyExcMessages("Order  must be ASC or DESC");
 			}
 		}
 
-		return extractedFinalQuery(filter, queryString);
+		return extractedFinalQuery(filter, queryString.toString());
 	}
 
 	// Extracted
-	private String extractedFilterCheck(PropertyFilter filter, String queryString) {
+	private StringBuilder extractedFilterCheck(PropertyFilter filter, StringBuilder queryString) {
 		if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
-			queryString = queryString + " and pe.category = :category ";
+			queryString.append(" and pe.category = :category ");
 		}
 		if (filter.getCity() != null && !filter.getCity().isEmpty()) {
-			queryString = queryString + " and pe.propertyLocation.cityName = :city ";
+			queryString.append(" and pe.propertyLocation.cityName = :city ") ;
 		}
 		if (filter.getMinPrice() != null ) {
-			queryString = queryString + " and ( pe.rentingPrice > :minone OR pe.sellingPrice > :mintwo ) ";
+			queryString.append(" and ( pe.rentingPrice > :minone OR pe.sellingPrice > :mintwo ) ");
 		}
 		if (filter.getMaxPrice() != null && filter.getMinPrice() != null && filter.getMaxPrice() > filter.getMinPrice()) {
-			queryString = queryString + " and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ";
+			queryString.append(" and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ");
 		}else {
 			if(filter.getMaxPrice() != null && filter.getMinPrice() == null) {
-				queryString = queryString + " and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ";
+				queryString.append(" and ( pe.rentingPrice < :maxone AND pe.sellingPrice < :maxtwo ) ");
 			}
 		}
 		return queryString;

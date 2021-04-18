@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.realestate.app.converter.LocationConverter;
@@ -26,7 +25,6 @@ public class LocationServiceImpl implements LocationService {
 	PropertyRepository propertyRepo;
 	LocationRepository locationRepo;
 
-	@Autowired
 	public LocationServiceImpl(PropertyRepository propertyRepo, LocationRepository locationRepo) {
 		super();
 		this.propertyRepo = propertyRepo;

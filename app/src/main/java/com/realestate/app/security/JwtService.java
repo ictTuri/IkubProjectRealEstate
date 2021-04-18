@@ -58,7 +58,6 @@ public class JwtService {
 
 	public UserPrincipal parseToken(String token) {
 		// @formatter:off
-
 		Claims claims = Jwts.parser().setSigningKey(secret).setAllowedClockSkewSeconds(clockSkew).parseClaimsJws(token)
 				.getBody();
 		return new UserPrincipal.Builder().withId(extractTokenIdFromClaims(claims))
