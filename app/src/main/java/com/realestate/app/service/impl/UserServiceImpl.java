@@ -25,7 +25,7 @@ import com.realestate.app.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-	
+
 	PasswordEncoder passwordEncoder;
 	UserRepository userRepository;
 
@@ -38,10 +38,10 @@ public class UserServiceImpl implements UserService {
 	// GET ALL USER OR FILTERED BY NAME
 	@Override
 	public List<UserDto> getUsers(UserFilter filter) {
-		
-		//LOGGING
+
+		// LOGGING
 		logger.info("Filtring users with filter {}", filter);
-		
+
 		List<UserDto> toReturn = new ArrayList<>();
 		userRepository.getAllUsers(filter).forEach(entity -> toReturn.add(UserConverter.toDto(entity)));
 		return toReturn;
@@ -52,10 +52,10 @@ public class UserServiceImpl implements UserService {
 	public UserDto userById(int id) {
 		UserEntity user = userRepository.getUserById(id);
 		if (user != null) {
-			
-			//LOGGING
+
+			// LOGGING
 			logger.info("Getting users with ID {}", id);
-			
+
 			return UserConverter.toDto(user);
 		} else {
 			throw new MyExcMessages("No such User with given Id !");
@@ -73,10 +73,10 @@ public class UserServiceImpl implements UserService {
 					user.setPassword(encodedPass);
 					UserEntity userToAdd = UserConverter.toEntityForCreate(user, role);
 					userRepository.insertUser(userToAdd);
-					
-					//LOGGING
+
+					// LOGGING
 					logger.info("User inserted: {}", userToAdd);
-					
+
 					return UserConverter.toDto(userToAdd);
 				} else {
 					throw new MyExcMessages("Role does not exist");
@@ -93,11 +93,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto updateUser(UserForCreateDto user, int id) {
 		UserEntity userToUpdate = userRepository.getUserById(id);
-		if (userToUpdate != null) {
-			return userUpdateValidation(user, userToUpdate);
-		} else {
+		if (userToUpdate == null) {
 			throw new MyExcMessages("No User with such Id / Please check again");
 		}
+		return userUpdateValidation(user, userToUpdate);
 	}
 
 	// Validations for the User Update Extracted
@@ -118,10 +117,10 @@ public class UserServiceImpl implements UserService {
 					userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
 					userToUpdate.setRole(role);
 					userToUpdate.setActive(user.isActive());
-					
-					//LOGGING
+
+					// LOGGING
 					logger.info("User Updated: {}", userToUpdate);
-					
+
 					userRepository.updateUser(userToUpdate);
 					return UserConverter.toDto(userToUpdate);
 				} else {
@@ -138,10 +137,10 @@ public class UserServiceImpl implements UserService {
 		if (userToDelete != null) {
 			if (userToDelete.isActive()) {
 				userToDelete.setActive(false);
-				
-				//LOGGING
+
+				// LOGGING
 				logger.info("User Soft Deleted: {}", userToDelete);
-				
+
 				userRepository.updateUser(userToDelete);
 			} else {
 				throw new MyExcMessages("User Already deleted.");

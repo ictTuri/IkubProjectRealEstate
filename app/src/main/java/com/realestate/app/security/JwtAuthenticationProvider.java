@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
@@ -15,6 +16,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		String authenticationToken = (String) authentication.getCredentials();
 		UserPrincipal agilityTokenDetails = jwtService.parseToken(authenticationToken);
 		return new JwtAuthentication(agilityTokenDetails);
+
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,6 @@ public class UserTradeServiceImpl implements UserTradeService {
 	TradeRepository tradeRepo;
 	UserRepository userRepo;
 
-	@Autowired
 	public UserTradeServiceImpl(TradeRepository tradeRepo, PropertyRepository propertyRepo, UserRepository userRepo) {
 		super();
 		this.tradeRepo = tradeRepo;

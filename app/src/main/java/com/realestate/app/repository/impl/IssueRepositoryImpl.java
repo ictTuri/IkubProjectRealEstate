@@ -22,13 +22,16 @@ public class IssueRepositoryImpl implements IssueRepository {
 		this.em = em;
 	}
 
+	private static final String GET_ISSUE_BY_ID = "FROM IssuesEntity ie WHERE ie.issueId = :id";
+
 	private static final String GET_ALL_ISSUES = "FROM IssuesEntity";
 	private static final String EXIST_ISSUE_FOR_POPERTY = "FROM IssuesEntity ie WHERE ie.property = :property";
 	private static final String GET_OWNER_RELATED_ISSUES = "SELECT ie FROM IssuesEntity ie LEFT JOIN PropertyEntity pe ON ie.property=pe.propertiesId"
 			+ " INNER JOIN UserEntity ue ON pe.owner=ue.userId WHERE pe.owner = :owner";
+
 	private static final String GET_CLIENT_RELATED_ISSUES = "FROM IssuesEntity ie WHERE ie.client = :client";
-	private static final String EXIST_ISSUE_FOR_PROPERTY = "SELECT ie FROM IssuesEntity ie WHERE ie.client = :client AND ie.property = :property AND (ie.resoulutionStatus"+
-	"= 'UNCHECKED' OR ie.resoulutionStatus = 'REVIEWED' OR ie.resoulutionStatus = 'ON_PROGRESS')";
+	private static final String EXIST_ISSUE_FOR_PROPERTY = "SELECT ie FROM IssuesEntity ie WHERE ie.client = :client AND ie.property = :property AND (ie.resoulutionStatus"
+			+ "= 'UNCHECKED' OR ie.resoulutionStatus = 'REVIEWED' OR ie.resoulutionStatus = 'ON_PROGRESS')";
 
 	// RETRIEVE OPERATIONS DOWN HERE
 	@Override
@@ -38,9 +41,11 @@ public class IssueRepositoryImpl implements IssueRepository {
 
 	@Override
 	public IssuesEntity getIssueById(Integer issueId) {
+		TypedQuery<IssuesEntity> query = em.createQuery(GET_ISSUE_BY_ID, IssuesEntity.class).setParameter("id",
+				issueId);
 		try {
-			return em.find(IssuesEntity.class, issueId);
-		} catch (IllegalArgumentException e) {
+			return query.getSingleResult();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}
@@ -63,6 +68,7 @@ public class IssueRepositoryImpl implements IssueRepository {
 		em.remove(issue);
 	}
 
+	// HELPING METHOD DOWN HERE
 	@Override
 	public IssuesEntity existIssueWithProperty(PropertyEntity property) {
 		TypedQuery<IssuesEntity> query = em.createQuery(EXIST_ISSUE_FOR_POPERTY, IssuesEntity.class)
@@ -87,11 +93,12 @@ public class IssueRepositoryImpl implements IssueRepository {
 
 	@Override
 	public boolean existIssueForProperty(UserEntity user, PropertyEntity property) {
-			TypedQuery<IssuesEntity> query = em.createQuery(EXIST_ISSUE_FOR_PROPERTY,IssuesEntity.class).setParameter("client", user).setParameter("property", property);
-			try {
-				return query.getSingleResult() != null;
-			}catch(NoResultException e) {
-				return false;
-			}
+		TypedQuery<IssuesEntity> query = em.createQuery(EXIST_ISSUE_FOR_PROPERTY, IssuesEntity.class)
+				.setParameter("client", user).setParameter("property", property);
+		try {
+			return query.getSingleResult() != null;
+		} catch (NoResultException e) {
+			return false;
+		}
 	}
 }

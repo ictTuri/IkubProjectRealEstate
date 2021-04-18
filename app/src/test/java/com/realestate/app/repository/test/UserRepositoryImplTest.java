@@ -1,57 +1,82 @@
 package com.realestate.app.repository.test;
+import javax.transaction.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import com.realestate.app.entity.RoleEntity;
 import com.realestate.app.entity.UserEntity;
-import com.realestate.app.repository.UserRepository;
+import com.realestate.app.filter.UserFilter;
+import com.realestate.app.repository.impl.UserRepositoryImpl;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class UserRepositoryImplTest {
 
-	
 	@Autowired
-	private TestEntityManager entityManager;
+	private UserRepositoryImpl userRepository;
 
-	@Mock
-	private UserRepository repository;
-
+	
 	@Test
-	void findByUsernameShouldReturnUser() throws Exception {
-		UserEntity user = getUser();
-				
-		this.entityManager.persist(user);
+	void givenUsername_whenRetrieved_thenGetUserData() {
+		RoleEntity role = userRepository.getRoleById(2);
+		UserEntity user = UserUtil.createUser();
+		user.setRole(role);
+		userRepository.insertUser(user);
+		String username = "test";
 		
-		when(this.repository.getUserByUsername("Test")).thenReturn(user);
+		UserEntity userRetrieved = userRepository.getUserByUsername(username);
 		
-		UserEntity userRetrieved = this.repository.getUserByUsername("Test");
-		assertThat(userRetrieved.getUsername()).isEqualTo("Test");
-		assertThat(userRetrieved.getPassword()).isEqualTo("pass");
+		Assertions.assertEquals(username, userRetrieved.getUsername());
 	}
 	
-	UserEntity getUser() {
-		UserEntity user = new UserEntity();
-		user.setActive(true);
-		user.setFirstName("Test");
-		user.setLastName("Test");
-		user.setEmail("Test@gmail.com");
-		user.setPassword("pass");
-		user.setUsername("Test");
-		user.setVersion(0);
-		user.setUserId(null);
-		user.setRole(this.repository.getRoleById(1));
+	@Test
+	void givenUser_whenUpdate_thenGetUpdatedUser() {
+		RoleEntity role = userRepository.getRoleById(3);
+		UserEntity user = UserUtil.createUser();
+		user.setRole(role);
+		userRepository.insertUser(user);
+		user.setFirstName("testUpdate");
 		
-		return user;
+		userRepository.updateUser(user);
+		
+		Assertions.assertEquals("testUpdate", userRepository.getUserByUsername("test").getFirstName());
 	}
 	
+	@Test
+	void givenUser_whenSave_thenGetCreatedUser() {
+		RoleEntity role = userRepository.getRoleById(1);
+		Integer userSize = userRepository.getAllUsers(new UserFilter()).size();
+		UserEntity user = UserUtil.createUserAdmin();
+		user.setRole(role);
 
+		userRepository.insertUser(user);
+		
+		Assertions.assertEquals(userSize+1, userRepository.getAllUsers(new UserFilter()).size());
+		Assertions.assertNotNull(userRepository.getUserByUsername("admin"));
+	}
+	
+	@Test
+	void givenWrongUsername_whenRetrieved_thenGetNoResult() {
+		String username = "test";
+		
+		UserEntity user = userRepository.getUserByUsername(username);
+		
+		Assertions.assertNull(user);
+	}
+	
+	
+	@Test
+	void givenUser_whenSoftDelete_thenGetNoResult() {
+		RoleEntity role = userRepository.getRoleById(1);
+		UserEntity user = UserUtil.createUserAdmin();
+		user.setRole(role);
+		userRepository.insertUser(user);
+
+		userRepository.deleteUser(user);
+		
+		Assertions.assertNull(userRepository.getUserByUsername("admin123"));
+	}
 }

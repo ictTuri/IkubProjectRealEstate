@@ -1,12 +1,9 @@
 package com.realestate.app.repository;
 
-import java.util.List;
-
 import com.realestate.app.entity.PropertyInfoEntity;
 
 public interface InfoRepository {
-	// GET INFOS FROM DATABASE
-	List<PropertyInfoEntity> getAllPropertyInfos();
+	//GET INFO BY ID
 	PropertyInfoEntity getPropertyInfoById(Integer propertyInfoId);
 	
 	// INSERT NEW INFO INTO DATABASE
@@ -17,7 +14,4 @@ public interface InfoRepository {
 	
 	// DELETE INFO FROM DATABASE
 	void deletePropertyInfo(PropertyInfoEntity propertyInfo);
-	
-	// HELPING METHODS 
-	boolean existProropertyWithInfo(PropertyInfoEntity id);
 }

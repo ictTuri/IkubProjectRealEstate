@@ -26,6 +26,7 @@ public class UserRepositoryImpl implements UserRepository{
 	
 	private static final String USERNAME = "username";
 	
+	private static final String GET_USER_BY_ID = "FROM UserEntity ue WHERE ue.userId = :id";
 	private static final String GET_ALL_USERS_BY_NAME = "FROM UserEntity ue WHERE ue.firstName = :name";
 	private static final String GET_OWNER_BY_ID = "SELECT u FROM UserEntity u WHERE u.userId = :id and u.role = :role";
 
@@ -35,19 +36,22 @@ public class UserRepositoryImpl implements UserRepository{
 	private static final String CHECK_BY_USERNAME = "SELECT u FROM UserEntity u WHERE u.username = :username and u.active = true";
 	private static final String CHECK_IF_CLIENT = "SELECT u FROM UserEntity u WHERE u.username = :username and u.role = :role";
 
+	
+	
 	// RETRIEVE OPERATIONS DOWN HERE
 	@Override
 	public List<UserEntity> getAllUsers(UserFilter filter) {
 		// Starting query
-		String queryString = "SELECT user FROM UserEntity user WHERE 1=1 ";
-
+		StringBuilder queryString = new StringBuilder("SELECT user FROM UserEntity user WHERE 1=1 ");
+		
+		
 		// Creating query string for all filtrabl
-		queryString = extractedFilterCheck(filter, queryString);
+		extractedFilterCheck(filter, queryString);
 		// setting sort field
 		if (filter.getSortBy() != null && !filter.getSortBy().isEmpty()) {
 			if (filter.getSortBy().equals("firstName") || filter.getSortBy().equals("lastName")
 					|| filter.getSortBy().equals(USERNAME)) {
-				queryString = queryString + " ORDER BY user." + filter.getSortBy();
+				queryString.append(" ORDER BY user." + filter.getSortBy());
 			} else {
 				throw new MyExcMessages("Sort by must be firstName , lastName or username");
 			}
@@ -57,18 +61,17 @@ public class UserRepositoryImpl implements UserRepository{
 		if (filter.getOrder() != null && !filter.getOrder().isEmpty() && filter.getSortBy() != null
 				&& !filter.getSortBy().isEmpty()) {
 			if (filter.getOrder().equalsIgnoreCase("ASC") || filter.getOrder().equalsIgnoreCase("DESC")) {
-				queryString = queryString + " " + filter.getOrder();
+				queryString.append(" " + filter.getOrder());
 			} else {
 				throw new MyExcMessages("Order  must be ASC or DESC");
 			}
 		}
 
-		return extractedFinalQuery(filter, queryString);
+		return extractedFinalQuery(filter, queryString.toString());
 	}
-
 	// Extracted
-	private List<UserEntity> extractedFinalQuery(UserFilter filter, String queryString) {
-		TypedQuery<UserEntity> query = em.createQuery(queryString, UserEntity.class);
+	private List<UserEntity> extractedFinalQuery(UserFilter filter, String string) {
+		TypedQuery<UserEntity> query = em.createQuery(string, UserEntity.class);
 
 		// Setting parameters
 		if (filter.getFirstName() != null && !filter.getFirstName().isEmpty()) {
@@ -83,15 +86,15 @@ public class UserRepositoryImpl implements UserRepository{
 		return query.getResultList();
 	}
 	// Extracted
-	private String extractedFilterCheck(UserFilter filter, String queryString) {
+	private StringBuilder extractedFilterCheck(UserFilter filter, StringBuilder queryString) {
 		if (filter.getFirstName() != null && !filter.getFirstName().isEmpty()) {
-			queryString = queryString + "and user.firstName=:firstName ";
+			queryString.append("and user.firstName=:firstName ");
 		}
 		if (filter.getLastName() != null && !filter.getLastName().isEmpty()) {
-			queryString = queryString + " and user.lastName=:lastName ";
+			queryString.append(" and user.lastName=:lastName ");
 		}
 		if (filter.getUsername() != null && !filter.getUsername().isEmpty()) {
-			queryString = queryString + " and user.username=:username ";
+			queryString.append(" and user.username=:username ");
 		}
 		return queryString;
 	}
@@ -99,9 +102,10 @@ public class UserRepositoryImpl implements UserRepository{
 	// Get users by id
 	@Override
 	public UserEntity getUserById(int userId) {
+		TypedQuery<UserEntity> query = em.createQuery(GET_USER_BY_ID,UserEntity.class).setParameter("id", userId);
 		try {
-			return em.find(UserEntity.class, userId);
-		} catch (IllegalArgumentException e) {
+			return query.getSingleResult();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}

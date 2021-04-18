@@ -2,9 +2,11 @@ package com.realestate.app.filter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class PropertyFilter {
 
 	private String category;
