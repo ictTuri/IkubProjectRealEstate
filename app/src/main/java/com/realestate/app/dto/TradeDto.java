@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class TradeDto {
 	
+	private Integer tradeId;
+	
 	private UserDto client;
 	
 	private PropertyDto properties;

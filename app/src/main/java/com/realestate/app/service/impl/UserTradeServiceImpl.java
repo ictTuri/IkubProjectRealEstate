@@ -117,7 +117,7 @@ public class UserTradeServiceImpl implements UserTradeService {
 			if (te.getTradeId() == id) {
 				tradeToUpdate.setTradeType(TradeType.valueOf(trade.getTradeType()));
 				tradeToUpdate.setPaymentType(trade.getPaymentType());
-				trade.setEndTradeDate(LocalDateTime.now());
+				tradeToUpdate.setEndTradeDate(LocalDateTime.now());
 				tradeRepo.updateTrade(tradeToUpdate);
 
 				// LOGGING

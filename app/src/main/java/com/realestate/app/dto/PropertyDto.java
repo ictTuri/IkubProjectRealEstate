@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class PropertyDto {
+	
+	private Integer propertyId;
 
 	private String description;
 

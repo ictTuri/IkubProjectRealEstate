@@ -17,6 +17,7 @@ public class TradeConverter {
 	
 	public static TradeDto toDto(TradeEntity trade) {
 		TradeDto toReturn = new TradeDto();
+		toReturn.setTradeId(trade.getTradeId());
 		toReturn.setClient(UserConverter.toDto(trade.getClient()));
 		toReturn.setProperties(FullPropertyConverter.singleToDto(trade.getProperty()));
 		toReturn.setTradeDate(trade.getTradeDate());

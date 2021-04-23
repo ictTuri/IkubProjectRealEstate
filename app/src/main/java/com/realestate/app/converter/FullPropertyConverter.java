@@ -32,6 +32,7 @@ public class FullPropertyConverter {
 
 	public static PropertyDto singleToDto(PropertyEntity property) {
 		PropertyDto propertyToReturn = new PropertyDto();
+		propertyToReturn.setPropertyId(property.getPropertiesId());
 		propertyToReturn.setDescription(property.getDescription());
 		propertyToReturn.setRentingPrice(property.getRentingPrice());
 		propertyToReturn.setSellingPrice(property.getSellingPrice());
